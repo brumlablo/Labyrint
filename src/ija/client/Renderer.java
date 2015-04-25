@@ -28,6 +28,10 @@ public class Renderer {
     public void newGame() {
         gameBoard.newGame();
         createdBoard = true;
+
+        System.out.println(gameBoard.get(7, 3).getCard().getType());
+        System.out.println(gameBoard.get(7, 3).getCard().canGo(MazeCard.CANGO.UP));
+        System.out.println(gameBoard.get(7, 3).getCard().canGo(MazeCard.CANGO.DOWN));
     }
     
     public void printBoard() {
@@ -43,20 +47,21 @@ public class Renderer {
                 
                 switch(gameBoard.get(row, col).getCard().getType()) {
                     case "C":
-                        System.out.print("C ");
+                        System.out.print("C");
                         break;
                         
                     case "L":
-                        System.out.print("L ");
+                        System.out.print("L");
                         break;
                         
                     case "F":
-                        System.out.print("F ");
+                        System.out.print("F");
                         break;
                         
                     default:
                         break;
                 }
+                System.out.print(gameBoard.get(row, col).getCard().getRotation() + " ");
             }
             System.out.println("");
             /*posledni cast hraciho pole, zalamujeme pro freeCard*/
@@ -64,20 +69,21 @@ public class Renderer {
                 System.out.print("Freecard: ");
                 switch(gameBoard.getFreeCard().getType()) {
                     case "C":
-                        System.out.println("C\n"); 
+                        System.out.print("C"); 
                         break;
                         
                     case "L":
-                        System.out.println("L\n");
+                        System.out.print("L");
                         break;
                         
                     case "F":
-                        System.out.println("F\n");
+                        System.out.print("F");
                         break;
                         
                     default:
                         break;
                 }
+                System.out.print(gameBoard.getFreeCard().getRotation() + "\n");
             }
         }
     }

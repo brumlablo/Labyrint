@@ -16,10 +16,10 @@
 	</target>
 
 
-	<target name = "compile">
+	<target name = "compile" depends = "clean">
 
 		<javac  srcdir="src" destdir="build" />
-		<javadoc sourcepath="src" destdir="doc"/>
+		<!--<javadoc sourcepath="src" destdir="doc"/>-->
 		<jar basedir="build" destfile="dest-client/ija3.jar" >
 			<manifest>
 				<attribute name="Main-Class" value="ija.client.Client" /> 

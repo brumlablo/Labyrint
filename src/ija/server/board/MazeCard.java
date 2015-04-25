@@ -1,7 +1,7 @@
 package ija.server.board;
 
 import java.util.ArrayList;
-import java.util.Objects;
+//import java.util.Objects;
 
 /**
  *
@@ -12,6 +12,7 @@ public class MazeCard {
    
     private String type;
     public ArrayList<CANGO> dirs; /*smery*/
+    private int rotationVec;
     
     public static enum CANGO {
         LEFT,
@@ -27,20 +28,24 @@ public class MazeCard {
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.UP);
+                this.rotationVec = 0;
                 break; 
             case "L": /*line*/
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.RIGHT);
+                this.rotationVec = 0;
                 break;
             case "F": /*!!! tvar T*/
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.UP);
                 dirs.add(CANGO.RIGHT);
+                this.rotationVec = 0;
                 break;
         }
     }   
+
     public static MazeCard create(String type) throws IllegalArgumentException {
         if(type.equals("C") || type.equals("L") || type.equals("F")) {
             MazeCard tmp = new MazeCard(type);
@@ -60,6 +65,7 @@ public class MazeCard {
     
     public void turnRight() {
         int index = 0;
+        rotationVec = (rotationVec+1) % 4;
         for(CANGO element : this.dirs) {
             element = CANGO.values()[(element.ordinal() +1 ) % 4]; /*posun indexu o jeden dal a osetreni cyklicnosti*/
             this.dirs.set(index, element);
@@ -67,8 +73,17 @@ public class MazeCard {
         }
     }
 
+    public void turnForN(int n) {
+        for(int i = 0; i < n; i++)
+            this.turnRight();
+    }
+
     public String getType() {
         return type;
+    }
+
+    public int getRotation() {
+        return this.rotationVec;
     }
     
 }
