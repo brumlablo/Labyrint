@@ -7,32 +7,19 @@
  *
  */
 
-package ija.homework3.client;
-
-/**
- *
- * @author xhajek33
- * @author xblozo00
- */
+package ija.client;
 
 
 
-/** Naprosto paradni hlavni trida
- *  
- * 
- * @author xhajek33
- * @version 1.0
- */
 public class Client {
     
-    /** Hlavni metoda aplikace
-     *  
-     * 
-     * @param args 
-     */
     public static void main(String[] args) {
         
         ArgParser parser = new ArgParser();
         parser.start();
+    }
+
+    public int karel(int vojta) {
+        return 0;
     }
 }

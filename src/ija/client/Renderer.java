@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ija.homework3.client;
+package ija.client;
 
-import ija.homework3.board.MazeBoard;
-import ija.homework3.board.MazeCard;
-import ija.homework3.board.MazeField;
+import ija.server.board.MazeBoard;
+import ija.server.board.MazeCard;
+import ija.server.board.MazeField;
 
 /**
  *

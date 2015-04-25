@@ -1,4 +1,7 @@
 .gitignore.swp
+.classpath
+.project
+*.swp
 .ant-targets-build.xml
 nbproject/private/
 build/
@@ -8,3 +11,5 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 .nb-gradle/
+/bin/
+

@@ -1,19 +1,28 @@
 <project>
 
 	<target name = "clean">
-		<delete dir = "build/classes/" />
+		<delete includeemptydirs = "true">
+			<fileset dir="build" includes="**/*" />
+		</delete>
+		<delete includeemptydirs = "true">
+			<fileset dir="doc" includes="**/*" />
+		</delete>
+		<delete includeemptydirs = "true">
+			<fileset dir="dest-client" includes="**/*" />
+		</delete>
+		<delete includeemptydirs = "true">
+			<fileset dir="dest-server" includes="**/*" />
+		</delete>
 	</target>
 
 
 	<target name = "compile">
-		<mkdir dir="build/classes/"/>
 
-		<javac  srcdir="src" destdir="build/classes/" />
-		<!-- TODO doplnit generovani programove dokumentace -->
+		<javac  srcdir="src" destdir="build" />
 		<javadoc sourcepath="src" destdir="doc"/>
-		<jar destfile="dest-client/ija3.jar" basedir="build/classes/">
+		<jar basedir="build" destfile="dest-client/ija3.jar" >
 			<manifest>
-				<attribute name="Main-Class" value="ija.homework3.client.Client" /> 
+				<attribute name="Main-Class" value="ija.client.Client" /> 
 			</manifest>
 		</jar>
 	</target>
