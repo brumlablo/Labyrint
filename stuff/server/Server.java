@@ -2,28 +2,32 @@ package server;
 
 import java.net.*;
 import java.io.*;
+import java.util.ArrayList;
 /**
  *
  * @author babu
  */
 
-/* TODO: arraylist clientid pro prideleni barvy, ZPRAVA jako posilany serializovany OBJEKT s id a obsahem, v serveru bude "parser" id ser. objektu,
+/* TODO: arraylist clientid pro prideleni barvy !!! PLUS jedinecne id, co se musi ulozit do budoucna,
 data(in/out)putstream na objectinoutdatastream cosy */
 
 public class Server implements Runnable
 {
     private ServerSocket server = null;
-    private Thread thread = null;
-    private ServerThread clients[] = new ServerThread[50];
     private int port = 0;
-    private int clientNum = 0;
-    private int clientId = 0;
+    private Thread thread = null;
+    private ArrayList <Session> players;
+    private int playerCount = 0;
+    private int playerID = 0;
+    private ServerDD dcd;
 
     public int getPort() {
         return port;
     }
     public Server()
     {  
+      this.players = new ArrayList <Session>();
+      this.dcd = new ServerDD();
       try
       {  
          this.port = 12345;
@@ -41,6 +45,7 @@ public class Server implements Runnable
           System.out.println("Can not bind to port " + port + ": " + ioe.getMessage());
       }
     }
+    
     public void run() {
       while (thread != null)
           {  try
@@ -58,68 +63,74 @@ public class Server implements Runnable
     public void start()
     {  
         if (thread == null) {  
-           thread = new Thread(this); 
-           thread.start();
+            thread = new Thread(this); 
+            thread.start();
        }
     }
     
     public void stop()
     {  if (thread != null)
-       {  thread.stop(); 
-          thread = null;
+       {  
+           thread.stop(); 
+           thread = null;
        }
     }
+    
     private int findClient(int ID)
-    {  for (int i = 0; i < clientNum; i++)
-          if (clients[i].getID() == ID)
+    {  for(int i = 0; i < this.players.size() ; i++)
+          if (players.get(i).getID() == ID)
              return i;
        return -1;
     }
 
     
-    public synchronized void handle(int ID, String input)
-    {  if (input.equals(".bye"))
-       {  clients[findClient(ID)].send(".bye");
-          remove(ID); }
+    public synchronized void handle(int ID, String input) //preposilani dat VSEM klientum, identifikace na zaklade ID clienta
+    {  
+       if (input.equals(".bye"))
+       {  
+           players.get(findClient(ID)).send(".bye");
+           remove(ID);
+       }
        else
-          for (int i = 0; i < clientNum; i++)
-             clients[i].send(ID + ": " + input);
+          for (Session client : players)
+             client.send(ID + ": " + input);
        System.out.println(ID + ": " + input);
     }
     
-    public synchronized void remove(int ID)
-    {  int pos = findClient(ID);
-       if (pos >= 0)
-       {  
-          ServerThread toTerminate = clients[pos];
-          System.out.println("Removing client thread " + ID + " at " + pos);
-          if (pos < clientNum-1)
-             for (int i = pos+1; i < clientNum; i++)
-                clients[i-1] = clients[i];
-          clientNum--;
-          try
-          {  
-              toTerminate.close();
-          }
-          catch(IOException ioe)
-          {  System.out.println("Error closing thread: " + ioe); }
-             toTerminate.stop();
-          }
+    public synchronized void remove(int ID) {  
+        int pos = findClient(ID);
+        Session threadExitus = players.get(pos);
+        players.remove(pos);
+        System.out.println("Removing client thread " + ID + " at " + pos);
+        playerCount--;
+        try
+        {  
+            threadExitus.close();
+        }
+        catch(IOException ioe)
+        {  
+            System.out.println("Error closing thread: " + ioe);
+        }
+        
+        threadExitus.stop();
     }
 
     private void addThread(Socket socket)
-    {  if (clientNum < clients.length)
-       {  System.out.println("Client accepted: " + socket);
-          this.clientId++;
-          clients[clientNum] = new ServerThread(this, socket,this.clientId);
-          try
-          {  clients[clientNum].open(); 
-             clients[clientNum].start();  
-             clientNum++; }
-          catch(IOException ioe)
-          {  System.out.println("Error opening thread: " + ioe); } }
-       else
-          System.out.println("Client refused: maximum " + clients.length + " reached.");
+    {  
+        System.out.println("Client accepted: " + socket);
+        this.playerID++;
+        Session newPlayer = new Session(this, socket,this.playerID);
+        players.add(newPlayer);
+        try
+        {
+            newPlayer.open(); 
+            newPlayer.start();  
+            playerCount++;
+        }
+        catch(IOException ioe)
+        {  
+            System.out.println("Error opening thread: " + ioe);
+        }
     }     
   /**
   * @param args the command line arguments
