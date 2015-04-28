@@ -21,9 +21,9 @@ import java.awt.event.MouseEvent;
  */
 public class Renderer {
     
-    MazeBoard gameBoard = null;
-    int setSize = 7; /*velikost hrany je dana*/
-    boolean createdBoard;
+    private MazeBoard gameBoard = null;
+    private int setSize = 7; /*velikost hrany je dana*/
+    private boolean createdBoard;
     
     public Renderer() {
         gameBoard = MazeBoard.createMazeBoard(setSize); /*vytvoreni herni desky o dane velikosti*/
@@ -105,6 +105,7 @@ public class Renderer {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
+
     }
     
     public void shift(String sRow, String sCol) {
@@ -146,15 +147,15 @@ public class Renderer {
 
                     switch(gameBoard.get(row, col).getCard().getType()) {
                         case "C":
-                            stoneIcon = new ImageIcon("lib/images/tile3.png");
-                            break;
-                            
-                        case "L":
                             stoneIcon = new ImageIcon("lib/images/tile1.png");
                             break;
                             
-                        case "F":
+                        case "L":
                             stoneIcon = new ImageIcon("lib/images/tile2.png");
+                            break;
+                            
+                        case "F":
+                            stoneIcon = new ImageIcon("lib/images/tile3.png");
                             break;
                             
                         default:
@@ -183,18 +184,20 @@ public class Renderer {
                     }
 
                     stone.setIcon(stoneIconRot);
-                    add(stone);
+                    CellPane karel = new CellPane(new GridLayout());
+                    karel.add(stone);
+                    add(karel);
                 }
             }
         }
     }
 
-
     public class CellPane extends JPanel {
 
         private Color defaultBackground;
 
-        public CellPane() {
+        public CellPane(LayoutManager mg) {
+            super(mg);
             addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseEntered(MouseEvent e) {
@@ -206,12 +209,22 @@ public class Renderer {
                 public void mouseExited(MouseEvent e) {
                     setBackground(defaultBackground);
                 }
+
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    setBackground(Color.BLUE);
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    setBackground(Color.RED);
+                }
             });
         }
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(50, 50);
+            return new Dimension(100, 100);
         }
     }
 

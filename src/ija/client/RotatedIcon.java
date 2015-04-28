@@ -22,41 +22,20 @@ import javax.swing.Icon;
  */
 public class RotatedIcon implements Icon
 {
-	public enum Rotate
-	{
-		DOWN,
-		UP,
-		UPSIDE_DOWN,
-		ABOUT_CENTER;
-	}
+	//public enum Rotate
+	//{
+		//DOWN,
+		//UP,
+		//UPSIDE_DOWN,
+		//ABOUT_CENTER;
+	//}
 
 	private Icon icon;
 
-	private Rotate rotate;
+	//private Rotate rotate;
 
 	private double angle;
 
-	/**
-	 *  Convenience constructor to create a RotatedIcon that is rotated DOWN.
-	 *
-	 *  @param icon  the Icon to rotate
-	 */
-	public RotatedIcon(Icon icon)
-	{
-		this(icon, Rotate.UP);
-	}
-
-	/**
-	 *  Create a RotatedIcon
-	 *
-	 *  @param icon    the Icon to rotate
-	 *  @param rotate  the direction of rotation
-	 */
-	public RotatedIcon(Icon icon, Rotate rotate)
-	{
-		this.icon = icon;
-		this.rotate = rotate;
-	}
 
 	/**
 	 *  Create a RotatedIcon. The icon will rotate about its center. This
@@ -69,43 +48,9 @@ public class RotatedIcon implements Icon
 	 */
 	public RotatedIcon(Icon icon, double angle)
 	{
-		this(icon, Rotate.ABOUT_CENTER);
+		this.icon = icon;
 		this.angle = angle;
 	}
-
-	/**
-	 *  Gets the Icon to be rotated
-	 *
-	 *  @return the Icon to be rotated
-	 */
-	public Icon getIcon()
-	{
-		return icon;
-	}
-
-	/**
-	 *  Gets the Rotate enum which indicates the direction of rotation
-	 *
-	 *  @return the Rotate enum
-	 */
-	public Rotate getRotate()
-	{
-		return rotate;
-	}
-
-	/**
-	 *  Gets the angle of rotation. Only use for Rotate.ABOUT_CENTER.
-	 *
-	 *  @return the angle of rotation
-	 */
-	public double getAngle()
-	{
-		return angle;
-	}
-
-//
-//  Implement the Icon Interface
-//
 
 	/**
 	 *  Gets the width of this icon.
@@ -115,18 +60,11 @@ public class RotatedIcon implements Icon
 	@Override
 	public int getIconWidth()
 	{
-		if (rotate == Rotate.ABOUT_CENTER)
-		{
-			double radians = Math.toRadians( angle );
-        	double sin = Math.abs( Math.sin( radians ) );
-        	double cos = Math.abs( Math.cos( radians ) );
-			int width = (int)Math.floor(icon.getIconWidth() * cos + icon.getIconHeight() * sin);
-			return width;
-		}
-		else if (rotate == Rotate.UPSIDE_DOWN)
-			return icon.getIconWidth();
-		else
-			return icon.getIconHeight();
+		double radians = Math.toRadians( angle );
+		double sin = Math.abs( Math.sin( radians ) );
+		double cos = Math.abs( Math.cos( radians ) );
+		int width = (int)Math.floor(icon.getIconWidth() * cos + icon.getIconHeight() * sin);
+		return width;
 	}
 
 	/**
@@ -137,18 +75,11 @@ public class RotatedIcon implements Icon
 	@Override
 	public int getIconHeight()
 	{
-		if (rotate == Rotate.ABOUT_CENTER)
-		{
-			double radians = Math.toRadians( angle );
-        	double sin = Math.abs( Math.sin( radians ) );
-        	double cos = Math.abs( Math.cos( radians ) );
-			int height = (int)Math.floor(icon.getIconHeight() * cos + icon.getIconWidth() * sin);
-			return height;
-		}
-		else if (rotate == Rotate.UPSIDE_DOWN)
-			return icon.getIconHeight();
-		else
-			return icon.getIconWidth();
+		double radians = Math.toRadians( angle );
+		double sin = Math.abs( Math.sin( radians ) );
+		double cos = Math.abs( Math.cos( radians ) );
+		int height = (int)Math.floor(icon.getIconHeight() * cos + icon.getIconWidth() * sin);
+		return height;
 	}
 
    /**
@@ -166,38 +97,15 @@ public class RotatedIcon implements Icon
 
 		int cWidth = icon.getIconWidth() / 2;
 		int cHeight = icon.getIconHeight() / 2;
-		int xAdjustment = (icon.getIconWidth() % 2) == 0 ? 0 : -1;
-		int yAdjustment = (icon.getIconHeight() % 2) == 0 ? 0 : -1;
 
-		if (rotate == Rotate.DOWN)
-		{
-			g2.translate(x + cHeight, y + cWidth);
-			g2.rotate( Math.toRadians( 90 ) );
-			icon.paintIcon(c, g2,  -cWidth, yAdjustment - cHeight);
-		}
-		else if (rotate == Rotate.UP)
-		{
-			g2.translate(x + cHeight, y + cWidth);
-			g2.rotate( Math.toRadians( -90 ) );
-			icon.paintIcon(c, g2,  xAdjustment - cWidth, -cHeight);
-		}
-		else if (rotate == Rotate.UPSIDE_DOWN)
-		{
-			g2.translate(x + cWidth, y + cHeight);
-			g2.rotate( Math.toRadians( 180 ) );
-			icon.paintIcon(c, g2, xAdjustment - cWidth, yAdjustment - cHeight);
-		}
-		else if (rotate == Rotate.ABOUT_CENTER)
-		{
-			g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			AffineTransform original = g2.getTransform();
-			AffineTransform at = new AffineTransform();
-			at.concatenate(original);
-	        at.translate((getIconWidth() - icon.getIconWidth()) / 2, (getIconHeight() - icon.getIconHeight()) / 2);
-			at.rotate(Math.toRadians(angle), x + cWidth, y + cHeight);
-			g2.setTransform(at);
-			icon.paintIcon(c, g2, x, y);
-			g2.setTransform(original);
-		}
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		AffineTransform original = g2.getTransform();
+		AffineTransform at = new AffineTransform();
+		at.concatenate(original);
+		at.translate((getIconWidth() - icon.getIconWidth()) / 2, (getIconHeight() - icon.getIconHeight()) / 2);
+		at.rotate(Math.toRadians(angle), x + cWidth, y + cHeight);
+		g2.setTransform(at);
+		icon.paintIcon(c, g2, x, y);
+		g2.setTransform(original);
 	}
 }

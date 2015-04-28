@@ -1,19 +1,24 @@
 package ija.server.board;
 
-import java.util.ArrayList;
-//import java.util.Objects;
+import ija.server.treasure.Treasure;
 
-/**
- *
+import java.util.ArrayList;
+
+
+/**Reprezentuje kamen na hraci desce 
+ *  
+ * 
  * @author xhajek33
  * @author xblozo00
+ * @version 1.0
  */
 public class MazeCard {
    
     private String type;
     public ArrayList<CANGO> dirs; /*smery*/
     private int rotationVec;
-    
+    private Treasure treasure;
+
     public static enum CANGO {
         LEFT,
         UP,
@@ -24,19 +29,19 @@ public class MazeCard {
     public MazeCard(String type) {     
         this.dirs = new ArrayList<CANGO>();
         switch(type) {
-            case "C": /*corner*/
+            case "C":
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.UP);
                 this.rotationVec = 0;
                 break; 
-            case "L": /*line*/
+            case "L":
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.RIGHT);
                 this.rotationVec = 0;
                 break;
-            case "F": /*!!! tvar T*/
+            case "F": 
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.UP);

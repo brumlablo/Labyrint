@@ -12,4 +12,6 @@ nbactions.xml
 nb-configuration.xml
 .nb-gradle/
 /bin/
-
+dest-client/
+dest-server/
+doc/
