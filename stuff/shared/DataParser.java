@@ -9,6 +9,6 @@ package shared;
  * Rozhrani pro tridy ServerDD a ClientDD
  * @author babu
  */
-public interface DataDecoder {
-    public void decode(DataUnit msg,int PLayerID);  
+public interface DataParser {
+    public DataUnit parse(DataUnit msg,int PLayerID);
 }

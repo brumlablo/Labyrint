@@ -1,11 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server;
+
 import java.net.*;
 import java.io.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import shared.*;
 
 /**
  *
@@ -15,57 +14,65 @@ import java.io.*;
  **/
 public class Session extends Thread
 {  
-   private Server server    = null;
-   private Socket socket    = null;
-   private int clientID        = -1;
-   private DataInputStream  streamIn  =  null;
-   private DataOutputStream streamOut = null;
+   private Server server = null;
+   private Socket socket = null;
+   private int clientID = -1;
+   private ObjectInputStream  streamIn;
+   private ObjectOutputStream streamOut;
+   private ServerDP parser = null;
 
-   public Session(Server server, Socket socket,int clientId)
-   {
+   public Session(Server server,Socket socket,int clientId) {
+      this.streamIn = null;
+      this.streamOut = null;
       this.server = server;
       this.socket = socket;
-      clientID     = clientId;
+      this.clientID = clientId;
+      this.parser = server.parser;
    }
    
-   public void send(String msg) {
+   public void send(DataUnit msg) {
        try {
-           streamOut.writeUTF(msg);
-           streamOut.flush();
+           this.streamOut.writeObject(msg);
+           this.streamOut.flush();
        }
        catch(IOException ioe) {
-           System.out.println(clientID + " ERROR sending: " + ioe.getMessage());
-           server.remove(clientID);
+           System.out.println(this.clientID + " ERROR sending: " + ioe.getMessage());
+           server.remove(this.clientID);
            stop();
        }
    }
    
    public int getID() {  
-       return clientID;
+       return this.clientID;
    }
    
    @Override
    public void run() {
-       System.out.println("Server Thread " + clientID + " running.");
+       System.out.println("Server Thread " + this.clientID + " running.");
        while (true) {
            try {
-               server.handle(clientID, streamIn.readUTF());
+               server.dataHandler(this.clientID, (DataUnit) streamIn.readObject());
             }
-            catch(IOException ioe)
-            {  System.out.println(clientID + " ERROR reading: " + ioe.getMessage());
-               server.remove(clientID);
-               stop();
-            }
+            catch(IOException ioe){
+                System.out.println(this.clientID + " ERROR reading: " + ioe.getMessage());
+                server.remove(this.clientID);
+                stop();
+            } catch (ClassNotFoundException cnfe) {
+               System.out.println(this.clientID + " Programming ERROR: " + cnfe.getMessage());
+           }
         }
    }
    
    public void open() throws IOException {  
-       streamIn = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-       streamOut = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+       streamOut = new ObjectOutputStream(socket.getOutputStream());
+       streamOut.flush();
+       streamIn = new ObjectInputStream(socket.getInputStream());
+       send(new DataUnit("Client is here",DataUnit.MsgID.C_HELLO));
    }
    
    public void close() throws IOException {  
-      if (socket != null)
+    send(new DataUnit("Client ending",DataUnit.MsgID.C_UNAV));  
+       if (socket != null)
        socket.close();
       if (streamIn != null)
           streamIn.close();

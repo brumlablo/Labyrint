@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package shared;
 import java.io.Serializable;
 
@@ -21,7 +16,6 @@ public class DataUnit implements Serializable{
      */
     public static enum MsgID{
         //client - kody
-        NONE(100),
         C_OK(1),
         C_UNAV(2),
         C_HELLO(3), //jsem tu
@@ -42,7 +36,8 @@ public class DataUnit implements Serializable{
         S_ENDGAME(29), //kdo vyhral, kdo prohral, remiza atd...
         //dalsi
         DENIED(98),
-        UNKNOWN(99); 
+        UNKNOWN(99),
+        NONE(100);
         private int code;
         private MsgID(int value) {
             this.code = value;
