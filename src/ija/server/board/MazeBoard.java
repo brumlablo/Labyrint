@@ -1,5 +1,16 @@
+/* file name  : MazeBoard.java
+ * authors    : xhajek33, xblozo00
+ * created    : Tue 28 Apr 2015 11:54:51 AM CEST
+ * copyright  : 
+ *
+ * modifications:
+ *
+ */
 package ija.server.board;
 
+import ija.server.treasure.CardPack;
+import ija.server.treasure.TreasureCard;
+import ija.server.treasure.Treasure;
 
 import java.util.Random;
 
@@ -13,17 +24,20 @@ import java.util.Random;
 public class MazeBoard { /*hraci deska*/
     private MazeField gameBoard[][];
     private int size = 0; //velikost 1 hrany hraci plochy
+    private int deckSize = 0;
     private MazeCard freeStone = null; //volny hraci kamen
-    
+    private CardPack deck = null;
 
-   /** 
+    /** Konstruktor tridy
     *  
     * 
     * @param n velikost jedne strany herni desky
+    * @param p velikost baliku karet
     */
-   private MazeBoard(int n) {
+   private MazeBoard(int n, int p) {
         this.gameBoard = new MazeField[n][n];  
         this.size = n;
+        this.deckSize = p;
     }  
     
 
@@ -32,11 +46,12 @@ public class MazeBoard { /*hraci deska*/
      *  
      * 
      * @param n velikost jedne strany herni desky
+     * @param p velikost baliku karet
      * @return 
      */
-    public static MazeBoard createMazeBoard(int n) {
+   public static MazeBoard createMazeBoard(int n, int p) {
         
-        MazeBoard tmp = new MazeBoard(n);
+        MazeBoard tmp = new MazeBoard(n, p);
         for (int r=1; r <= n; r++){
             for (int c=1; c <= n; c++) {
                 tmp.gameBoard[r-1][c-1] = new MazeField(r, c);
@@ -68,7 +83,7 @@ public class MazeBoard { /*hraci deska*/
               randI = rand.nextInt(4);
               for(int j = 0; j <= randI; j++)
                   tmp.turnRight();
-              
+
               //Lichy sloupec a radek, vytvoreni kamene F
               /*****************************************/
               if( ((r % 2) == 0) && ((c % 2) == 0) ) {
@@ -122,10 +137,41 @@ public class MazeBoard { /*hraci deska*/
         c4.turnForN(3);
         this.gameBoard[0][this.size-1].putCard(c4);
         /************************/
-    }
-    
 
-    /** Vraci policko (objekt typu MazeField) na zadane pozici.
+        createDeck();
+        putTreasures();
+
+    }
+
+    /**Nahodne rozlozeni pokladu po herni desce 
+     *  
+     */
+    private void putTreasures() {
+         int randX = 0;
+         int randY = 0;
+         Random rand = new Random();
+         int cards = this.deckSize;
+         
+         while(cards != 0) {
+            randX = rand.nextInt(this.size);
+            randY = rand.nextInt(this.size);
+            
+            if( gameBoard[randX][randY].getCard().getTreasure() == null ) {
+               gameBoard[randX][randY].getCard().setTreasure(Treasure.getTreasure(1));
+               cards--;
+            }
+         }
+    }
+   
+    /**Vytvoreni balicku karet s poklady o velikosti
+     * tridni promenne deckSize
+     *  
+     */
+    private void createDeck() {
+       this.deck = new CardPack(this.deckSize);
+    }
+
+    /**Vraci policko (objekt typu MazeField) na zadane pozici.
      *  
      * 
      * @param r radek desky

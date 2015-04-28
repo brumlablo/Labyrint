@@ -1,3 +1,12 @@
+/* file name  : MazeCard.java
+ * authors    : xhajek33, xblozo00
+ * created    : Tue 28 Apr 2015 11:55:03 AM CEST
+ * copyright  : 
+ *
+ * modifications:
+ *
+ */
+
 package ija.server.board;
 
 import ija.server.treasure.Treasure;
@@ -17,7 +26,7 @@ public class MazeCard {
     private String type;
     public ArrayList<CANGO> dirs; /*smery*/
     private int rotationVec;
-    private Treasure treasure;
+    private Treasure treasure = null;
 
     public static enum CANGO {
         LEFT,
@@ -26,6 +35,11 @@ public class MazeCard {
         DOWN
     };
     
+    /**Konstruktor tridy 
+     *  
+     * 
+     * @param type jeden ze tri typu karty: C, L, F
+     */
     public MazeCard(String type) {     
         this.dirs = new ArrayList<CANGO>();
         switch(type) {
@@ -51,6 +65,13 @@ public class MazeCard {
         }
     }   
 
+    /**Metoda pro vytvoreni jednoho herniho kamene 
+     *  
+     * 
+     * @param type jeden ze tri typu karty: C, L, F
+     * @return herni kamen
+     * @throws IllegalArgumentException 
+     */
     public static MazeCard create(String type) throws IllegalArgumentException {
         if(type.equals("C") || type.equals("L") || type.equals("F")) {
             MazeCard tmp = new MazeCard(type);
@@ -60,6 +81,12 @@ public class MazeCard {
             throw new IllegalArgumentException();            
     }
     
+    /**Overuje, jestli je mozne herni kamen danym smerem opustit 
+     *  
+     * 
+     * @param dir smer, na ktery se kamen testuje
+     * @return true pokud lze timhle smerem oopustit, jinak false
+     */
     public boolean canGo(MazeCard.CANGO dir) {
         for(MazeCard.CANGO dirsElem: this.dirs) {
             if(dirsElem == dir)
@@ -68,6 +95,9 @@ public class MazeCard {
         return false;
     }
     
+    /**Otoci herni kamen o 90° doprava 
+     *  
+     */
     public void turnRight() {
         int index = 0;
         rotationVec = (rotationVec+1) % 4;
@@ -78,6 +108,11 @@ public class MazeCard {
         }
     }
 
+    /**Otoci herni kamen n-krat doprava 
+     *  
+     * 
+     * @param n pocet pravotocivych otoceni
+     */
     public void turnForN(int n) {
         for(int i = 0; i < n; i++)
             this.turnRight();
@@ -91,4 +126,11 @@ public class MazeCard {
         return this.rotationVec;
     }
     
+    public void setTreasure(Treasure tr) {
+        this.treasure = tr;
+    }
+
+    public Treasure getTreasure() {
+        return this.treasure;
+    }
 }

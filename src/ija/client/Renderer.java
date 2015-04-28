@@ -22,18 +22,29 @@ import java.awt.event.MouseEvent;
 public class Renderer {
     
     private MazeBoard gameBoard = null;
-    private int setSize = 7; /*velikost hrany je dana*/
+    private int setSize = 5; /*velikost hrany je dana*/
+    private int cardSize = 24;
     private boolean createdBoard;
-    
+    JFrame frame;
+
     public Renderer() {
-        gameBoard = MazeBoard.createMazeBoard(setSize); /*vytvoreni herni desky o dane velikosti*/
+        gameBoard = MazeBoard.createMazeBoard(setSize, cardSize); /*vytvoreni herni desky o dane velikosti*/
         createdBoard = false;
+        frame =  new JFrame("Testing");
     }
     
     public void newGame() {
         gameBoard.newGame();
         createdBoard = true;
     }
+    
+    public void refresh() {
+                gameBoard.shift(gameBoard.get(1, 2));
+frame.invalidate();
+frame.validate();
+frame.repaint();
+    }
+
     
     public void printBoard() {
         
@@ -62,6 +73,8 @@ public class Renderer {
                     default:
                         break;
                 }
+                if(gameBoard.get(row, col).getCard().getTreasure() != null )
+                    System.out.print("T");
                 System.out.print(gameBoard.get(row, col).getCard().getRotation() + " ");
             }
             System.out.println("");
@@ -84,6 +97,8 @@ public class Renderer {
                     default:
                         break;
                 }
+                if(gameBoard.getFreeCard().getTreasure() != null)
+                    System.out.print("T");
                 System.out.print(gameBoard.getFreeCard().getRotation() + "\n");
             }
         }
@@ -93,7 +108,6 @@ public class Renderer {
                 } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
                 }
 
-                JFrame frame = new JFrame("Testing");
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.setLayout(new BorderLayout()); //Styl rozlozeni, viz API
                 JPanel left = new JPanel();
@@ -105,7 +119,6 @@ public class Renderer {
                 frame.pack();
                 frame.setLocationRelativeTo(null);
                 frame.setVisible(true);
-
     }
     
     public void shift(String sRow, String sCol) {
@@ -184,8 +197,8 @@ public class Renderer {
                     }
 
                     stone.setIcon(stoneIconRot);
-                    CellPane karel = new CellPane(new GridLayout());
-                    karel.add(stone);
+                    CellPane karel = new CellPane(new BorderLayout());
+                    karel.add(stone, BorderLayout.CENTER);
                     add(karel);
                 }
             }
@@ -224,7 +237,7 @@ public class Renderer {
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(100, 100);
+            return new Dimension(80, 80);
         }
     }
 

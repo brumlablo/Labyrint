@@ -44,7 +44,7 @@ public class ArgParser {
                 case "p":
                     renderer.printBoard();
                     break;
-                    
+
                 default:
                     if(cliCommand.matches("s\\d\\d$"))
                         renderer.shift(cliCommand.substring(1, 2), cliCommand.substring(2, 3));

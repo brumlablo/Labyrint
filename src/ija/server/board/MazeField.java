@@ -1,3 +1,12 @@
+/* file name  : MazeField.java
+ * authors    : xhajek33, xblozo00
+ * created    : Tue 28 Apr 2015 11:55:18 AM CEST
+ * copyright  : 
+ *
+ * modifications:
+ *
+ */
+
 package ija.server.board;
 
 /**
