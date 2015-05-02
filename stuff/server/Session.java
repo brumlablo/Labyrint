@@ -14,20 +14,22 @@ import shared.*;
  **/
 public class Session extends Thread
 {  
+   public static enum PlState {
+       INGAME,INLOBBY,IDLE
+   };
+   private int clientID = -1;
+   private PlState clientState = PlState.IDLE;
+   private int roomID = -1;
+   
    private Server server = null;
    private Socket socket = null;
-   private int clientID = -1;
-   private ObjectInputStream  streamIn;
-   private ObjectOutputStream streamOut;
-   private ServerDP parser = null;
+   private ObjectInputStream  streamIn = null;
+   private ObjectOutputStream streamOut = null;
 
    public Session(Server server,Socket socket,int clientId) {
-      this.streamIn = null;
-      this.streamOut = null;
       this.server = server;
       this.socket = socket;
       this.clientID = clientId;
-      this.parser = server.parser;
    }
    
    public void send(DataUnit msg) {
@@ -46,6 +48,22 @@ public class Session extends Thread
        return this.clientID;
    }
    
+   public int getRoomID() {
+      return this.roomID; 
+    }
+
+    public PlState getClientState() {
+        return clientState;
+    }
+
+    public void setRoomID(int roomID) {
+        this.roomID = roomID;
+    }
+
+    public void setClientState(PlState clientState) {
+        this.clientState = clientState;
+    }
+
    @Override
    public void run() {
        System.out.println("Server Thread " + this.clientID + " running.");
@@ -67,11 +85,9 @@ public class Session extends Thread
        streamOut = new ObjectOutputStream(socket.getOutputStream());
        streamOut.flush();
        streamIn = new ObjectInputStream(socket.getInputStream());
-       send(new DataUnit("Client is here",DataUnit.MsgID.C_HELLO));
-   }
+    }
    
    public void close() throws IOException {  
-    send(new DataUnit("Client ending",DataUnit.MsgID.C_UNAV));  
        if (socket != null)
        socket.close();
       if (streamIn != null)
