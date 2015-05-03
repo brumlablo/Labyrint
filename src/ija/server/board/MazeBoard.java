@@ -17,8 +17,8 @@ import ija.server.board.PathFinder;
 import java.util.Random;
 import java.util.ArrayList;
 
-/** Trida reprezentujici celou herni desku
- *  
+/** 
+ * Trida reprezentujici celou herni desku
  * 
  * @author xhajek33
  * @author xblozo00
@@ -33,8 +33,8 @@ public class MazeBoard { /*hraci deska*/
     private ArrayList<Player> players;
     private PathFinder finder;
 
-    /** Konstruktor tridy
-    *  
+    /** 
+    * Konstruktor tridy 
     * 
     * @param n velikost jedne strany herni desky
     * @param p velikost baliku karet
@@ -52,12 +52,13 @@ public class MazeBoard { /*hraci deska*/
     }  
     
 
-   /** Metoda pro vytvoreni herni desky o velikosti n*n a prida na 
-    * na kazdou pozici objekt tridy MazeField.
-     *  
-     * 
+    /** 
+     * Metoda pro vytvoreni herni desky o velikosti n*n a prida na 
+     * na kazdou pozici objekt tridy MazeField.
+     *
      * @param n velikost jedne strany herni desky
      * @param p velikost baliku karet
+     * @param h pocet hracu
      * @return 
      */
    public static MazeBoard createMazeBoard(int n, int p, int h) {
@@ -72,8 +73,8 @@ public class MazeBoard { /*hraci deska*/
     }
     
 
-    /** Rozlozi na herni desce herni kameny, podle zadanych pravidel. 
-     *  
+    /** 
+     * Rozlozi na herni desce herni kameny, podle zadanych pravidel. 
      */
     public void newGame() {
         String type [] = {"C","L","F"};
@@ -153,8 +154,8 @@ public class MazeBoard { /*hraci deska*/
         putPlayers();
     }
 
-    /**Nahodne rozlozeni pokladu po herni desce 
-     *  
+    /** 
+     * Nahodne rozlozeni pokladu po herni desce
      */
     private void putTreasures() {
          int randX = 0;
@@ -181,8 +182,22 @@ public class MazeBoard { /*hraci deska*/
        this.deck = new CardPack(this.deckSize);
     }
 
-    /**Vlozi do rohu herni desky hrace
-     *  
+
+    /** 
+     * Ziskani hrace podle indexu 
+     * 
+     * @param index index hrace v seznamu hracu
+     * @return hrace na zadanem indexu
+     */
+    public Player getPlayer(int index) {
+       if(players.get(index) != null)
+          return players.get(index);
+       else
+          return null;
+    }
+
+    /**
+     * Vlozi do rohu herni desky hrace 
      */
     private void putPlayers() {
        for(int i = 0; i < this.players.size(); i++) {
