@@ -3,6 +3,7 @@
  */
 package ija.server;
 
+import ija.server.board.*;
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
@@ -238,8 +239,8 @@ public class Server implements Runnable
                     break;
                 }
                 else {
-                GameStats savedGame = (GameStats) toParse.data;
-                savedGame.setRoomID(tmpgs.getRoomID());
+                MazeBoard savedGame = (MazeBoard) toParse.data; //asi najdu id a podle nej najdu hru
+                //savedGame.setRoomID(tmpgs.getRoomID()); // jak resit roomID???
                 tmpgs.loader(0,0,savedGame);
                 break;
                 }

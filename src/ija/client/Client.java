@@ -186,7 +186,7 @@ public class Client
     }
     
     public static void main(String args[]) {  
-        Client mujclient = null;
-        mujclient = new Client();
+        //Client mujclient = null;
+        //mujclient = new Client();
      }
 }

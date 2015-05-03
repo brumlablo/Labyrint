@@ -3,6 +3,7 @@
  */
 
 package ija.server;
+import ija.server.board.MazeBoard;
 import java.util.*;
 import ija.shared.*;
 
@@ -11,12 +12,11 @@ import ija.shared.*;
  * @author babu
  */
 public class GameSession {
-    //MazeBoard gb = null;
     private int roomID;
     private static int roomCounter = 0;
     private ArrayList <Session> roommates;
     private int ready = 0;
-    private GameStats game = null;
+    private MazeBoard game = null;
 
     public GameSession() {
         this.roomID = roomCounter++;
@@ -59,7 +59,7 @@ public class GameSession {
         return false;
     } 
     
-    public void loader(int N,int K,GameStats savedGame) { //velikost hrany pole, pocet pokladu
+    public void loader(int N,int K,MazeBoard savedGame) { //velikost hrany pole, pocet pokladu
         
         boolean loadSaved = false;
         if(savedGame != null) {
@@ -78,14 +78,13 @@ public class GameSession {
         Random rand = new Random();
         myTurn = rand.nextInt(roommates.size());
         
+        if(loadSaved)
+            this.game = savedGame;
+        else
+            this.game = MazeBoard.createMazeBoard(N,K,roommates.size(),colors);
         //nacitani hry
         for(int i = 0; i < roommates.size() ; i++)  {      
-            if(loadSaved) {
-                this.game = savedGame;
-            }
-            else
-                this.game = new GameStats(colors.get(i),this.roomID,N,K);
-            roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
+                roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
             if(i == myTurn)
                 roommates.get(i).send(new DataUnit(1,DataUnit.MsgID.S_YOURTURN));
             else
