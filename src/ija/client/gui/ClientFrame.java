@@ -4,10 +4,13 @@
 
 package ija.client.gui;
 
+import ija.client.*;
+import ija.shared.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.border.EmptyBorder;
+
 
 public class ClientFrame extends JFrame{
 
@@ -16,24 +19,25 @@ public class ClientFrame extends JFrame{
     private JButton newGame;
     private JList lobbyPlayers;
     private JDialog newGameDialog;
+    private Client connect;
+    private static ClientFrame instance; //singleton!
 
-    public static void main(String[] args) {
-        ClientFrame window = new ClientFrame();
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                window.setVisible(true);
-            }
-        });
-    }
 
-    public ClientFrame() {
+    private ClientFrame() {
         this.m = 7;
         this.n = 7;
         this.frameContents = new JPanel();
         this.frameContents.setLayout(new BorderLayout());
         this.lobbyPlayers = new JList();
+        this.connect = null;
         
         this.start();
+    }
+    
+    public static ClientFrame getInstance() {
+        if(instance == null)
+            instance = new ClientFrame();
+        return instance;
     }
 
     private void start() {
@@ -62,8 +66,8 @@ public class ClientFrame extends JFrame{
             }
         });
         frameContents.add(newGame, BorderLayout.SOUTH);
-
-        setVisible(true);
+        connect = new Client();
+        //setVisible(true);
     }
 
     private void createDialog() {
@@ -118,5 +122,16 @@ public class ClientFrame extends JFrame{
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         newGameDialog.pack();
+    }
+    
+    
+    public static void main(String[] args) {
+        ClientFrame window = ClientFrame.getInstance();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                window.setVisible(true);
+            }
+        });
     }
 }
