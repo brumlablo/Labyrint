@@ -5,17 +5,22 @@
 package ija.client.gui;
 
 import ija.client.*;
+import ija.server.board.MazeBoard;
 import ija.shared.*;
+
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.border.EmptyBorder;
 
 
 public class ClientFrame extends JFrame{
 
-    private int m, n;
+    private int n;
     private JPanel frameContents;
     private JButton newGame;
     private JButton refresh;
@@ -25,7 +30,6 @@ public class ClientFrame extends JFrame{
     private static ClientFrame instance; //singleton!
 
     private ClientFrame() {
-        this.m = 7;
         this.n = 7;
         this.frameContents = new JPanel();
         this.frameContents.setLayout(new BorderLayout());
@@ -42,6 +46,7 @@ public class ClientFrame extends JFrame{
     }
 
     private void start() {
+
         setLayout(new BorderLayout());
         setTitle("IJA - Labyrint");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

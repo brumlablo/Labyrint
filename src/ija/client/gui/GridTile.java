@@ -29,15 +29,23 @@ public class GridTile extends JComponent {
         Graphics2D g2 = (Graphics2D) g;
         Image img = textures.getMazeTexture(type);
         
-		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		AffineTransform original = g2.getTransform();
-		AffineTransform at = new AffineTransform();
-		at.concatenate(original);
-        at.translate((img.getWidth() - img.getWidth()) / 2, (img.getHeight() - img.getHeight()) / 2);
-		at.rotate(Math.toRadians(angle), x + cWidth, y + cHeight);
-		g2.setTransform(at);
+        switch(rotationVec) {
+            case 0:
+                g2.rotate(Math.toRadians(0.0));
+                break;
 
+            case 1:
+                g2.rotate(Math.toRadians(90.0));
+                break;
 
+            case 2:
+                g2.rotate(Math.toRadians(180.0));
+                break;
+
+            case 3:
+                g2.rotate(Math.toRadians(270.0));
+                break;
+        }
         g2.drawImage(img, 0,0, this);
         //g2.drawImage(Players.GetPlayer(Player, Direction), 0,0, this);
   }
