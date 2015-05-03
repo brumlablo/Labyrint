@@ -18,10 +18,9 @@ public class ClientFrame extends JFrame{
     private JDialog newGameDialog;
 
     public static void main(String[] args) {
-        ClientFrame window = new ClientFrame();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                window.setVisible(true);
+                new ClientFrame().setVisible(true);
             }
         });
     }
@@ -67,13 +66,14 @@ public class ClientFrame extends JFrame{
     }
 
     private void createDialog() {
-        if(this.newGameDialog != null)
-            return;
-
+        //if(this.newGameDialog != null)
+            //return;
         JButton ngButton = new JButton("NOVA HRA");
         JButton sgButton = new JButton("ULOZENA HRA");
-        this.newGameDialog = new JDialog();
+        this.newGameDialog = new JDialog(this);
 
+        this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
+        newGameDialog.setBounds(200, 300, 100, 100);
         ngButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -95,7 +95,6 @@ public class ClientFrame extends JFrame{
     }
 
     private void createNGDialog() {
-        this.newGameDialog = null;
 
         JButton confirmButton = new JButton("POTVRDIT");
         String[] treasureNumber = {"12", "24"};
@@ -103,7 +102,7 @@ public class ClientFrame extends JFrame{
         JComboBox<String> treasureCB = new JComboBox<>(treasureNumber);
         JLabel sizeLabel = new JLabel("VELIKOST DESKY");
         JTextField sizeField = new JTextField();
-        this.newGameDialog = new JDialog();
+        this.newGameDialog = new JDialog(this);
 
         newGameDialog.add(treasureLabel);
         newGameDialog.add(treasureCB);
