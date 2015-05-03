@@ -16,16 +16,16 @@ public class Server implements Runnable
     private int port = 0;
     private Thread thread = null;
     private ArrayList <Session> players;
-    private int playerCount = 0;
     private int playerID = 0;
-    protected ServerDP parser = null;
-
+    private ArrayList <GameSession> gameRooms = null;
+    
     public int getPort() {
         return port;
     }
     
     public Server() {  
-        this.players = new ArrayList <Session>();       
+        this.players = new ArrayList <Session>();
+        this.gameRooms = new ArrayList <GameSession>();
         try {  
             this.port = 12345;
             System.out.println("Binding to port " + port + ", please wait  ...");
@@ -74,25 +74,197 @@ public class Server implements Runnable
                 return i;
        return -1;
     }
-
     
-    public synchronized void dataHandler(int ID, DataUnit toParse) //preposilani dat VSEM klientum, identifikace na zaklade ID clienta
-    {  
-       /*if (input.equals(".bye")) {  
-           players.get(findClient(ID)).send(".bye");
-           remove(ID);
-       }
-       else {*/
-        DataUnit toSend = parser.parse(toParse, playerID);
-        toSend.data = ID + ": " + toParse.data;
-        System.out.println("------------------sh-----------------");
-        System.out.println(toParse.data);
-        System.out.println(toSend.data);
-        System.out.println("------------------sh-----------------");
-        
-        for (Session client : players) //prozatim rozesilam vsem
-            client.send(toSend);
-        //players.get(findClient(ID)).send(toSend); //nebo i jednomu
+    private GameSession findRoom(int ID) {
+        for(GameSession room : gameRooms) {
+            if (room.getRoomID() == ID)
+                return room;
+        }
+        return null;
+    }
+
+    public synchronized void dataHandler(int ID, DataUnit toParse) {
+        System.out.println("------------------s------------------");
+        int autorID = findClient(ID);
+        Session autor = null;
+        if(autorID >= 0) { //pokud client ID neexistuje, nacitame dal
+            autor = players.get(autorID);
+        }
+        else {
+            return;
+        }
+        String who = autor.getID() + ""; // pro vypisy
+        System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
+        //if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
+        //    return;
+        DataUnit toSend = null;
+        GameSession tmpgs = null;
+        switch(toParse.objCode) {
+            /*----------------------------------------------------------------*/
+            case C_HELLO: { //bez na cekacku
+                System.out.println( who + ": " + (String)toParse.data);
+                toSend = new DataUnit(true,DataUnit.MsgID.S_LOBBY);
+                autor.send(toSend);
+                break;
+            }
+            /*----------------------------------------------------------------*/
+            case C_OK_LOBBY: {
+                    boolean ready = false;               
+                    for (Session client : players) { /*pokud je v lobby vic jak dva klientu, je mozne vyzvat hrace*/
+                        if(client.getClientState() == Session.PlState.INLOBBY) {
+                            if(client.getID() != autor.getID()) {
+                                ready = true;
+                                client.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_CLOBBY));
+                            }
+                            //+vsem ostatnim v lobby se vypise pripojeny klient
+                            //break;
+                        }     
+                    }
+                    autor.setClientState(Session.PlState.INLOBBY);
+                    for (Session client : players) {
+                        if(client.getClientState() == Session.PlState.INLOBBY) { //klienti v lobby
+                            if(ready)
+                                toSend = new DataUnit(true,DataUnit.MsgID.S_READY);
+                            else
+                                toSend = new DataUnit(false,DataUnit.MsgID.S_READY); //server neni ready na vyzvani
+                            client.send(toSend);
+                        }
+                    }
+                    ready = false;
+                break;
+            }   
+            /*----------------------------------------------------------------*/
+            case C_CHALLPL: { //v objektu dostanu pole int s ids
+                autor.setClientState(Session.PlState.INGAME);
+                ArrayList<Integer> clientIDs = (ArrayList<Integer>) toParse.data; //autor posle IDs hracu na vyzvani
+                int foundID = 0; //hledani hraci k vyzvani
+                GameSession gs = new GameSession(); //nove herni sezeni
+                gs.addPlayer(autor);
+                gs.addReady();
+                for(int i = 0; i < clientIDs.size() ; i++) { //najdi vyzvane klienty v lobby
+                    foundID = findClient(clientIDs.get(i)); //najdi klienta s jeho id
+                    if((foundID >= 0) && (players.get(foundID).getClientState() == Session.PlState.INLOBBY)) {
+                        gs.addPlayer(players.get(foundID));
+                        toSend = new DataUnit(true,DataUnit.MsgID.S_READYFG); //server ready for game
+                        players.get(foundID).send(toSend);
+                    }
+                    else {
+                        toSend = new DataUnit(false,DataUnit.MsgID.S_READYFG); //server not ready for game
+                        autor.send(toSend);
+                        autor.setClientState(Session.PlState.INLOBBY);
+                        //gs.multicast(toSend,false); //ostatnim doted nabranym rozeslu, ze nejsme ready
+                        gs.destroyer();
+                        break;
+                    }
+                }
+                gameRooms.add(gs);
+                break;
+            }
+            /*----------------------------------------------------------------*/
+            case C_RESP_CHALLPL: { //dojde mi odpoved, autor je v mistnosti
+                boolean resp = (boolean) toParse.data; //prijal nebo ne?
+                tmpgs = findRoom(autor.getID());
+                if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                    break;
+                }
+                else {
+                    if(!resp) {
+                        tmpgs.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
+                        for(Session player : tmpgs.getRoommates()) {
+                            player.setClientState(Session.PlState.INLOBBY);
+                        }
+                        tmpgs.destroyer();
+                        break;
+                    }
+                    //NOVA HRA
+                    tmpgs.addReady();
+                    if(tmpgs.isAllReady()) {
+                        //tady je potreba poslat autorovi vyber hry
+                        Session leader = tmpgs.getLeader();
+                        if(leader == null) { //vysoce nepravdepodobne
+                            tmpgs.destroyer();
+                            break;
+                        }
+                        else {
+                            //vsichni uz jsou ve hre
+                            ArrayList<Session> gsPlayers = tmpgs.getRoommates();
+                            for(Session player : gsPlayers) {
+                                player.setClientState(Session.PlState.INGAME);
+                                //tady by se uz nemeli vykreslovat v lobby
+                            }
+                            toSend = new DataUnit("",DataUnit.MsgID.S_CHOOSEG); //leader bude na klientove strane vybirat hru
+                            leader.send(toSend);
+                            toSend = new DataUnit(true,DataUnit.MsgID.S_WAITFG);
+                            tmpgs.multicast(toSend,true);
+                        }
+                    }
+                    break;
+                }
+            }
+            /*----------------------------------------------------------------*/
+            case C_CHOSENG: { //nova nebo ulozena hra, inicializace
+                int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: pole s [-1][-1]
+                
+                tmpgs = findRoom(autor.getID());
+                if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                    break;
+                }
+                else {
+                    //leader chce videt seznam ulozenych her
+                    if((newgame[0] == -1)&& (newgame[1] == -1)) {
+                        //vypis ulozene hry
+                        //tmpgs = nalezena hra;
+                        toSend = new DataUnit("seznam ulozenych her",toSend.objCode.S_SHOWGS);
+                        autor.send(toSend); //leaderovi seznam
+                        toSend = new DataUnit(true,DataUnit.MsgID.S_WAITFG); //ostatni dale cekaji
+                        tmpgs.multicast(toSend,true);
+                        break;
+                    }
+                    else {
+                        //nova hra
+                        tmpgs.loader(newgame[0],newgame[1],null); //N,K,savedgame=null;
+                        break;
+                    }
+                }
+            }
+            /*----------------------------------------------------------------*/            
+            case C_LOADSG: {
+                //prisel mi objekt??? nebo ID ulozene hry, jak to propojit s GameSession
+                tmpgs = findRoom(autor.getID());
+                if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                    break;
+                }
+                else {
+                GameStats savedGame = (GameStats) toParse.data;
+                savedGame.setRoomID(tmpgs.getRoomID());
+                tmpgs.loader(0,0,savedGame);
+                break;
+                }
+            }
+            /*----------------------------------------------------------------*/
+            case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
+                 break;
+            }
+            /*----------------------------------------------------------------*/
+            case C_MOVE: { //vzal poklad?
+                 break;
+            }
+            /*----------------------------------------------------------------*/
+            case C_UNAV: {
+                //pokud bude v mistnosti mene jak dva hraci, poslu je do lobby
+                System.out.println( who + ": " + (String)toParse.data);
+                break;
+            }
+            /*----------------------------------------------------------------*/
+            default:
+                System.out.println("Tady jsme v defaultni vetvi");
+                autor.send(new DataUnit("OK",DataUnit.MsgID.DENIED));
+                break;
+
+        }
+        if(toSend != null)
+            System.out.println(who +": "+ toSend.data + ".");
+        System.out.println("------------------s------------------");
     }
     
     public synchronized void remove(int ID) {  
@@ -100,14 +272,13 @@ public class Server implements Runnable
         Session threadExitus = players.get(pos);
         players.remove(pos);
         System.out.println("Removing client thread " + ID + " at " + pos);
-        playerCount--;
+        //playerCount--;
         try {  
             threadExitus.close();
         }
         catch(IOException ioe) {  
             System.out.println("Error closing thread: " + ioe);
         }
-        
         threadExitus.stop();
     }
 
@@ -119,7 +290,6 @@ public class Server implements Runnable
         try {
             newPlayer.open(); 
             newPlayer.start();  
-            playerCount++;
         }
         catch(IOException ioe) {  
             System.out.println("Error opening thread: " + ioe);
@@ -131,5 +301,6 @@ public class Server implements Runnable
    public static void main(String args[]) {  
       Server mujserver = null;
       mujserver = new Server();
-   }
+
+      }
 }

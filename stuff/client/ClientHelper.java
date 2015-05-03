@@ -8,19 +8,17 @@ import shared.*;
 
 
 /**
- * Vlakno sezeni klienta
+ * Vlakno nacitani jednoho klienta ze serveru
  * @author babu
  */
 public class ClientHelper extends Thread {  
     private Socket socket = null;
     private Client client = null;
     private ObjectInputStream streamIn = null;
-    private ClientDP parser = null;
 
     public ClientHelper(Client client, Socket socket) {
         this.client   = client;
         this.socket   = socket;
-        this.parser = client.parser;
         open();  
         start(); //start vlakna Thread
     }
