@@ -84,29 +84,26 @@ public class Server implements Runnable
     }
 
     public synchronized void dataHandler(int ID, DataUnit toParse) {
-       /*if (input.equals(".bye")) {  
-           players.get(findClient(ID)).send(".bye");
-           remove(ID);
-       }
-       else {*/
-        if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
-            return;
-        DataUnit toSend = null;
+        System.out.println("------------------s------------------");
         int autorID = findClient(ID);
         Session autor = null;
-        if(autorID > 0) { //pokud client ID neexistuje, nacitame dal
+        if(autorID >= 0) { //pokud client ID neexistuje, nacitame dal
             autor = players.get(autorID);
         }
         else {
             return;
         }
-        GameSession tmpgs = null;
         String who = autor.getID() + ""; // pro vypisy
-        switch(toSend.objCode) {// zeptat se pavla na IP adresu na pripojeni ke hre
+        System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
+        //if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
+        //    return;
+        DataUnit toSend = null;
+        GameSession tmpgs = null;
+        switch(toParse.objCode) {
             /*----------------------------------------------------------------*/
             case C_HELLO: { //bez na cekacku
                 System.out.println( who + ": " + (String)toParse.data);
-                toSend = new DataUnit(1,toSend.objCode.S_LOBBY);
+                toSend = new DataUnit(true,DataUnit.MsgID.S_LOBBY);
                 autor.send(toSend);
                 break;
             }
@@ -115,9 +112,10 @@ public class Server implements Runnable
                     boolean ready = false;               
                     for (Session client : players) { /*pokud je v lobby vic jak dva klientu, je mozne vyzvat hrace*/
                         if(client.getClientState() == Session.PlState.INLOBBY) {
-                            ready = true;
-                            if(client.getID() != autor.getID())
-                                client.send(new DataUnit(client.getID(),toSend.objCode.S_CLOBBY));
+                            if(client.getID() != autor.getID()) {
+                                ready = true;
+                                client.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_CLOBBY));
+                            }
                             //+vsem ostatnim v lobby se vypise pripojeny klient
                             //break;
                         }     
@@ -126,9 +124,9 @@ public class Server implements Runnable
                     for (Session client : players) {
                         if(client.getClientState() == Session.PlState.INLOBBY) { //klienti v lobby
                             if(ready)
-                                toSend = new DataUnit(true,toSend.objCode.S_READY);
+                                toSend = new DataUnit(true,DataUnit.MsgID.S_READY);
                             else
-                                toSend = new DataUnit(false,toSend.objCode.S_READY); //server neni ready na vyzvani
+                                toSend = new DataUnit(false,DataUnit.MsgID.S_READY); //server neni ready na vyzvani
                             client.send(toSend);
                         }
                     }
@@ -144,14 +142,14 @@ public class Server implements Runnable
                 gs.addPlayer(autor);
                 gs.addReady();
                 for(int i = 0; i < clientIDs.size() ; i++) { //najdi vyzvane klienty v lobby
-                    foundID = findClient(clientIDs.get(i)); //najdi klienta s jeho id // JE TO OK??
+                    foundID = findClient(clientIDs.get(i)); //najdi klienta s jeho id
                     if((foundID >= 0) && (players.get(foundID).getClientState() == Session.PlState.INLOBBY)) {
                         gs.addPlayer(players.get(foundID));
-                        toSend = new DataUnit(true,toSend.objCode.S_READYFG); //server ready for game
+                        toSend = new DataUnit(true,DataUnit.MsgID.S_READYFG); //server ready for game
                         players.get(foundID).send(toSend);
                     }
                     else {
-                        toSend = new DataUnit(false,toSend.objCode.S_READYFG); //server not ready for game
+                        toSend = new DataUnit(false,DataUnit.MsgID.S_READYFG); //server not ready for game
                         autor.send(toSend);
                         autor.setClientState(Session.PlState.INLOBBY);
                         //gs.multicast(toSend,false); //ostatnim doted nabranym rozeslu, ze nejsme ready
@@ -171,7 +169,7 @@ public class Server implements Runnable
                 }
                 else {
                     if(!resp) {
-                        tmpgs.multicast(new DataUnit(false,toSend.objCode.S_READYFG),false);
+                        tmpgs.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
                         for(Session player : tmpgs.getRoommates()) {
                             player.setClientState(Session.PlState.INLOBBY);
                         }
@@ -194,9 +192,9 @@ public class Server implements Runnable
                                 player.setClientState(Session.PlState.INGAME);
                                 //tady by se uz nemeli vykreslovat v lobby
                             }
-                            toSend = new DataUnit("",toSend.objCode.S_CHOOSEG); //leader bude na klientove strane vybirat hru
+                            toSend = new DataUnit("",DataUnit.MsgID.S_CHOOSEG); //leader bude na klientove strane vybirat hru
                             leader.send(toSend);
-                            toSend = new DataUnit(1,toSend.objCode.S_WAITFG);
+                            toSend = new DataUnit(true,DataUnit.MsgID.S_WAITFG);
                             tmpgs.multicast(toSend,true);
                         }
                     }
@@ -218,7 +216,7 @@ public class Server implements Runnable
                         //tmpgs = nalezena hra;
                         toSend = new DataUnit("seznam ulozenych her",toSend.objCode.S_SHOWGS);
                         autor.send(toSend); //leaderovi seznam
-                        toSend = new DataUnit(1,toSend.objCode.S_WAITFG); //ostatni dale cekaji
+                        toSend = new DataUnit(true,DataUnit.MsgID.S_WAITFG); //ostatni dale cekaji
                         tmpgs.multicast(toSend,true);
                         break;
                     }
@@ -259,18 +257,14 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             default:
-                players.get(findClient(ID)).send(new DataUnit("OK",DataUnit.MsgID.DENIED));
+                System.out.println("Tady jsme v defaultni vetvi");
+                autor.send(new DataUnit("OK",DataUnit.MsgID.DENIED));
+                break;
 
         }
-        toSend.data = ID + ": " + toParse.data;
+        if(toSend != null)
+            System.out.println(who +": "+ toSend.data + ".");
         System.out.println("------------------s------------------");
-        System.out.println(toParse.data);
-        System.out.println(toSend.data);
-        System.out.println("------------------s------------------");
-        
-        for (Session client : players) //prozatim rozesilam vsem
-            client.send(toSend);
-        //players.get(findClient(ID)).send(toSend); //nebo i jednomu
     }
     
     public synchronized void remove(int ID) {  
@@ -296,7 +290,6 @@ public class Server implements Runnable
         try {
             newPlayer.open(); 
             newPlayer.start();  
-           // playerCount++;
         }
         catch(IOException ioe) {  
             System.out.println("Error opening thread: " + ioe);
