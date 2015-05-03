@@ -134,7 +134,19 @@ public class Server implements Runnable
                     }
                     ready = false;
                 break;
-            }   
+            } 
+            /*----------------------------------------------------------------*/
+            case C_UPDLOBBY: {
+                ArrayList <Integer> inLobby = new ArrayList <> ();
+                for (Session client : players) { /*pokud je v lobby vic jak dva klientu, je mozne vyzvat hrace*/
+                    if(client.getClientState() == Session.PlState.INLOBBY) {
+                        inLobby.add(client.getID());
+                    }     
+                }
+                toSend = new DataUnit(inLobby,DataUnit.MsgID.S_CLOBBY);
+                autor.send(toSend);                
+                break;
+            }
             /*----------------------------------------------------------------*/
             case C_CHALLPL: { //v objektu dostanu pole int s ids
                 autor.setClientState(Session.PlState.INGAME);

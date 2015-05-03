@@ -18,6 +18,7 @@ public class ClientFrame extends JFrame{
     private int m, n;
     private JPanel frameContents;
     private JButton newGame;
+    private JButton refresh;
     private JList lobbyPlayers;
     private JDialog newGameDialog;
     private Client connect;
@@ -53,9 +54,19 @@ public class ClientFrame extends JFrame{
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
         frameContents.add(name, BorderLayout.NORTH);
 
-        //Seznam her
+        //Seznam hracu
         frameContents.add(lobbyPlayers);
-
+        
+        //Tlacitko obnoveni seznamuhracu
+        refresh = new JButton("OBNOVIT");
+        refresh.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                connect.send(new DataUnit(true,DataUnit.MsgID.C_UPDLOBBY));
+            }
+        });
+        frameContents.add(refresh, BorderLayout.EAST);
+        
         //Tlacitko zacit hru
         newGame = new JButton("ZACIT HRAT");
         newGame.setPreferredSize( new Dimension(this.getWidth(), 50));
@@ -68,6 +79,7 @@ public class ClientFrame extends JFrame{
         frameContents.add(newGame, BorderLayout.SOUTH);
         connect = new Client();
         //setVisible(true);
+        
     }
     
     public void updateLobby(ArrayList<Integer> inLobby) {
@@ -87,7 +99,7 @@ public class ClientFrame extends JFrame{
         JButton sgButton = new JButton("ULOZENA HRA");
         this.newGameDialog = new JDialog(this);
 
-        this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
+        //this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
         newGameDialog.setBounds(200, 300, 100, 100);
         ngButton.addActionListener(new ActionListener() {
             @Override
