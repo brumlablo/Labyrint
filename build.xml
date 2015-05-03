@@ -20,15 +20,21 @@
 
 		<javac  srcdir="src" destdir="build" />
 		<!--<javadoc sourcepath="src" destdir="doc"/>-->
-		<jar basedir="build" destfile="dest-client/ija3.jar" >
+		<jar basedir="build" destfile="dest-client/ija2015-client.jar" >
 			<manifest>
 				<attribute name="Main-Class" value="ija.client.gui.ClientFrame" /> 
+			</manifest>
+		</jar>
+		<jar basedir="build" destfile="dest-server/ija2015-server.jar" >
+			<manifest>
+				<attribute name="Main-Class" value="ija.server.Server" /> 
 			</manifest>
 		</jar>
 	</target>
 
 	<target name="run">
-		<java jar="dest-client/ija3.jar" fork="true"/>
+		<java jar="dest-client/ija2015-client.jar" fork="true"/>
+		<!--<java jar="dest-server/ija2015-server.jar" fork="true"/>-->
 	</target>
 
 </project>

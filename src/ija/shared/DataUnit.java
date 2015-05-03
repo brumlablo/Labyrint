@@ -1,4 +1,4 @@
-package shared;
+package ija.shared;
 import java.io.Serializable;
 
 /**

@@ -1,10 +1,10 @@
-package server;
+package ija.server;
 
 import java.net.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import shared.*;
+import ija.shared.*;
 
 /**
  *

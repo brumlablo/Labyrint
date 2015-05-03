@@ -1,9 +1,9 @@
-package server;
+package ija.server;
 
 import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
-import shared.*;
+import ija.shared.*;
 
 
 /**

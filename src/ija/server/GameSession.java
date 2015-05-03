@@ -4,9 +4,9 @@
  * and open the template in the editor.
  */
 
-package server;
+package ija.server;
 import java.util.*;
-import shared.*;
+import ija.shared.*;
 
 /**
  * Trida pro novou hru
