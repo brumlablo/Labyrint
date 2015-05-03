@@ -43,7 +43,7 @@ public class Client
         DataUnit toSend = null; 
         ArrayList<Integer> toChall = new ArrayList<Integer>();
         System.out.println("------------------c------------------");
-        System.out.println(toParse.data);
+        System.out.println( toParse.objCode + ", " + toParse.data);
         switch(toParse.objCode) {
             case S_OK: {
                 send(toSend);
@@ -68,64 +68,33 @@ public class Client
             case S_READY: { //server ready na vyzvani
                 boolean ready = (boolean)toParse.data;
                 if(!ready) {
+                    //blokuj tlacitko ZACIT HRAT
                     break;
                 }
-                else {
-                    //je mozno vyzvat hrace
-                    //zde bude gui brat id hracu
-                    Scanner in = new Scanner(System.in);
-                   // int i = 0;
-                   // while(i < 3) {
-                  //      if(in.hasNextInt())
-                  //          toChall.add(in.nextInt());
-                  //      i++;
-                 //   }
-                    //if(toChall.size() > 3)
-                    //    System.out.println("Nelze vyzvat vice jak 3 hrace");
-                    //    return;
-                    //toSend = new DataUnit("tebe vyzivam",DataUnit.MsgID.C_CHALLPL);
-                    //send(toSend);
-                    break;
-                }
+                break;
             }
             case S_READYFG: { //vyzva k pridani se do hry, dle hracova vyberu, otazka ano/ne
                 boolean readyyy = false;
+                readyyy = (boolean) toParse.data;
                 boolean resp = false;
                 if(!readyyy) {
-                    //leaderovi prislo oznameni o pokazene vyzve, bude v lobby
-                    System.out.println("Nepodarilo se uskutecnit vyzvu.");
-                    toSend = new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY);
+                    //vyzva se nepodarila
+                    ClientFrame.getInstance().challFailDialog();
+                    break;
                 }
-                else {
-                    Scanner in = new Scanner(System.in);
-                    System.out.println("Jsi vyzvan ke hre, prijimas?");
-                    if(in.hasNextInt()) {
-                        if(in.nextInt() == 1)
-                            resp = true;
-                        else
-                            resp = false;
-                    }
-                    toSend = new DataUnit(resp,DataUnit.MsgID.C_RESP_CHALLPL);
-                }  
-                send(toSend); 
+                System.out.println("Jsi vyzvan ke hre, prijimas?");
+                ClientFrame.getInstance().showChallDialog();
                 break;
             }
             case S_WAITFG: { //+nastaveni mistnosti
-                System.out.println("Leader vybira parametry hry.");
+                System.out.println("Leader vybira parametry hry...");
+                break;
             }
             case S_CHOOSEG: { //pro leadera: vybrat hru novou nebo ulozenou
                 //GUI s oknem na vyber hry
                 //tlacitko nova hra a pole s N a K
-                int [] gParams = new int[2]; //parametry hry
-                gParams[0] = 7; //hrana
-                gParams[1] = 12; //pocet pokladu
-                
-                //tlacitko ulozene hry
-                //gParams[0] = -1; //hrana
-                //gParams[1] = -1; //pocet pokladu
-                
-                toSend = new DataUnit(gParams,DataUnit.MsgID.C_CHOSENG);
-                send(toSend);
+                System.out.println("Leadere, vyber hru.");
+                ClientFrame.getInstance().chooseGDialog();
                 break;
             }
             case S_SHOWGS: { //vybrat hru a do C_CHOSENSG
@@ -133,7 +102,8 @@ public class Client
                 break;
             }
             case S_NEWGAME: { //nova hra, barva hrace
-                send(toSend); 
+                System.out.println("Toto je moje skvela hra. Moc se mi libi.");
+                //send(toSend); 
                 break;
             }
             case S_YOURTURN: {

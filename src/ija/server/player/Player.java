@@ -11,6 +11,7 @@ package ija.server.player;
 
 import ija.server.board.MazeField;
 import ija.server.treasure.TreasureCard;
+import java.io.Serializable;
 
 import java.lang.String;
 
@@ -21,7 +22,7 @@ import java.lang.String;
  * @author xhajek33
  * @version 1.0
  */
-public class Player {
+public class Player implements Serializable{
     private int color = -1;
     private TreasureCard activeCard;
     private MazeField position;
@@ -33,7 +34,7 @@ public class Player {
      * @param name jmeno hrace/barva
      * @param startPos startovni pozice, ktera se prideli do aktualni pozice
      */
-    public Player(int col, TreasureCard card) {
+    public Player(int col, TreasureCard card){
         this.color = col;
         this.activeCard = card;
     }
