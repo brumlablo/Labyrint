@@ -6,8 +6,6 @@ package ija.client.gui;
 
 import java.awt.Image;
 
-import ija.client.gui.RotateableIcon;
-
 /** 
  * Trida ukladajici si vsechny porebne textury pro hru 
  * 
@@ -17,6 +15,7 @@ public class TextureCache {
 
     private Image[] mazeTextures = new Image[3];
     private Image[] treasureTextures = new Image[24];
+    private Image[] playerTextures = new Image[4];
 
     /** 
      * Konstruktor tridy, ulozi si vsechny potrebne textury 
@@ -35,11 +34,19 @@ public class TextureCache {
         //Textury pokladu
         /*****************/
         //Coming soon
+        for(int i = 0; i < 24; i++)
+            if(i < 10)
+                treasureTextures[i] = new javax.swing.ImageIcon("lib/textures/treasures/tr0" + i + ".png").getImage();
+            else
+                treasureTextures[i] = new javax.swing.ImageIcon("lib/textures/treasures/tr" + i + ".png").getImage();
         /*****************/
 
         //Textury hrace
         /*****************/
-        //Coming soon
+        playerTextures[0] = new javax.swing.ImageIcon("lib/textures/players/player1.png").getImage();
+        playerTextures[1] = new javax.swing.ImageIcon("lib/textures/players/player2.png").getImage();
+        playerTextures[2] = new javax.swing.ImageIcon("lib/textures/players/player3.png").getImage();
+        playerTextures[3] = new javax.swing.ImageIcon("lib/textures/players/player4.png").getImage();
         /*****************/
 
     }
@@ -64,5 +71,11 @@ public class TextureCache {
         }
     }
 
-    //public Image getTreasureTexture() {}
+    public Image getTreasureTexture(int code) {
+        return treasureTextures[code];
+    }
+
+    public Image getPlayerTexture(int color) {
+        return playerTextures[color];   
+    }
 }

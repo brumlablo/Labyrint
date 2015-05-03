@@ -47,6 +47,21 @@ public class ClientFrame extends JFrame{
 
     private void start() {
 
+        //ArrayList<Integer> colours = new ArrayList<>();
+        //colours.add(0);
+        //colours.add(1);
+        //colours.add(2);
+        //colours.add(3);
+        //MazeBoard gameBoard = MazeBoard.createMazeBoard(5, 24, 4, colours);
+        //gameBoard.newGame();
+        //GridPanel p = new GridPanel(this, 5, gameBoard);
+        //JFrame karel = new JFrame();
+        //karel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //karel.setPreferredSize(new Dimension(800, 600));
+        //karel.add(p);
+        //karel.setVisible(true);
+
+        /************/
         setLayout(new BorderLayout());
         setTitle("IJA - Labyrint");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -157,7 +172,7 @@ public class ClientFrame extends JFrame{
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                window.setVisible(true);
+                ClientFrame.getInstance().setVisible(true);
             }
         });
     }

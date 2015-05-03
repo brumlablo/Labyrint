@@ -72,4 +72,8 @@ public class Treasure implements Serializable{
         else
             return code == ((Treasure)o).code;
     }
+
+    public int getCode() {
+        return this.code;
+    }
 }

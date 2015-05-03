@@ -162,7 +162,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             randY = rand.nextInt(this.size);
             
             if( gameBoard[randX][randY].getCard().getTreasure() == null ) {
-               gameBoard[randX][randY].getCard().setTreasure(Treasure.getTreasure(1));
+               gameBoard[randX][randY].getCard().setTreasure(Treasure.getTreasure(cards-1));
                cards--;
             }
          }
