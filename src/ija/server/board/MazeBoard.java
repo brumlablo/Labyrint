@@ -8,11 +8,14 @@
  */
 package ija.server.board;
 
+import ija.server.player.Player;
 import ija.server.treasure.CardPack;
 import ija.server.treasure.TreasureCard;
 import ija.server.treasure.Treasure;
+import ija.server.board.PathFinder;
 
 import java.util.Random;
+import java.util.ArrayList;
 
 /** Trida reprezentujici celou herni desku
  *  
@@ -27,6 +30,8 @@ public class MazeBoard { /*hraci deska*/
     private int deckSize = 0;
     private MazeCard freeStone = null; //volny hraci kamen
     private CardPack deck = null;
+    private ArrayList<Player> players;
+    private PathFinder finder;
 
     /** Konstruktor tridy
     *  
@@ -34,10 +39,16 @@ public class MazeBoard { /*hraci deska*/
     * @param n velikost jedne strany herni desky
     * @param p velikost baliku karet
     */
-   private MazeBoard(int n, int p) {
-        this.gameBoard = new MazeField[n][n];  
-        this.size = n;
-        this.deckSize = p;
+   private MazeBoard(int n, int p, int h) {
+      this.gameBoard = new MazeField[n][n];
+      this.size = n;
+      this.deckSize = p;
+      this.players = new ArrayList<Player>();
+      this.finder = new PathFinder();
+      createDeck();
+
+      for(int i = 0; i < h; i++ )
+         this.players.add(new Player("karel", this.deck.popCard()));
     }  
     
 
@@ -49,9 +60,9 @@ public class MazeBoard { /*hraci deska*/
      * @param p velikost baliku karet
      * @return 
      */
-   public static MazeBoard createMazeBoard(int n, int p) {
+   public static MazeBoard createMazeBoard(int n, int p, int h) {
         
-        MazeBoard tmp = new MazeBoard(n, p);
+        MazeBoard tmp = new MazeBoard(n, p, h);
         for (int r=1; r <= n; r++){
             for (int c=1; c <= n; c++) {
                 tmp.gameBoard[r-1][c-1] = new MazeField(r, c);
@@ -74,7 +85,7 @@ public class MazeBoard { /*hraci deska*/
         //Predvyplneni herni desky pomoci kamenu s nahodnym natoceni
         for (int r=0; r < this.size; r++){
             for (int c=0; c < this.size; c++) {
-            
+
                //Nahodne generovany kamen
               tmp = MazeCard.create(type[ randStone % 3 ]);
               randStone++;
@@ -138,9 +149,8 @@ public class MazeBoard { /*hraci deska*/
         this.gameBoard[0][this.size-1].putCard(c4);
         /************************/
 
-        createDeck();
         putTreasures();
-
+        putPlayers();
     }
 
     /**Nahodne rozlozeni pokladu po herni desce 
@@ -169,6 +179,55 @@ public class MazeBoard { /*hraci deska*/
      */
     private void createDeck() {
        this.deck = new CardPack(this.deckSize);
+    }
+
+    /**Vlozi do rohu herni desky hrace
+     *  
+     */
+    private void putPlayers() {
+       for(int i = 0; i < this.players.size(); i++) {
+          
+          switch(i) {
+             case 0:
+                get(1, 1).putPlayer(this.players.get(i));
+                this.players.get(i).seizePosition(get(1,1));
+                break;
+             case 1:
+                get(this.size, this.size).putPlayer(this.players.get(i));
+                this.players.get(i).seizePosition(get(this.size, this.size));
+                break;
+             case 2:
+                get(this.size, 1).putPlayer(this.players.get(i));
+                this.players.get(i).seizePosition(get(this.size, 1));
+                break;
+             case 3:
+                get(1, this.size).putPlayer(this.players.get(i));
+                this.players.get(i).seizePosition(get(1, this.size));
+                break;
+          }
+
+       }
+
+       ArrayList<MazeField> avai = this.finder.findRoutes(this.players.get(0), this);
+       ArrayList<MazeField> avai2 = this.finder.findRoutes(this.players.get(1), this);
+       ArrayList<MazeField> avai3 = this.finder.findRoutes(this.players.get(2), this);
+       ArrayList<MazeField> avai4 = this.finder.findRoutes(this.players.get(3), this);
+
+       for(MazeField i : avai)
+          System.out.println(i.row() + "-" + i.col());
+
+       System.out.println("**************");
+
+       for(MazeField i : avai2)
+          System.out.println(i.row() + "-" + i.col());
+       System.out.println("**************");
+
+       for(MazeField i : avai3)
+          System.out.println(i.row() + "-" + i.col());
+       System.out.println("**************");
+
+       for(MazeField i : avai4)
+          System.out.println(i.row() + "-" + i.col());
     }
 
     /**Vraci policko (objekt typu MazeField) na zadane pozici.
@@ -258,4 +317,12 @@ public class MazeBoard { /*hraci deska*/
         this.freeStone= tmp;
     }
     
+    /**Metoda pro ziskani velikosti desky 
+     *  
+     * 
+     * @return velikost hrany desky
+     */
+    public int getSize() {
+      return this.size;
+    }
 }

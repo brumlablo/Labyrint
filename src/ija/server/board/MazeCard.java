@@ -26,7 +26,7 @@ public class MazeCard {
     private String type;
     public ArrayList<CANGO> dirs; /*smery*/
     private int rotationVec;
-    private Treasure treasure = null;
+    private Treasure treasure;
 
     public static enum CANGO {
         LEFT,
@@ -48,12 +48,14 @@ public class MazeCard {
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.UP);
                 this.rotationVec = 0;
+                this.treasure = null;
                 break; 
             case "L":
                 this.type = type;
                 dirs.add(CANGO.LEFT);
                 dirs.add(CANGO.RIGHT);
                 this.rotationVec = 0;
+                this.treasure = null;
                 break;
             case "F": 
                 this.type = type;
@@ -61,6 +63,7 @@ public class MazeCard {
                 dirs.add(CANGO.UP);
                 dirs.add(CANGO.RIGHT);
                 this.rotationVec = 0;
+                this.treasure = null;
                 break;
         }
     }   

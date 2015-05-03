@@ -22,7 +22,7 @@
 		<!--<javadoc sourcepath="src" destdir="doc"/>-->
 		<jar basedir="build" destfile="dest-client/ija3.jar" >
 			<manifest>
-				<attribute name="Main-Class" value="ija.client.Client" /> 
+				<attribute name="Main-Class" value="ija.client.gui.ClientFrame" /> 
 			</manifest>
 		</jar>
 	</target>

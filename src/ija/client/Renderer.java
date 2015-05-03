@@ -24,11 +24,12 @@ public class Renderer {
     private MazeBoard gameBoard = null;
     private int setSize = 5; /*velikost hrany je dana*/
     private int cardSize = 24;
+    private int numPlayers = 4;
     private boolean createdBoard;
     JFrame frame;
 
     public Renderer() {
-        gameBoard = MazeBoard.createMazeBoard(setSize, cardSize); /*vytvoreni herni desky o dane velikosti*/
+        gameBoard = MazeBoard.createMazeBoard(setSize, cardSize, numPlayers); /*vytvoreni herni desky o dane velikosti*/
         createdBoard = false;
         frame =  new JFrame("Testing");
     }
@@ -75,6 +76,8 @@ frame.repaint();
                 }
                 if(gameBoard.get(row, col).getCard().getTreasure() != null )
                     System.out.print("T");
+                if(gameBoard.get(row, col).hasPlayer())
+                    System.out.print("P");
                 System.out.print(gameBoard.get(row, col).getCard().getRotation() + " ");
             }
             System.out.println("");
@@ -160,15 +163,15 @@ frame.repaint();
 
                     switch(gameBoard.get(row, col).getCard().getType()) {
                         case "C":
-                            stoneIcon = new ImageIcon("lib/images/tile1.png");
+                            stoneIcon = new ImageIcon("lib/images/L.jpg");
                             break;
                             
                         case "L":
-                            stoneIcon = new ImageIcon("lib/images/tile2.png");
+                            stoneIcon = new ImageIcon("lib/images/I.jpg");
                             break;
                             
                         case "F":
-                            stoneIcon = new ImageIcon("lib/images/tile3.png");
+                            stoneIcon = new ImageIcon("lib/images/T.jpg");
                             break;
                             
                         default:
@@ -237,7 +240,7 @@ frame.repaint();
 
         @Override
         public Dimension getPreferredSize() {
-            return new Dimension(80, 80);
+            return new Dimension(100, 100);
         }
     }
 

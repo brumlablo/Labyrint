@@ -9,24 +9,78 @@
 
 package ija.server.player;
 
-import ija.server.board.MazeBoard;
-import ija.server.board.MazeCard;
+import ija.server.board.MazeField;
+import ija.server.treasure.TreasureCard;
 
-import java.util.ArrayList;
+import java.lang.String;
 
-/**Trida reprezentujici jednoho hrace 
+/**Trida reprezentujici jednoho hrace unikatniho
+ * jeho jmenem/barvou
  *  
  * 
  * @author xhajek33
  * @version 1.0
  */
 public class Player {
-    private string name;
+    private String name;
     private TreasureCard activeCard;
-    private MazeCard position;
+    private MazeField position;
+    private int treasureCount;
 
-    public Player(string name, MazeField startPos) {
+    /**Konstruktor tridy, vytvori jednoho hrace
+     *  
+     * 
+     * @param name jmeno hrace/barva
+     * @param startPos startovni pozice, ktera se prideli do aktualni pozice
+     */
+    public Player(String name, TreasureCard card) {
         this.name = name;
-        this.position = startPos;
+        this.activeCard = card;
     }
+
+    /**Ziskani jmena hrace
+     *  
+     * 
+     * @return jmeno/barva hrace
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**Ziskani aktualni pozici hrace
+     *  
+     * 
+     * @return aktualni pozice hrace
+     */
+    public MazeField getPosition() {
+        return position;
+    }
+ 
+    /**Obsazeni policka hracem, zaroven overi, jestli se na danem policku
+     * nenachazi poklad, ktery hrac hleda; pokud ano, je navyseno jeho skore.
+     *  
+     * 
+     * @param mf policko desky k obsazeni
+     */
+    public void seizePosition(MazeField mf) {
+        if(this.position != null)
+            this.position.removePlayer(this);
+        this.position = mf;
+        mf.putPlayer(this);
+
+        if(mf.getCard().getTreasure() == this.activeCard.getTreasure())
+            this.treasureCount++;
+    }
+
+    /**Ziskani aktivni pokladove karty
+     * (pokladu, ktery hrac hleda)
+     *  
+     * 
+     * @return aktivni pokladova karta
+     */
+    public TreasureCard getActiveCard() {
+        return this.activeCard;
+    }
+
+
 }

@@ -1,4 +1,4 @@
-package ija.client;
+package ija.client.gui;
 
 import java.awt.Component;
 import java.awt.Graphics2D;
@@ -12,14 +12,11 @@ public class RotateableIcon implements Icon
 	private Icon icon;
 	private double angle;
 
-	/**
-	 *  Create a RotatedIcon. The icon will rotate about its center. This
-	 *  constructor will automatically set the Rotate enum to ABOUT_CENTER.
-	 *  For rectangular icons the icon will be clipped before the rotation
-	 *  to make sure it doesn't paint over the rest of the component.
-	 *
-	 *  @param icon    the Icon to rotate
-	 *  @param angle   the angle of rotation
+	/**Vytvori ikonu otocenou okolo stredu o zadany uhel 
+	 *  
+	 * 
+	 * @param icon ikona k otoceni
+	 * @param angle uhel ve stupnich
 	 */
 	public RotateableIcon(Icon icon, double angle)
 	{
@@ -27,10 +24,10 @@ public class RotateableIcon implements Icon
 		this.angle = angle;
 	}
 
-	/**
-	 *  Gets the width of this icon.
-	 *
-	 *  @return the width of the icon in pixels.
+	/**Ziskani sirky ikony
+	 *  
+	 * 
+	 * @return sirka ikony v pixelech
 	 */
 	@Override
 	public int getIconWidth()
@@ -42,10 +39,10 @@ public class RotateableIcon implements Icon
 		return width;
 	}
 
-	/**
-	 *  Gets the height of this icon.
-	 *
-	 *  @return the height of the icon in pixels.
+	/**Ziskani vysky ikony
+	 *  
+	 * 
+	 * @return vyska ikony v pixelech
 	 */
 	@Override
 	public int getIconHeight()
@@ -58,12 +55,12 @@ public class RotateableIcon implements Icon
 	}
 
    /**
-	*  Paint the icons of this compound icon at the specified location
+	*  Vykresleni ikony na zadanou komponentu
 	*
-	*  @param c The component on which the icon is painted
-	*  @param g the graphics context
-	*  @param x the X coordinate of the icon's top-left corner
-	*  @param y the Y coordinate of the icon's top-left corner
+	*  @param c komponenta, na kterou se ma ikona vykreslit 
+	*  @param g graficky kontext
+	*  @param x x koordinaty
+	*  @param y y koordinaty
 	*/
 	@Override
 	public void paintIcon(Component c, Graphics g, int x, int y)
