@@ -1,10 +1,5 @@
 /* file name  : PathFinder.java
  * authors    : xhajek33, xblozo00
- * created    : Wed 29 Apr 2015 03:25:49 PM CEST
- * copyright  : 
- *
- * modifications:
- *
  */
 
 package ija.server.board;

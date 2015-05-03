@@ -1,10 +1,5 @@
 /* file name  : MazeBoard.java
  * authors    : xhajek33, xblozo00
- * created    : Tue 28 Apr 2015 11:54:51 AM CEST
- * copyright  : 
- *
- * modifications:
- *
  */
 package ija.server.board;
 
@@ -14,8 +9,7 @@ import ija.server.treasure.TreasureCard;
 import ija.server.treasure.Treasure;
 import ija.server.board.PathFinder;
 
-import java.util.Random;
-import java.util.ArrayList;
+import java.util.*;
 
 /** 
  * Trida reprezentujici celou herni desku
@@ -39,7 +33,7 @@ public class MazeBoard { /*hraci deska*/
     * @param n velikost jedne strany herni desky
     * @param p velikost baliku karet
     */
-   private MazeBoard(int n, int p, int h) {
+   private MazeBoard(int n, int p, int h,List<Integer> colors) {
       this.gameBoard = new MazeField[n][n];
       this.size = n;
       this.deckSize = p;
@@ -48,7 +42,7 @@ public class MazeBoard { /*hraci deska*/
       createDeck();
 
       for(int i = 0; i < h; i++ )
-         this.players.add(new Player("karel", this.deck.popCard()));
+         this.players.add(new Player(colors.get(i), this.deck.popCard()));
     }  
     
 
@@ -61,9 +55,9 @@ public class MazeBoard { /*hraci deska*/
      * @param h pocet hracu
      * @return 
      */
-   public static MazeBoard createMazeBoard(int n, int p, int h) {
+   public static MazeBoard createMazeBoard(int n, int p, int h,List<Integer> colors) {
         
-        MazeBoard tmp = new MazeBoard(n, p, h);
+        MazeBoard tmp = new MazeBoard(n, p, h,colors);
         for (int r=1; r <= n; r++){
             for (int c=1; c <= n; c++) {
                 tmp.gameBoard[r-1][c-1] = new MazeField(r, c);

@@ -1,10 +1,5 @@
 /* file name  : MazeCard.java
  * authors    : xhajek33, xblozo00
- * created    : Tue 28 Apr 2015 11:55:03 AM CEST
- * copyright  : 
- *
- * modifications:
- *
  */
 
 package ija.server.board;

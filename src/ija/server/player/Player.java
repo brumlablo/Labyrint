@@ -22,7 +22,7 @@ import java.lang.String;
  * @version 1.0
  */
 public class Player {
-    private String name;
+    private int color = -1;
     private TreasureCard activeCard;
     private MazeField position;
     private int treasureCount;
@@ -33,8 +33,8 @@ public class Player {
      * @param name jmeno hrace/barva
      * @param startPos startovni pozice, ktera se prideli do aktualni pozice
      */
-    public Player(String name, TreasureCard card) {
-        this.name = name;
+    public Player(int col, TreasureCard card) {
+        this.color = col;
         this.activeCard = card;
     }
 
@@ -43,8 +43,8 @@ public class Player {
      * 
      * @return jmeno/barva hrace
      */
-    public String getName() {
-        return this.name;
+    public int getColor() {
+        return this.color;
     }
 
     /**Ziskani aktualni pozici hrace
