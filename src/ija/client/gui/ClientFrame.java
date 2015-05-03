@@ -1,10 +1,5 @@
 /* file name  : ClientFrame.java
  * authors    : xhajek33, xblozo00
- * created    : Sat 02 May 2015 11:22:04 AM CEST
- * copyright  : 
- *
- * modifications:
- *
  */
 
 package ija.client.gui;
@@ -24,6 +19,11 @@ public class ClientFrame extends JFrame{
 
     public static void main(String[] args) {
         ClientFrame window = new ClientFrame();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                window.setVisible(true);
+            }
+        });
     }
 
     public ClientFrame() {

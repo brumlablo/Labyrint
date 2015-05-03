@@ -1,14 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* file name  : GameStats.java
+ * authors    : xhajek33, xblozo00
  */
 package ija.server;
 
-/**
- *
- * @author babu
- */
 public class GameStats {
     //MazeBoard gb = null;
     private int color;
