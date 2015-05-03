@@ -8,13 +8,15 @@
  */
 package ija.server.treasure;
 
+import java.io.Serializable;
+
 /** Trida reprezentujici jednu herni kartu s pokladem 
  *  
  * 
  * @author xhajek33
  * @version 1.0
  */
-public class TreasureCard {
+public class TreasureCard implements Serializable{
     
     private Treasure treasure;
     

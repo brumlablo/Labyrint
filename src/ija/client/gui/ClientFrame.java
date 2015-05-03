@@ -9,6 +9,7 @@ import ija.shared.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import javax.swing.border.EmptyBorder;
 
 
@@ -67,6 +68,16 @@ public class ClientFrame extends JFrame{
         frameContents.add(newGame, BorderLayout.SOUTH);
         connect = new Client();
         //setVisible(true);
+    }
+    
+    public void updateLobby(ArrayList<Integer> inLobby) {
+        this.lobbyPlayers.setVisible(false);
+        String [] toWrite = new String [inLobby.size()];
+        for(int i = 0; i < inLobby.size(); i++) {
+            toWrite[i] = "hrac " + inLobby.get(i);
+        }
+        this.lobbyPlayers.setListData(toWrite);
+        this.lobbyPlayers.setVisible(true);
     }
 
     private void createDialog() {

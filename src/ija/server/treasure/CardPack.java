@@ -8,6 +8,7 @@
  */
 package ija.server.treasure;
 
+import java.io.Serializable;
 import java.util.Random;
 
 /** Trida reprezentujici balicek hernich karet s poklady, ktere hraci musi najit 
@@ -16,7 +17,7 @@ import java.util.Random;
  * @author xhajek33
  * @version 
  */
-public class CardPack {
+public class CardPack implements Serializable{
 
     private int stackSize;
     private TreasureCard[] cardStack;

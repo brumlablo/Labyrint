@@ -106,31 +106,29 @@ public class Server implements Runnable
         switch(toParse.objCode) {
             /*----------------------------------------------------------------*/
             case C_HELLO: { //bez na cekacku
-                System.out.println( who + ": " + (String)toParse.data);
-                toSend = new DataUnit(true,DataUnit.MsgID.S_LOBBY);
+                toSend = new DataUnit(autor.getID(),DataUnit.MsgID.S_LOBBY);
                 autor.send(toSend);
                 break;
             }
             /*----------------------------------------------------------------*/
             case C_OK_LOBBY: {
-                    boolean ready = false;               
+                    boolean ready = false; 
+                    ArrayList <Integer> inLobby = new ArrayList <> ();
+                    autor.setClientState(Session.PlState.INLOBBY);
                     for (Session client : players) { /*pokud je v lobby vic jak dva klientu, je mozne vyzvat hrace*/
                         if(client.getClientState() == Session.PlState.INLOBBY) {
+                            inLobby.add(client.getID());
                             if(client.getID() != autor.getID()) {
                                 ready = true;
-                                client.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_CLOBBY));
                             }
-                            //+vsem ostatnim v lobby se vypise pripojeny klient
-                            //break;
                         }     
                     }
-                    autor.setClientState(Session.PlState.INLOBBY);
+                    //client.send(new DataUnit(inLobby,DataUnit.MsgID.S_CLOBBY));
                     for (Session client : players) {
                         if(client.getClientState() == Session.PlState.INLOBBY) { //klienti v lobby
-                            if(ready)
-                                toSend = new DataUnit(true,DataUnit.MsgID.S_READY);
-                            else
-                                toSend = new DataUnit(false,DataUnit.MsgID.S_READY); //server neni ready na vyzvani
+                            toSend = new DataUnit(ready,DataUnit.MsgID.S_READY);
+                            client.send(toSend);
+                            toSend = new DataUnit(inLobby,DataUnit.MsgID.S_CLOBBY);
                             client.send(toSend);
                         }
                     }

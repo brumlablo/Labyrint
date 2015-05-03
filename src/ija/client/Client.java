@@ -3,6 +3,7 @@
  */
 package ija.client;
 
+import ija.client.gui.ClientFrame;
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -17,6 +18,7 @@ public class Client
     private Thread thread = null;
     private ObjectOutputStream streamOut = null;
     private ClientHelper client = null;
+    private int myID = -1;
     
     public Client() {
         System.out.println("Establishing connection. Please wait ...");
@@ -52,12 +54,15 @@ public class Client
                 break;
             }
             case S_LOBBY: {
+                myID = (int) toParse.data;
                 toSend = new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY);
                 send(toSend);
                 break;
             }
-            case S_CLOBBY: { //na vypis: novy cizi klient v lobby, pro vykresleni na gui
-                System.out.println("Client " + (int) toParse.data + " se pripojil...");
+            case S_CLOBBY: { //na vypis: novy klient v lobby
+                ArrayList <Integer> inLobby = (ArrayList <Integer>) toParse.data;
+                inLobby.remove((Integer) myID); //sebe vypsat nechci
+                ClientFrame.getInstance().updateLobby(inLobby);
                 break;
             }
             case S_READY: { //server ready na vyzvani
@@ -69,17 +74,17 @@ public class Client
                     //je mozno vyzvat hrace
                     //zde bude gui brat id hracu
                     Scanner in = new Scanner(System.in);
-                    int i = 0;
-                    while(i < 3) {
-                        if(in.hasNextInt())
-                            toChall.add(in.nextInt());
-                        i++;
-                    }
+                   // int i = 0;
+                   // while(i < 3) {
+                  //      if(in.hasNextInt())
+                  //          toChall.add(in.nextInt());
+                  //      i++;
+                 //   }
                     //if(toChall.size() > 3)
                     //    System.out.println("Nelze vyzvat vice jak 3 hrace");
                     //    return;
-                    toSend = new DataUnit(toChall,DataUnit.MsgID.C_CHALLPL);
-                    send(toSend);
+                    //toSend = new DataUnit("tebe vyzivam",DataUnit.MsgID.C_CHALLPL);
+                    //send(toSend);
                     break;
                 }
             }
@@ -186,7 +191,5 @@ public class Client
     }
     
     public static void main(String args[]) {  
-        //Client mujclient = null;
-        //mujclient = new Client();
      }
 }
