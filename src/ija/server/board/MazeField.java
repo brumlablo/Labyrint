@@ -5,6 +5,7 @@
 package ija.server.board;
 
 import ija.server.player.Player;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,7 @@ import java.util.ArrayList;
  * @author xhajek33
  * @author xblozo00
  */
-public class MazeField {
+public class MazeField implements Serializable{
     
     private int row = 0;
     private int col = 0;

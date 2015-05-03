@@ -8,6 +8,8 @@
  */
 package ija.server.treasure;
 
+import java.io.Serializable;
+
 
 /**Trida reprezentujici jeden poklad 
  *  
@@ -15,7 +17,7 @@ package ija.server.treasure;
  * @author xhajek33
  * @version 1.0
  */
-public class Treasure {
+public class Treasure implements Serializable{
     
     private int code;
     private static int treasureCount;

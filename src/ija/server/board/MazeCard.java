@@ -5,6 +5,7 @@
 package ija.server.board;
 
 import ija.server.treasure.Treasure;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,7 @@ import java.util.ArrayList;
  * @author xblozo00
  * @version 1.0
  */
-public class MazeCard {
+public class MazeCard implements Serializable{
    
     private String type;
     public ArrayList<CANGO> dirs; /*smery*/

@@ -26,7 +26,8 @@ public class DataUnit implements Serializable{
         C_MOVE(9),
         C_OK_LOBBY(10),
         C_RESP_CHALLPL(11), //klient response for game
-        S_CLOBBY(12),
+        S_CLOBBY(12), //novy hrac v lobby
+        C_UPDLOBBY(13), //update lobby
         //server - kody
         S_OK(21),       
         S_UNAV(22),  //server nedostupny

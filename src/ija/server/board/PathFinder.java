@@ -8,6 +8,7 @@ import ija.server.board.MazeBoard;
 import ija.server.board.MazeField;
 import ija.server.board.MazeCard;
 import ija.server.player.Player;
+import java.io.Serializable;
 
 import java.util.ArrayList;
 import java.lang.System;
@@ -20,7 +21,7 @@ import java.lang.System;
  * @author xhajek33
  * @version 1.0
  */
-public class PathFinder {
+public class PathFinder implements Serializable{
    
    private ArrayList<MazeField> OPEN;
    private ArrayList<MazeField> AVAILABLE;

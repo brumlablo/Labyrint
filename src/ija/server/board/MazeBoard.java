@@ -8,6 +8,7 @@ import ija.server.treasure.CardPack;
 import ija.server.treasure.TreasureCard;
 import ija.server.treasure.Treasure;
 import ija.server.board.PathFinder;
+import java.io.Serializable;
 
 import java.util.*;
 
@@ -16,9 +17,8 @@ import java.util.*;
  * 
  * @author xhajek33
  * @author xblozo00
- * @version 1.0
  */
-public class MazeBoard { /*hraci deska*/
+public class MazeBoard implements Serializable { /*hraci deska*/
     private MazeField gameBoard[][];
     private int size = 0; //velikost 1 hrany hraci plochy
     private int deckSize = 0;
