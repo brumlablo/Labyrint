@@ -16,3 +16,4 @@ dest-client/
 dest-server/
 doc/
 bin/
+*.swo
