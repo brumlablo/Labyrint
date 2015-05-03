@@ -1,3 +1,6 @@
+/* file name  : Server.java
+ * authors    : xhajek33, xblozo00
+ */
 package ija.server;
 
 import java.net.*;

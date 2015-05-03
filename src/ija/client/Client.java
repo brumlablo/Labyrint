@@ -1,10 +1,11 @@
+/* file name  : Client.java
+ * authors    : xhajek33, xblozo00
+ */
 package ija.client;
 
 import java.net.*;
 import java.io.*;
 import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ija.shared.*;
 /**
  * Trida pro klienta-hrace

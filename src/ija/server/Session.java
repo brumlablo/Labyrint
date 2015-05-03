@@ -1,9 +1,11 @@
+/* file name  : Session.java
+ * authors    : xhajek33, xblozo00
+ */
+
 package ija.server;
 
 import java.net.*;
 import java.io.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import ija.shared.*;
 
 /**

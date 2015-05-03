@@ -1,3 +1,7 @@
+/* file name  : ClientHelper.java
+ * authors    : xhajek33, xblozo00
+ */
+
 package ija.client;
 
 import java.net.*;
