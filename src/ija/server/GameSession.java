@@ -24,6 +24,7 @@ public class GameSession {
     }
     
     public void addPlayer(Session p) {
+        System.out.println("pridan hrac: " + p.getID() + " v mistnosti " + this.roomID);
         this.roommates.add(p);
         p.setRoomID(roomID);
     }
@@ -36,12 +37,13 @@ public class GameSession {
     } 
     
     public void multicast(DataUnit toSend,boolean notLeader){
+        
         int i = 0;
         for(Session najemnik : roommates) {
-            if((notLeader) && (i == 0))
+            if((notLeader) && (i++ == 0))
                 continue;
+            System.out.println("odeslano klientovi: " + najemnik.getID());
             najemnik.send(toSend);
-            i++;
         }
     }
 
@@ -80,8 +82,10 @@ public class GameSession {
         
         if(loadSaved)
             this.game = savedGame;
-        else
+        else {
             this.game = MazeBoard.createMazeBoard(N,K,roommates.size(),colors);
+            this.game.newGame();
+        }
         //nacitani hry
         for(int i = 0; i < roommates.size() ; i++)  {      
                 roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));

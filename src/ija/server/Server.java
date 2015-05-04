@@ -159,34 +159,31 @@ public class Server implements Runnable
                     foundID = findClient(clientIDs.get(i)); //najdi klienta s jeho id
                     if((foundID >= 0) && (players.get(foundID).getClientState() == Session.PlState.INLOBBY)) {
                         gs.addPlayer(players.get(foundID));
-                        toSend = new DataUnit(true,DataUnit.MsgID.S_READYFG); //server ready for game
-                        players.get(foundID).send(toSend);
                     }
                     else {
                         toSend = new DataUnit(false,DataUnit.MsgID.S_READYFG); //server not ready for game
-                        autor.send(toSend);
                         autor.setClientState(Session.PlState.INLOBBY);
-                        //gs.multicast(toSend,false); //ostatnim doted nabranym rozeslu, ze nejsme ready
+                        autor.send(toSend);
                         gs.destroyer();
-                        break;
+                        return;
                     }
                 }
+                toSend = new DataUnit(true,DataUnit.MsgID.S_READYFG); //prijmete vyzvu?
+                System.out.println("jsem tu");
+                gs.multicast(toSend,true);
                 gameRooms.add(gs);
                 break;
             }
             /*----------------------------------------------------------------*/
             case C_RESP_CHALLPL: { //dojde mi odpoved, autor je v mistnosti
                 boolean resp = (boolean) toParse.data; //prijal nebo ne?
-                tmpgs = findRoom(autor.getID());
+                tmpgs = findRoom(autor.getRoomID());
                 if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                     break;
                 }
                 else {
                     if(!resp) {
                         tmpgs.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
-                        for(Session player : tmpgs.getRoommates()) {
-                            player.setClientState(Session.PlState.INLOBBY);
-                        }
                         tmpgs.destroyer();
                         break;
                     }
@@ -219,7 +216,7 @@ public class Server implements Runnable
             case C_CHOSENG: { //nova nebo ulozena hra, inicializace
                 int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: pole s [-1][-1]
                 
-                tmpgs = findRoom(autor.getID());
+                tmpgs = findRoom(autor.getRoomID());
                 if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                     break;
                 }
@@ -244,7 +241,7 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/            
             case C_LOADSG: {
                 //prisel mi objekt??? nebo ID ulozene hry, jak to propojit s GameSession
-                tmpgs = findRoom(autor.getID());
+                tmpgs = findRoom(autor.getRoomID());
                 if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                     break;
                 }

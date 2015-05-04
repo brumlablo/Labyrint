@@ -216,27 +216,6 @@ public class MazeBoard implements Serializable { /*hraci deska*/
           }
 
        }
-
-       ArrayList<MazeField> avai = this.finder.findRoutes(this.players.get(0), this);
-       ArrayList<MazeField> avai2 = this.finder.findRoutes(this.players.get(1), this);
-       ArrayList<MazeField> avai3 = this.finder.findRoutes(this.players.get(2), this);
-       ArrayList<MazeField> avai4 = this.finder.findRoutes(this.players.get(3), this);
-
-       for(MazeField i : avai)
-          System.out.println(i.row() + "-" + i.col());
-
-       System.out.println("**************");
-
-       for(MazeField i : avai2)
-          System.out.println(i.row() + "-" + i.col());
-       System.out.println("**************");
-
-       for(MazeField i : avai3)
-          System.out.println(i.row() + "-" + i.col());
-       System.out.println("**************");
-
-       for(MazeField i : avai4)
-          System.out.println(i.row() + "-" + i.col());
     }
 
     /**Vraci policko (objekt typu MazeField) na zadane pozici.
