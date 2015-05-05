@@ -103,6 +103,7 @@ public class Client
             }
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
+                ClientFrame.getInstance().showFrame();
                 //send(toSend); 
                 break;
             }

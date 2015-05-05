@@ -55,22 +55,6 @@ public class ClientFrame extends JFrame{
         setMinimumSize(new Dimension(800, 600));
         add(frameContents);
 
-        //ArrayList<Integer> colours = new ArrayList<>();
-        //colours.add(0);
-        //colours.add(1);
-        //colours.add(2);
-        //colours.add(3);
-        //MazeBoard gameBoard = MazeBoard.createMazeBoard(5, 24, 4, colours);
-        //gameBoard.newGame();
-        //GridPanel p = new GridPanel(this, 5, gameBoard);
-        //JFrame karel = new JFrame();
-        //karel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //karel.setPreferredSize(new Dimension(800, 600));
-        //add(p);
-        //karel.setVisible(true);
-        /************/
-
-
         //Jmeno hry
         JLabel name = new JLabel("LABYRINTHIAN", SwingConstants.CENTER);
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
@@ -272,7 +256,28 @@ public class ClientFrame extends JFrame{
         newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        newGameDialog.setBounds(800, 300, 100, 100);
+        //TODO Sprav to, zmenit velikosti oken a vycentrovat, vscka stejnou velikost
         newGameDialog.pack();
+    }
+
+    public void showFrame() {
+        ArrayList<Integer> colours = new ArrayList<>();
+        colours.add(0);
+        colours.add(1);
+        colours.add(2);
+        colours.add(3);
+        MazeBoard gameBoard = MazeBoard.createMazeBoard(5, 24, 4, colours);
+        gameBoard.newGame();
+        GridPanel p = new GridPanel(this, 5, gameBoard);
+        JFrame karel = new JFrame();
+        karel.setTitle("IJA - Labyrint");
+        karel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        karel.setPreferredSize(new Dimension(800, 600));
+        karel.setMinimumSize(new Dimension(800, 600));
+        karel.add(p);
+        karel.setVisible(true);
+        System.out.println("kareeeeeeeeeeeeeeel");
     }
     
     

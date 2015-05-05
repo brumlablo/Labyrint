@@ -5,8 +5,10 @@
 package ija.client.gui;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.util.Random;
 
 import ija.server.board.MazeCard;
 import ija.client.gui.TextureCache;
