@@ -278,7 +278,7 @@ public class ClientFrame extends JFrame{
         setVisible(false);
 
         //Vytvoreni panelu s herni deskou
-        GridPanel maze = new GridPanel(this, g.getSize(), g);
+        GridPanel maze = new GridPanel(this, g);
 
         gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
@@ -286,8 +286,6 @@ public class ClientFrame extends JFrame{
         westPane.setLayout(new FlowLayout());
         westPane.add(maze);
         gamePane.add(westPane, BorderLayout.WEST);
-
-        freeStoneTile = new GridTile(g.getFreeStone());
 
         //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
