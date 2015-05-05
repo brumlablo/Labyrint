@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 public class ClientFrame extends JFrame{
 
+    //
     private JPanel lobbyPane;
     private JPanel gamePane;
     private JPanel MAINPane;
@@ -273,7 +274,9 @@ public class ClientFrame extends JFrame{
     }
 
     public void showGame(MazeBoard g) {
-        
+        setVisible(false);
+
+        //Vytvoreni panelu s herni deskou
         GridPanel maze = new GridPanel(this, g.getSize(), g);
 
         gamePane.setLayout(new BorderLayout());
@@ -282,7 +285,11 @@ public class ClientFrame extends JFrame{
         westPane.setLayout(new FlowLayout());
         westPane.add(maze);
         gamePane.add(westPane, BorderLayout.WEST);
+
+
+        //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
+        setVisible(true);
     }
     
     

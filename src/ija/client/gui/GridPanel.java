@@ -34,7 +34,7 @@ public class GridPanel extends JPanel {
         setLayout(new GridLayout(this.size, this.size, 5, 5));
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
-                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), textures);
+                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col), textures);
                 add(tiles[ (row-1)+(col-1) ]);
             }
         }

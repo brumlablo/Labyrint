@@ -52,9 +52,10 @@ public class MazeField implements Serializable{
     }
 
     public boolean hasPlayer() {
-        if(this.players.isEmpty())
-            return true;
-        else
-            return false;
+        return !players.isEmpty();
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 }
