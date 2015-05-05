@@ -22,10 +22,12 @@ public class ClientFrame extends JFrame{
 
     private int n;
     private JPanel lobbyPane;
-    private JPanel mainPane;
-    private JButton newGame;
-    private JButton refresh;
-    private JList lobbyPlayers;
+    private JPanel gamePane;
+    private JPanel MAINPane;
+    private CardLayout cardLayout = new CardLayout();
+    private JButton newGameButton;
+    private JButton refreshButton;
+    private JList lobbyPlayersList;
     private JDialog newGameDialog;
     private JDialog challDialog;
     private JDialog challFailDialog;
@@ -33,10 +35,7 @@ public class ClientFrame extends JFrame{
     private static ClientFrame instance; //singleton!
 
     private ClientFrame() {
-        this.lobbyPane = new JPanel();
-        this.lobbyPane.setLayout(new BorderLayout());
         this.connect = null;
-        
         this.init();
     }
     
@@ -47,28 +46,37 @@ public class ClientFrame extends JFrame{
     }
 
     private void init() {
+        this.MAINPane = new JPanel();
+        this.MAINPane.setLayout(new BorderLayout());
 
-        setLayout(new BorderLayout());
+        this.lobbyPane = new JPanel();
+        this.lobbyPane.setLayout(new BorderLayout());
+        
+        this.gamePane = new JPanel();
+        this.gamePane.setLayout(new BorderLayout());
+        
+        MAINPane.setLayout(this.cardLayout);
         setTitle("IJA - Labyrint");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
         setMinimumSize(new Dimension(800, 600));
-        add(lobbyPane);
+        MAINPane.add(lobbyPane,"lobby");
+        MAINPane.add(gamePane,"game");
 
         //Jmeno hry
-        JLabel name = new JLabel("LABYRINTHIAN", SwingConstants.CENTER);
+        JLabel name = new JLabel("LABYRINTUSUS", SwingConstants.CENTER);
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
         lobbyPane.add(name, BorderLayout.NORTH);
 
-        this.lobbyPlayers = new JList();
-        this.lobbyPlayers.setSelectionModel(new DefaultListSelectionModel(){
+        this.lobbyPlayersList = new JList();
+        this.lobbyPlayersList.setSelectionModel(new DefaultListSelectionModel(){
             public void setSelectionInterval(int index0,int index1){
                 if(index1-index0>= 3)
                     index1=index0+2;
                 super.setSelectionInterval(index0, index1);
             }
             public void addSelectionInterval(int index0,int index1){
-                int selLen = lobbyPlayers.getSelectedIndices().length;
+                int selLen = lobbyPlayersList.getSelectedIndices().length;
                 if(selLen >= 3) //osetreni vybrani maximalne tri hracu
                     return; 
                 if(index1-index0 >= 3 -selLen)
@@ -79,50 +87,51 @@ public class ClientFrame extends JFrame{
             }   
         });
         //Seznam hracu
-        lobbyPane.add(lobbyPlayers);
+        lobbyPane.add(lobbyPlayersList);
         
         //Tlacitko obnoveni seznamu hracu
-        refresh = new JButton("OBNOVIT");
-        refresh.addActionListener(new ActionListener() {
+        refreshButton = new JButton("OBNOVIT");
+        refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 connect.send(new DataUnit(true,DataUnit.MsgID.C_UPDLOBBY));
             }
         });
-        lobbyPane.add(refresh, BorderLayout.EAST);
+        lobbyPane.add(refreshButton, BorderLayout.EAST);
         
         //Tlacitko zacit hru
-        newGame = new JButton("VYZVAT HRACE A HRAT");
-        newGame.setPreferredSize( new Dimension(this.getWidth(), 50));
-        newGame.addActionListener(new ActionListener() {
+        newGameButton = new JButton("VYZVAT HRACE A HRAT");
+        newGameButton.setPreferredSize( new Dimension(this.getWidth(), 50));
+        newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 ArrayList <Integer> selected = new ArrayList <>();
-                for(Object o : lobbyPlayers.getSelectedValuesList()) {
+                for(Object o : lobbyPlayersList.getSelectedValuesList()) {
                     selected.add(((LobbyPlayer) o).getID());
                 }
                 //createDialog();
                 connect.send(new DataUnit(selected,DataUnit.MsgID.C_CHALLPL));
             }
         });
-        lobbyPane.add(newGame, BorderLayout.SOUTH);
+        lobbyPane.add(newGameButton, BorderLayout.SOUTH);
         connect = new Client();
-        //setVisible(true);
         
+        add(MAINPane);
+        this.cardLayout.show(MAINPane,"lobby");
     }
     
     public void setNGButton(boolean b) {
-        newGame.setEnabled(b);
+        newGameButton.setEnabled(b);
     }
     
     public void updateLobby(ArrayList<Integer> inLobby) {
-        this.lobbyPlayers.setVisible(false);
+        this.lobbyPlayersList.setVisible(false);
         DefaultListModel listModel = new DefaultListModel();
         for(int i = 0; i < inLobby.size(); i++) {
             listModel.addElement(new LobbyPlayer(inLobby.get(i)));
         }
-        this.lobbyPlayers.setModel(listModel);
-        this.lobbyPlayers.setVisible(true);
+        this.lobbyPlayersList.setModel(listModel);
+        this.lobbyPlayersList.setVisible(true);
     }
     
     public void showChallDialog() {
@@ -261,12 +270,16 @@ public class ClientFrame extends JFrame{
     
     
     public void showGame(MazeBoard g) {
-        GridPanel panel = new GridPanel(this, 5, g);
-        JFrame newWindow = new JFrame();
-        newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
+        GridPanel maze = new GridPanel(this, g.getSize(), g);
+        //JFrame newWindow = new JFrame();
+        /*newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         newWindow.setPreferredSize(new Dimension(800, 600));
         newWindow.add(panel);
-        newWindow.setVisible(true);
+        newWindow.setVisible(true);*/
+        gamePane.removeAll();
+        gamePane.add(maze);
+        this.cardLayout.show(MAINPane, "game");
     }
     
     

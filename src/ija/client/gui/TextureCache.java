@@ -24,11 +24,11 @@ public class TextureCache {
         //Textury hracich kamenu
         /**********************/
         //typ C
-        mazeTextures[0] = new javax.swing.ImageIcon("lib/textures/maze/tile1.png").getImage();
+        mazeTextures[0] = new javax.swing.ImageIcon("lib/textures/maze/L2.jpg").getImage();
         //typ L
-        mazeTextures[1] = new javax.swing.ImageIcon("lib/textures/maze/tile2.png").getImage();
+        mazeTextures[1] = new javax.swing.ImageIcon("lib/textures/maze/I.jpg").getImage();
         //typ F
-        mazeTextures[2] = new javax.swing.ImageIcon("lib/textures/maze/tile3.png").getImage();
+        mazeTextures[2] = new javax.swing.ImageIcon("lib/textures/maze/T.jpg").getImage();
         /**********************/
 
         //Textury pokladu
