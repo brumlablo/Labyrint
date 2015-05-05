@@ -72,7 +72,6 @@ public class GameSession {
         List<Integer> colors = new ArrayList<>();
         for (int i = 0; i <= roommates.size(); i++) {
             colors.add(i);
-            colors.add(i);
         }
         Collections.shuffle(colors);        
         
