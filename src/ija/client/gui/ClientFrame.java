@@ -272,36 +272,16 @@ public class ClientFrame extends JFrame{
         newGameDialog.pack();
     }
 
-    public void showFrame() {
-        ArrayList<Integer> colours = new ArrayList<>();
-        colours.add(0);
-        colours.add(1);
-        colours.add(2);
-        colours.add(3);
-        MazeBoard gameBoard = MazeBoard.createMazeBoard(5, 24, 4, colours);
-        gameBoard.newGame();
-        GridPanel p = new GridPanel(this, 5, gameBoard);
-        JFrame karel = new JFrame();
-        karel.setTitle("IJA - Labyrint");
-        karel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        karel.setPreferredSize(new Dimension(800, 600));
-        karel.setMinimumSize(new Dimension(800, 600));
-        karel.add(p);
-        karel.setVisible(true);
-        System.out.println("kareeeeeeeeeeeeeeel");
-    }
-    
-    
     public void showGame(MazeBoard g) {
         
         GridPanel maze = new GridPanel(this, g.getSize(), g);
-        //JFrame newWindow = new JFrame();
-        /*newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newWindow.setPreferredSize(new Dimension(800, 600));
-        newWindow.add(panel);
-        newWindow.setVisible(true);*/
+
+        gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
-        gamePane.add(maze);
+        JPanel westPane = new JPanel();
+        westPane.setLayout(new FlowLayout());
+        westPane.add(maze);
+        gamePane.add(westPane, BorderLayout.WEST);
         this.cardLayout.show(MAINPane, "game");
     }
     

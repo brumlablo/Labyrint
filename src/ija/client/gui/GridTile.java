@@ -29,6 +29,18 @@ public class GridTile extends JComponent {
         setPreferredSize(new Dimension(80, 80));
     }
 
+    public Dimension getMinimumSize() {
+      return getPreferredSize();
+    }
+
+    public Dimension getMaximumSize() {
+        return getPreferredSize();
+    }
+
+    public Dimension getPreferredSize() {
+        return new Dimension(80, 80);
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
