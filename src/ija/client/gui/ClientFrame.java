@@ -171,6 +171,7 @@ public class ClientFrame extends JFrame{
     }
     
     public void challFailDialog() {
+        this.challDialog.dispose();
         this.challFailDialog = new JDialog(this);
         JLabel label = new JLabel("Vyzva selhala.");
         JButton okButton = new JButton("OK");
