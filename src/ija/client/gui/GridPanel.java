@@ -37,6 +37,7 @@ public class GridPanel extends JPanel {
                 tiles[ (row-1)+(col-1) ].addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseClicked(java.awt.event.MouseEvent e) {
+                        gameBoard.shift(gameBoard.get(1,2));
                         System.out.println("click");
                     }
                 });
