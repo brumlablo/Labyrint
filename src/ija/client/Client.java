@@ -107,12 +107,11 @@ public class Client
             }
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
-                 ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
-                //send(toSend); 
+                ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
                 break;
             }
             case S_YOURTURN: {
-                if((boolean) toParse.data)
+                ClientFrame.getInstance().setGButtons((boolean) toParse.data);
                 break;
             }
             /* case S_DIRS: {

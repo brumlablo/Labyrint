@@ -129,6 +129,12 @@ public class ClientFrame extends JFrame{
         newGameButton.setEnabled(b);
     }
     
+    public void setGButtons(boolean b) {
+        //GameButton.setEnabled(b);
+        //zakaz orotovane free card
+        //zakaz reakci na kliknuti na desku
+    }
+    
     public void updateLobby(ArrayList<Integer> inLobby) {
         this.lobbyPlayersList.setVisible(false);
         DefaultListModel listModel = new DefaultListModel();
@@ -296,9 +302,7 @@ public class ClientFrame extends JFrame{
         this.cardLayout.show(MAINPane, "game");
         setVisible(true);
     }
-    
-    
-    
+
     public static void main(String[] args) {
         ClientFrame window = ClientFrame.getInstance();
         java.awt.EventQueue.invokeLater(new Runnable() {
