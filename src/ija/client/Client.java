@@ -70,8 +70,10 @@ public class Client
                 boolean ready = (boolean)toParse.data;
                 if(!ready) {
                     //blokuj tlacitko ZACIT HRAT
+                    ClientFrame.getInstance().setNGButton(false);
                     break;
                 }
+                ClientFrame.getInstance().setNGButton(true);
                 break;
             }
             case S_READYFG: { //vyzva k pridani se do hry, dle hracova vyberu, otazka ano/ne

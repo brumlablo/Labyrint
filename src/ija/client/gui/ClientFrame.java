@@ -161,16 +161,17 @@ public class ClientFrame extends JFrame{
         challDialog.add(yesButton);
         challDialog.add(noButton);
 
-        challDialog.setLocationRelativeTo(this);
         challDialog.setVisible(true);
         challDialog.setModal(true);
         challDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) challDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         challDialog.pack();
+        challDialog.setLocationRelativeTo(this);
     }
     
     public void challFailDialog() {
+        this.challDialog.dispose();
         this.challFailDialog = new JDialog(this);
         JLabel label = new JLabel("Vyzva selhala.");
         JButton okButton = new JButton("OK");
@@ -185,14 +186,14 @@ public class ClientFrame extends JFrame{
         
         challFailDialog.add(label);
         challFailDialog.add(okButton);
-        
-        challFailDialog.setLocationRelativeTo(this);
+
         challFailDialog.setVisible(true);
         challFailDialog.setModal(true);
         challFailDialog.setLayout(new GridLayout(2, 0, 10, 10));
         JPanel pane = (JPanel) challFailDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        challFailDialog.pack();       
+        challFailDialog.pack(); 
+        challFailDialog.setLocationRelativeTo(this);
     }
 
     public void chooseGDialog() {
@@ -223,13 +224,13 @@ public class ClientFrame extends JFrame{
         newGameDialog.add(ngButton);
         newGameDialog.add(sgButton);
 
-        newGameDialog.setLocationRelativeTo(this);
         newGameDialog.setVisible(true);
         newGameDialog.setModal(true);
         newGameDialog.setLayout(new GridLayout(2, 0, 10, 10));
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         newGameDialog.pack();
+        newGameDialog.setLocationRelativeTo(this);
     }
 
     private void createNGDialog() {
@@ -262,7 +263,6 @@ public class ClientFrame extends JFrame{
         newGameDialog.add(edgeCB);
         newGameDialog.add(confirmButton);
 
-        newGameDialog.setLocationRelativeTo(this);
         newGameDialog.setVisible(true);
         newGameDialog.setModal(true);
         newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
@@ -271,6 +271,7 @@ public class ClientFrame extends JFrame{
         newGameDialog.setBounds(800, 300, 100, 100);
         //TODO Sprav to, zmenit velikosti oken a vycentrovat, vscka stejnou velikost
         newGameDialog.pack();
+        newGameDialog.setLocationRelativeTo(this);
     }
 
     public void showGame(MazeBoard g) {
