@@ -20,17 +20,19 @@ import javax.swing.border.EmptyBorder;
 
 public class ClientFrame extends JFrame{
 
-    private int n;
     private JPanel lobbyPane;
     private JPanel gamePane;
     private JPanel MAINPane;
     private CardLayout cardLayout = new CardLayout();
+    
     private JButton newGameButton;
     private JButton refreshButton;
     private JList lobbyPlayersList;
+    
     private JDialog newGameDialog;
     private JDialog challDialog;
     private JDialog challFailDialog;
+    
     private Client connect;
     private static ClientFrame instance; //singleton!
 
