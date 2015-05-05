@@ -6,7 +6,7 @@
  * modifications:
  *
  */
-package ija.server.treasure;
+package ija.shared.treasure;
 
 import java.io.Serializable;
 

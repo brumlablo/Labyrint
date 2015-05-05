@@ -8,9 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 
-import ija.server.board.MazeCard;
+import ija.shared.board.MazeCard;
 import ija.client.gui.TextureCache;
-import ija.server.treasure.Treasure;
+import ija.shared.treasure.Treasure;
 
 public class GridTile extends JComponent {
 

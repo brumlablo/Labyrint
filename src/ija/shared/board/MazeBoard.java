@@ -1,13 +1,13 @@
 /* file name  : MazeBoard.java
  * authors    : xhajek33, xblozo00
  */
-package ija.server.board;
+package ija.shared.board;
 
-import ija.server.player.Player;
-import ija.server.treasure.CardPack;
-import ija.server.treasure.TreasureCard;
-import ija.server.treasure.Treasure;
-import ija.server.board.PathFinder;
+import ija.shared.player.Player;
+import ija.shared.treasure.CardPack;
+import ija.shared.treasure.TreasureCard;
+import ija.shared.treasure.Treasure;
+import ija.shared.board.PathFinder;
 import java.io.Serializable;
 
 import java.util.*;

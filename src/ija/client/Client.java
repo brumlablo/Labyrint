@@ -4,6 +4,7 @@
 package ija.client;
 
 import ija.client.gui.ClientFrame;
+import ija.shared.board.MazeBoard;
 import java.net.*;
 import java.io.*;
 import java.util.*;
@@ -103,14 +104,14 @@ public class Client
             }
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
+                 ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
                 //send(toSend); 
                 break;
             }
             case S_YOURTURN: {
-                send(toSend); 
                 break;
             }
-            case S_DIRS: {
+            /* case S_DIRS: {
                 send(toSend); 
                 break;
             }
@@ -122,9 +123,9 @@ public class Client
                 send(toSend); 
                 break;
 
-            }         
+            } */        
             default:
-                send(new DataUnit("OK",DataUnit.MsgID.DENIED));
+                //send(new DataUnit("OK",DataUnit.MsgID.DENIED));
         }
         if(toSend != null)
             System.out.println(toSend.data);

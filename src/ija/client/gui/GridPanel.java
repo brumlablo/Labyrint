@@ -9,7 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Dimension;
 
 import ija.client.gui.ClientFrame;
-import ija.server.board.MazeBoard;
+import ija.shared.board.MazeBoard;
 
 public class GridPanel extends JPanel {
 

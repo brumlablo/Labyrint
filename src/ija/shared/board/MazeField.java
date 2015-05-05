@@ -2,9 +2,9 @@
  * authors    : xhajek33, xblozo00
  */
 
-package ija.server.board;
+package ija.shared.board;
 
-import ija.server.player.Player;
+import ija.shared.player.Player;
 import java.io.Serializable;
 
 import java.util.ArrayList;
