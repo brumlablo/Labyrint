@@ -80,6 +80,7 @@ public class Client
                 boolean readyyy = false;
                 readyyy = (boolean) toParse.data;
                 boolean resp = false;
+                ClientFrame.getInstance().setNGButton(false);
                 if(!readyyy) {
                     //vyzva se nepodarila
                     ClientFrame.getInstance().challFailDialog();
@@ -111,6 +112,7 @@ public class Client
                 break;
             }
             case S_YOURTURN: {
+                if((boolean) toParse.data)
                 break;
             }
             /* case S_DIRS: {

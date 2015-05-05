@@ -17,6 +17,7 @@ public class GameSession {
     private ArrayList <Session> roommates;
     private int ready = 0;
     private MazeBoard game = null;
+    private int onTurn;
 
     public GameSession() {
         this.roomID = roomCounter++;
@@ -70,14 +71,15 @@ public class GameSession {
         
         //generovani barev hracu
         List<Integer> colors = new ArrayList<>();
-        for (int i = 0; i <= roommates.size(); i++) {
+        for (int i = 0; i < roommates.size(); i++) {
             colors.add(i);
         }
-        Collections.shuffle(colors);        
+        Collections.shuffle(colors);
+        System.out.println("barvy: " + Arrays.toString(colors.toArray()));
         
-        int myTurn = 0; //ID hrace na tahu 
+        this.onTurn = 0; //ID hrace na tahu 
         Random rand = new Random();
-        myTurn = rand.nextInt(roommates.size());
+        onTurn = rand.nextInt(roommates.size());
         
         if(loadSaved)
             this.game = savedGame;
@@ -88,7 +90,7 @@ public class GameSession {
         //nacitani hry
         for(int i = 0; i < roommates.size() ; i++)  {      
                 roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
-            if(i == myTurn)
+            if(i == onTurn)
                 roommates.get(i).send(new DataUnit(1,DataUnit.MsgID.S_YOURTURN));
             else
                 roommates.get(i).send(new DataUnit(0,DataUnit.MsgID.S_YOURTURN));

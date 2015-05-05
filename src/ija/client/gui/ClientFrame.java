@@ -108,6 +108,8 @@ public class ClientFrame extends JFrame{
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (lobbyPlayersList.getSelectedIndices().length <=0)
+                    return;
                 ArrayList <Integer> selected = new ArrayList <>();
                 for(Object o : lobbyPlayersList.getSelectedValuesList()) {
                     selected.add(((LobbyPlayer) o).getID());
@@ -171,7 +173,8 @@ public class ClientFrame extends JFrame{
     }
     
     public void challFailDialog() {
-        this.challDialog.dispose();
+        if(challDialog != null)
+            challDialog.dispose();
         this.challFailDialog = new JDialog(this);
         JLabel label = new JLabel("Vyzva selhala.");
         JButton okButton = new JButton("OK");
@@ -181,6 +184,7 @@ public class ClientFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 connect.send(new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY));
                 challFailDialog.dispose();
+                setNGButton(true);
             }
         });
         
