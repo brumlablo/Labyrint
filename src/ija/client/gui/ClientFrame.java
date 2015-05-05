@@ -20,7 +20,6 @@ import javax.swing.border.EmptyBorder;
 
 public class ClientFrame extends JFrame{
 
-    //
     private JPanel lobbyPane;
     private JPanel gamePane;
     private JPanel MAINPane;
@@ -29,6 +28,7 @@ public class ClientFrame extends JFrame{
     private JButton newGameButton;
     private JButton refreshButton;
     private JList lobbyPlayersList;
+    private GridTile freeStoneTile;
     
     private JDialog newGameDialog;
     private JDialog challDialog;
@@ -286,6 +286,7 @@ public class ClientFrame extends JFrame{
         westPane.add(maze);
         gamePane.add(westPane, BorderLayout.WEST);
 
+        freeStoneTile = new GridTile(g.getFreeStone());
 
         //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");

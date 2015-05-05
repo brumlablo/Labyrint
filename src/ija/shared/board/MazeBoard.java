@@ -245,7 +245,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * 
      * @return 
      */
-    public MazeCard getFreeCard() {
+    public MazeCard getFreeStone() {
        return this.freeStone;
     }
     

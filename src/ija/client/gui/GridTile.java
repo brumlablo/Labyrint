@@ -35,6 +35,14 @@ public class GridTile extends JComponent {
         setPreferredSize(new Dimension(80, 80));
     }
 
+    public GridTile(MazeCard card, TextureCache textures) {
+        this.type = card.getType();
+        this.rotationVec = card.getRotation();
+        this.treasure = card.getTreasure();
+        this.textures = textures;
+        setPreferredSize(new Dimension(80, 80));
+    }
+
     public Dimension getMinimumSize() {
       return getPreferredSize();
     }
