@@ -20,6 +20,7 @@ import javax.swing.border.EmptyBorder;
 
 public class ClientFrame extends JFrame{
 
+    //
     private JPanel lobbyPane;
     private JPanel gamePane;
     private JPanel MAINPane;
@@ -266,22 +267,29 @@ public class ClientFrame extends JFrame{
         newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        newGameDialog.setBounds(800, 300, 100, 100);
+        //TODO Sprav to, zmenit velikosti oken a vycentrovat, vscka stejnou velikost
         newGameDialog.pack();
         newGameDialog.setLocationRelativeTo(this);
     }
-    
-    
+
     public void showGame(MazeBoard g) {
-        
+        setVisible(false);
+
+        //Vytvoreni panelu s herni deskou
         GridPanel maze = new GridPanel(this, g.getSize(), g);
-        //JFrame newWindow = new JFrame();
-        /*newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        newWindow.setPreferredSize(new Dimension(800, 600));
-        newWindow.add(panel);
-        newWindow.setVisible(true);*/
+
+        gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
-        gamePane.add(maze);
+        JPanel westPane = new JPanel();
+        westPane.setLayout(new FlowLayout());
+        westPane.add(maze);
+        gamePane.add(westPane, BorderLayout.WEST);
+
+
+        //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
+        setVisible(true);
     }
     
     

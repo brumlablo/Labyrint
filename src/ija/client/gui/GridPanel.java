@@ -24,20 +24,21 @@ public class GridPanel extends JPanel {
         this.gameBoard = gameBoard;
         this.size = size;
         this.tiles = new GridTile[size*size];
-        init(this.size);
-        setSize(new Dimension(80, 80));
+        //setPreferredSize(new Dimension(200, 200));
+        init();
     }
 
-    public void init(int size) {
+    public void init() {
         this.textures = new TextureCache();
 
-        setLayout(new GridLayout(this.size, this.size, 0, 0));
+        setLayout(new GridLayout(this.size, this.size, 5, 5));
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
-                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), textures);
+                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col), textures);
                 add(tiles[ (row-1)+(col-1) ]);
             }
         }
+        revalidate();
     }
 
 }

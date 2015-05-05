@@ -37,6 +37,8 @@
 			<java jar="dest-server/ija2015-server.jar" fork="true"/>
 			<java jar="dest-client/ija2015-client.jar" fork="true"/>
 			<java jar="dest-client/ija2015-client.jar" fork="true"/>
+			<java jar="dest-client/ija2015-client.jar" fork="true"/>
+			<java jar="dest-client/ija2015-client.jar" fork="true"/>
 		</parallel>
 	</target>
 
