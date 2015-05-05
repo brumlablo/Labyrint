@@ -3,7 +3,7 @@
  */
 
 package ija.server;
-import ija.server.board.MazeBoard;
+import ija.shared.board.MazeBoard;
 import java.util.*;
 import ija.shared.*;
 

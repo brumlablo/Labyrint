@@ -5,7 +5,7 @@
 package ija.client.gui;
 
 import ija.client.*;
-import ija.server.board.MazeBoard;
+import ija.shared.board.MazeBoard;
 import ija.shared.*;
 
 import javax.swing.*;
@@ -21,7 +21,8 @@ import javax.swing.border.EmptyBorder;
 public class ClientFrame extends JFrame{
 
     private int n;
-    private JPanel frameContents;
+    private JPanel lobbyPane;
+    private JPanel mainPane;
     private JButton newGame;
     private JButton refresh;
     private JList lobbyPlayers;
@@ -32,9 +33,8 @@ public class ClientFrame extends JFrame{
     private static ClientFrame instance; //singleton!
 
     private ClientFrame() {
-        this.n = 7;
-        this.frameContents = new JPanel();
-        this.frameContents.setLayout(new BorderLayout());
+        this.lobbyPane = new JPanel();
+        this.lobbyPane.setLayout(new BorderLayout());
         this.connect = null;
         
         this.init();
@@ -53,12 +53,12 @@ public class ClientFrame extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(800, 600));
         setMinimumSize(new Dimension(800, 600));
-        add(frameContents);
+        add(lobbyPane);
 
         //Jmeno hry
         JLabel name = new JLabel("LABYRINTHIAN", SwingConstants.CENTER);
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
-        frameContents.add(name, BorderLayout.NORTH);
+        lobbyPane.add(name, BorderLayout.NORTH);
 
         this.lobbyPlayers = new JList();
         this.lobbyPlayers.setSelectionModel(new DefaultListSelectionModel(){
@@ -79,7 +79,7 @@ public class ClientFrame extends JFrame{
             }   
         });
         //Seznam hracu
-        frameContents.add(lobbyPlayers);
+        lobbyPane.add(lobbyPlayers);
         
         //Tlacitko obnoveni seznamu hracu
         refresh = new JButton("OBNOVIT");
@@ -89,7 +89,7 @@ public class ClientFrame extends JFrame{
                 connect.send(new DataUnit(true,DataUnit.MsgID.C_UPDLOBBY));
             }
         });
-        frameContents.add(refresh, BorderLayout.EAST);
+        lobbyPane.add(refresh, BorderLayout.EAST);
         
         //Tlacitko zacit hru
         newGame = new JButton("VYZVAT HRACE A HRAT");
@@ -105,7 +105,7 @@ public class ClientFrame extends JFrame{
                 connect.send(new DataUnit(selected,DataUnit.MsgID.C_CHALLPL));
             }
         });
-        frameContents.add(newGame, BorderLayout.SOUTH);
+        lobbyPane.add(newGame, BorderLayout.SOUTH);
         connect = new Client();
         //setVisible(true);
         
@@ -279,6 +279,17 @@ public class ClientFrame extends JFrame{
         karel.setVisible(true);
         System.out.println("kareeeeeeeeeeeeeeel");
     }
+    
+    
+    public void showGame(MazeBoard g) {
+        GridPanel panel = new GridPanel(this, 5, g);
+        JFrame newWindow = new JFrame();
+        newWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        newWindow.setPreferredSize(new Dimension(800, 600));
+        newWindow.add(panel);
+        newWindow.setVisible(true);
+    }
+    
     
     
     public static void main(String[] args) {

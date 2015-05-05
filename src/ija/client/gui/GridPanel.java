@@ -9,7 +9,7 @@ import java.awt.GridLayout;
 import java.awt.Dimension;
 
 import ija.client.gui.ClientFrame;
-import ija.server.board.MazeBoard;
+import ija.shared.board.MazeBoard;
 
 public class GridPanel extends JPanel {
 
@@ -24,11 +24,11 @@ public class GridPanel extends JPanel {
         this.gameBoard = gameBoard;
         this.size = size;
         this.tiles = new GridTile[size*size];
-        init(this.size);
-        setSize(new Dimension(80, 80));
+        setPreferredSize(new Dimension(200, 200));
+        init();
     }
 
-    public void init(int size) {
+    public void init() {
         this.textures = new TextureCache();
 
         setLayout(new GridLayout(this.size, this.size, 0, 0));

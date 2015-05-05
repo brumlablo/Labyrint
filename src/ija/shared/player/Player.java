@@ -7,10 +7,10 @@
  *
  */
 
-package ija.server.player;
+package ija.shared.player;
 
-import ija.server.board.MazeField;
-import ija.server.treasure.TreasureCard;
+import ija.shared.board.MazeField;
+import ija.shared.treasure.TreasureCard;
 import java.io.Serializable;
 
 import java.lang.String;

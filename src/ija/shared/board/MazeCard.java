@@ -2,9 +2,9 @@
  * authors    : xhajek33, xblozo00
  */
 
-package ija.server.board;
+package ija.shared.board;
 
-import ija.server.treasure.Treasure;
+import ija.shared.treasure.Treasure;
 import java.io.Serializable;
 
 import java.util.ArrayList;

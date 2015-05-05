@@ -10,9 +10,9 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.util.Random;
 
-import ija.server.board.MazeCard;
+import ija.shared.board.MazeCard;
 import ija.client.gui.TextureCache;
-import ija.server.treasure.Treasure;
+import ija.shared.treasure.Treasure;
 
 public class GridTile extends JComponent {
 
@@ -26,7 +26,7 @@ public class GridTile extends JComponent {
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
         this.textures = textures;
-        setSize(new Dimension(80, 80));
+        setPreferredSize(new Dimension(80, 80));
     }
 
     @Override

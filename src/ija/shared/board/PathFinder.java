@@ -2,12 +2,12 @@
  * authors    : xhajek33, xblozo00
  */
 
-package ija.server.board;
+package ija.shared.board;
 
-import ija.server.board.MazeBoard;
-import ija.server.board.MazeField;
-import ija.server.board.MazeCard;
-import ija.server.player.Player;
+import ija.shared.board.MazeBoard;
+import ija.shared.board.MazeField;
+import ija.shared.board.MazeCard;
+import ija.shared.player.Player;
 import java.io.Serializable;
 
 import java.util.ArrayList;
