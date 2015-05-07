@@ -47,6 +47,16 @@ public class GridPanel extends JPanel {
             }
         }
         freeStoneTile = new GridTile(gameBoard.getFreeStone(), null, textures);
+        freeStoneTile.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                gameBoard.getFreeStone().turnRight();
+                //gameWindow.updateAfterShift(getFreeStone());
+                init();
+            }
+        });
+
+
         revalidate();
     }
     
@@ -54,8 +64,7 @@ public class GridPanel extends JPanel {
         tile.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                //gameBoard.shift(gameBoard.get(row, col));
-                gameWindow.getConnect().send(new DataUnit("r"+row+"c"+col,DataUnit.MsgID.C_SHIFT));
+                gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
                 init();
             }
         });

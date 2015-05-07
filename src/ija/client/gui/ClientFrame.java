@@ -315,7 +315,9 @@ public class ClientFrame extends JFrame{
         JPanel eastPane = new JPanel();
         eastPane.setPreferredSize(new Dimension(200, 100));
         eastPane.setBackground(Color.GRAY);
-        eastPane.add(maze.getFreeStone());
+        freeStonePane = new JPanel();
+        freeStonePane.add(maze.getFreeStone());
+        eastPane.add(freeStonePane);
 
         //Pridani panelu do okna
         gamePane.add(westPane, BorderLayout.WEST);
@@ -325,6 +327,10 @@ public class ClientFrame extends JFrame{
         this.cardLayout.show(MAINPane, "game");
         setVisible(true);
         pack();
+    }
+
+    public void updateAfterShift(GridTile freeStone) {
+        freeStone.revalidate();
     }
 
     public static void main(String[] args) {
