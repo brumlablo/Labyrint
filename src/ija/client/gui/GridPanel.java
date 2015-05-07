@@ -46,6 +46,16 @@ public class GridPanel extends JPanel {
             }
         }
         freeStoneTile = new GridTile(gameBoard.getFreeStone(), null, textures);
+        freeStoneTile.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                gameBoard.getFreeStone().turnRight();
+                //gameWindow.updateAfterShift(getFreeStone());
+                init();
+            }
+        });
+
+
         revalidate();
     }
     
