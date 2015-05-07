@@ -50,6 +50,11 @@ public class ClientFrame extends JFrame{
         return instance;
     }
 
+    public Client getConnect() {
+        return connect;
+    }
+
+    
     private void init() {
         this.MAINPane = new JPanel();
         this.MAINPane.setLayout(new BorderLayout());

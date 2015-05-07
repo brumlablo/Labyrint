@@ -52,6 +52,16 @@ public class GameSession {
         return roomID;
     }
 
+    public MazeBoard getGame() {
+        return game;
+    }
+
+    public void setGame(MazeBoard game) {
+        this.game = game;
+    }
+    
+    
+
     public void addReady() {
         this.ready++;
     }

@@ -8,7 +8,7 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import ija.shared.*;
-
+import java.util.Arrays;
 
 /**
  * Trida reprezentujici asynchronni server
@@ -253,7 +253,24 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
-                 break;
+                String input = (String) toParse.data;
+                System.out.println(input);
+                tmpgs = findRoom(autor.getRoomID());
+                String [] coords = input.split("r|c");
+                System.out.println(Arrays.toString(coords));
+                System.out.println(coords[1].toString());
+                System.out.println(coords[2].toString());
+                toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_DIRS);
+                autor.send(toSend);
+                
+                toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_GUPADATE);
+                ArrayList<Session> gsPlayers = tmpgs.getRoommates();
+                for(Session player : gsPlayers) {
+                    if(player.getID() == autor.getID())
+                        continue;
+                    player.send(toSend);
+                }
+                break;
             }
             /*----------------------------------------------------------------*/
             case C_MOVE: { //vzal poklad?
