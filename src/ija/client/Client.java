@@ -63,6 +63,10 @@ public class Client
             case S_CLOBBY: { //na vypis: novy klient v lobby
                 ArrayList <Integer> inLobby = (ArrayList <Integer>) toParse.data;
                 inLobby.remove((Integer) myID); //sebe vypsat nechci
+                if(inLobby.size() < 1)
+                    ClientFrame.getInstance().setNGButton(false);
+                else
+                    ClientFrame.getInstance().setNGButton(true); 
                 ClientFrame.getInstance().updateLobby(inLobby);
                 break;
             }
@@ -71,18 +75,22 @@ public class Client
                 if(!ready) {
                     //blokuj tlacitko ZACIT HRAT
                     ClientFrame.getInstance().setNGButton(false);
+                    System.out.println("not ready kurna");
                     break;
                 }
                 ClientFrame.getInstance().setNGButton(true);
+                ClientFrame.getInstance().setLobbyButtons(true);
+                System.out.println("ready kurna");
                 break;
             }
             case S_READYFG: { //vyzva k pridani se do hry, dle hracova vyberu, otazka ano/ne
                 boolean readyyy = false;
                 readyyy = (boolean) toParse.data;
-                boolean resp = false;
+                ClientFrame.getInstance().setNGButton(false);
+                ClientFrame.getInstance().setLobbyButtons(false);
                 if(!readyyy) {
                     //vyzva se nepodarila
-                    ClientFrame.getInstance().challFailDialog();
+                    ClientFrame.getInstance().showChallFailDialog();
                     break;
                 }
                 System.out.println("Jsi vyzvan ke hre, prijimas?");
@@ -101,31 +109,28 @@ public class Client
                 break;
             }
             case S_SHOWGS: { //vybrat hru a do C_CHOSENSG
-                send(toSend); //POSLE C_CHOSENSG
+               //POSLE C_CHOSENSG
                 break;
             }
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
-                 ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
-                //send(toSend); 
+                ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
                 break;
             }
             case S_YOURTURN: {
+                ClientFrame.getInstance().setGButtons((boolean) toParse.data);
                 break;
             }
-            /* case S_DIRS: {
-                send(toSend); 
+            case S_DIRS: {
                 break;
             }
             case S_GUPADATE: {
-                send(toSend);
                 break;
             }
             case S_ENDGAME: {
-                send(toSend); 
                 break;
 
-            } */        
+            }      
             default:
                 //send(new DataUnit("OK",DataUnit.MsgID.DENIED));
         }

@@ -123,7 +123,6 @@ public class Server implements Runnable
                             }
                         }     
                     }
-                    //client.send(new DataUnit(inLobby,DataUnit.MsgID.S_CLOBBY));
                     for (Session client : players) {
                         if(client.getClientState() == Session.PlState.INLOBBY) { //klienti v lobby
                             toSend = new DataUnit(ready,DataUnit.MsgID.S_READY);
