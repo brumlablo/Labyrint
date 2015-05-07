@@ -256,10 +256,11 @@ public class Server implements Runnable
                 String input = (String) toParse.data;
                 System.out.println(input);
                 tmpgs = findRoom(autor.getRoomID());
-                String [] coords = input.split("r|c");
+                String [] coords = input.split("i|j|r"); //radek,sloupec,otoceni
                 System.out.println(Arrays.toString(coords));
                 System.out.println(coords[1].toString());
                 System.out.println(coords[2].toString());
+                System.out.println(coords[3].toString());
                 toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_DIRS);
                 autor.send(toSend);
                 
