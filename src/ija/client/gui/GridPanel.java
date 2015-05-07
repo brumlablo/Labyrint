@@ -56,7 +56,6 @@ public class GridPanel extends JPanel {
             }
         });
 
-
         revalidate();
     }
     
@@ -65,6 +64,8 @@ public class GridPanel extends JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
+
+                //gameBoard.shift(gameBoard.get(row, col));
                 init();
             }
         });
