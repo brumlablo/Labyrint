@@ -254,12 +254,19 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
                 String input = (String) toParse.data;
-                System.out.println(input);
+                //System.out.println(input);
                 tmpgs = findRoom(autor.getRoomID());
-                String [] coords = input.split("r|c");
+                String [] coords = input.split("i|j|r"); //radek,sloupec,otoceni
+                
                 System.out.println(Arrays.toString(coords));
-                System.out.println(coords[1].toString());
-                System.out.println(coords[2].toString());
+               // System.out.println(coords[1].toString());
+               // System.out.println(coords[2].toString());
+               // System.out.println(coords[3].toString());
+                tmpgs.getGame().getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
+                tmpgs.getGame().shift(tmpgs.getGame().get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2])));
+                
+                //tmpgs.setGame(board);
+                
                 toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_DIRS);
                 autor.send(toSend);
                 

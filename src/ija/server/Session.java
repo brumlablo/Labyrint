@@ -36,6 +36,7 @@ public class Session extends Thread
    
    public void send(DataUnit msg) {
        try {
+           this.streamOut.reset();
            this.streamOut.writeObject(msg);
            this.streamOut.flush();
        }

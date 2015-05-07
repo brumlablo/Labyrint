@@ -31,6 +31,7 @@ public class ClientFrame extends JFrame{
     private JButton refreshButton;
     private JList lobbyPlayersList;
     private GridTile freeStoneTile;
+    private GridPanel maze;
     
     private JDialog newGameDialog;
     private JDialog challDialog;
@@ -303,7 +304,7 @@ public class ClientFrame extends JFrame{
         setVisible(false);
 
         //Vytvoreni panelu s herni deskou
-        GridPanel maze = new GridPanel(this, g);
+        this.maze = new GridPanel(this, g);
 
         gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
@@ -327,6 +328,12 @@ public class ClientFrame extends JFrame{
         this.cardLayout.show(MAINPane, "game");
         setVisible(true);
         pack();
+    }
+    
+    public void refreshGame(MazeBoard g) {
+        //g.shift(g.get(1, 2));
+        maze.setGameBoard(g);
+        maze.init();
     }
 
     public void updateAfterShift(GridTile freeStone) {

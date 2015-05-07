@@ -25,15 +25,14 @@ public class GridPanel extends JPanel {
 
     public GridPanel(ClientFrame window, MazeBoard gameBoard) {
         this.gameWindow = window;
-        this.gameBoard = gameBoard;
         this.size = gameBoard.getSize();
         this.tiles = new GridTile[size*size];
         this.textures = new TextureCache();
+        this.gameBoard = gameBoard;
         init();
     }
 
     public void init() {
-
         this.removeAll();
         freeStoneTile = null;
         tiles = null;
@@ -64,13 +63,15 @@ public class GridPanel extends JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
-
-                //gameBoard.shift(gameBoard.get(row, col));
-                init();
+                //init();
             }
         });
     }
 
+    public void setGameBoard(MazeBoard mb) {
+        this.gameBoard = mb;
+    }
+    
     public GridTile getFreeStone() {
         return freeStoneTile;
     }
