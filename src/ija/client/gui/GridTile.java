@@ -24,15 +24,23 @@ public class GridTile extends JComponent {
     private ArrayList<Player> players;
     private TextureCache textures;
 
-    public GridTile(MazeField mf, TextureCache textures) {
+    //public GridTile(MazeField mf, TextureCache textures) {
+    public GridTile(MazeCard card, ArrayList<Player> players, TextureCache textures) {
 
-        MazeCard card = mf.getCard();
         this.type = card.getType();
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
-        this.players = mf.getPlayers();
+        this.players = players;
         this.textures = textures;
         setPreferredSize(new Dimension(80, 80));
+
+        //MazeCard card = mf.getCard();
+        //this.type = card.getType();
+        //this.rotationVec = card.getRotation();
+        //this.treasure = card.getTreasure();
+        //this.players = mf.getPlayers();
+        //this.textures = textures;
+        //setPreferredSize(new Dimension(80, 80));
     }
 
     public GridTile(MazeCard card, TextureCache textures) {
@@ -92,16 +100,17 @@ public class GridTile extends JComponent {
         g2.rotate(Math.toRadians(0.0));
         if(treasure != null) {
           Image tr = textures.getTreasureTexture(treasure.getCode());
-          g2.drawImage(tr, 0, 0, this);
+          g2.drawImage(tr, 15, 15, this);
         }
         /**************************/
 
         //Vykresleni hracu
         /**************************/
-        for(Player p : players) {
-          Image pl = textures.getPlayerTexture(p.getColor());
-          g2.drawImage(pl, 0, 0, this);
-        }
+        if(players != null)
+          for(Player p : players) {
+            Image pl = textures.getPlayerTexture(p.getColor());
+            g2.drawImage(pl, 0, 0, this);
+          }
         /**************************/
   }
 }

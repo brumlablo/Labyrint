@@ -23,6 +23,8 @@ public class ClientFrame extends JFrame{
     private JPanel lobbyPane;
     private JPanel gamePane;
     private JPanel MAINPane;
+    private JPanel sidePane;
+    private JPanel freeStonePane;
     private CardLayout cardLayout = new CardLayout();
     
     private JButton newGameButton;
@@ -61,7 +63,7 @@ public class ClientFrame extends JFrame{
         MAINPane.setLayout(this.cardLayout);
         setTitle("IJA - Labyrint");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setPreferredSize(new Dimension(800, 600));
+        //setPreferredSize(new Dimension(800, 600));
         setMinimumSize(new Dimension(800, 600));
         MAINPane.add(lobbyPane,"lobby");
         MAINPane.add(gamePane,"game");
@@ -285,11 +287,21 @@ public class ClientFrame extends JFrame{
         JPanel westPane = new JPanel();
         westPane.setLayout(new FlowLayout());
         westPane.add(maze);
+
+        //Vytvoreni bocniho panelu
+        JPanel eastPane = new JPanel();
+        eastPane.setPreferredSize(new Dimension(200, 100));
+        eastPane.setBackground(Color.GRAY);
+        eastPane.add(maze.getFreeStone());
+
+        //Pridani panelu do okna
         gamePane.add(westPane, BorderLayout.WEST);
+        gamePane.add(eastPane, BorderLayout.EAST);
 
         //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
         setVisible(true);
+        pack();
     }
     
     

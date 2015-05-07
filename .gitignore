@@ -17,3 +17,5 @@ dest-server/
 doc/
 bin/
 *.swo
+.idea
+*.iml

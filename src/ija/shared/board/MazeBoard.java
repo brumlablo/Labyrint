@@ -262,37 +262,37 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         
         //SHIFT DOLU
         if( (r == 1) && ((c & 1) == 0) ) {
-            tmp = this.gameBoard[this.size-1][c-1].getCard();
+            tmp = get(size, c).getCard();
             
-            for(int row = this.size-1; row > 0; row--) {
-                this.gameBoard[row][c-1].putCard(this.gameBoard[row-1][c-1].getCard());
+            for(int row = this.size; row > 1; row--) {
+                get(row, c).putCard(get(row-1, c).getCard());
             }
         }
 
-        //SHIFT DOLU
+        //SHIFT NAHORU
         else if( (r == this.size) && ((c & 1) == 0) ) {
-            tmp = this.gameBoard[0][c-1].getCard();
+            tmp = get(1, c).getCard();
             
             for(int row = 1; row < this.size; row++) {
-                this.gameBoard[row][c-1].putCard(this.gameBoard[row-1][c-1].getCard());
+                get(row, c).putCard(get(row+1, c).getCard());
             }
         }
         
         //SHIFT DOPRAVA
         else if( ((r & 1) == 0) && (c == 1) ) {
-            tmp = this.gameBoard[r-1][this.size-1].getCard();
+            tmp = get(r, size).getCard();
             
-            for(int col = this.size-1; col > 0; col--) {
-                this.gameBoard[r-1][col].putCard(this.gameBoard[r-1][col-1].getCard());
+            for(int col = this.size; col > 1; col--) {
+                get(r, col).putCard(get(r, col-1).getCard());
             }
         }
         
         //SHIFT DOLEVA
         else if( ((r & 1) == 0) && (c == this.size) ) {
-            tmp = this.gameBoard[r-1][0].getCard();
+            tmp = get(r, 1).getCard();
             
-            for(int col = 1; col < this.size; col--) {
-                this.gameBoard[r-1][col].putCard(this.gameBoard[r-1][col-1].getCard());
+            for(int col = 1; col < this.size; col++) {
+                get(r, col).putCard(get(r, col+1).getCard());
             }
         }
         
@@ -301,7 +301,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             return;
         }
         
-        this.gameBoard[r-1][c-1].putCard(this.freeStone);
+        get(r, c).putCard(this.freeStone);
         this.freeStone= tmp;
     }
     

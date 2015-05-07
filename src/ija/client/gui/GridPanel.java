@@ -6,6 +6,7 @@ package ija.client.gui;
 
 import javax.swing.JPanel;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 
@@ -19,6 +20,7 @@ public class GridPanel extends JPanel {
     private TextureCache textures;
     private ClientFrame gameWindow;
     private MazeBoard gameBoard;
+    private GridTile freeStoneTile;
 
     public GridPanel(ClientFrame window, MazeBoard gameBoard) {
         this.gameWindow = window;
@@ -30,20 +32,34 @@ public class GridPanel extends JPanel {
     }
 
     public void init() {
+
+        this.removeAll();
+        freeStoneTile = null;
+        tiles = null;
+        this.tiles = new GridTile[size*size];
         setLayout(new GridLayout(this.size, this.size, 5, 5));
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
-                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col), textures);
-                tiles[ (row-1)+(col-1) ].addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseClicked(java.awt.event.MouseEvent e) {
-                        gameBoard.shift(gameBoard.get(1,2));
-                        System.out.println("click");
-                    }
-                });
+                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), gameBoard.get(row, col).getPlayers(), textures);
+                addListener(tiles[ (row-1)+(col-1) ], row, col);
                 add(tiles[ (row-1)+(col-1) ]);
             }
         }
+        freeStoneTile = new GridTile(gameBoard.getFreeStone(), null, textures);
         revalidate();
+    }
+    
+    private void addListener(GridTile tile, final int row, final int col) {
+        tile.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                gameBoard.shift(gameBoard.get(row, col));
+                init();
+            }
+        });
+    }
+
+    public GridTile getFreeStone() {
+        return freeStoneTile;
     }
 }
