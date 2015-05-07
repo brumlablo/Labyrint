@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 
 import ija.client.gui.ClientFrame;
+import ija.shared.DataUnit;
 import ija.shared.board.MazeBoard;
 
 public class GridPanel extends JPanel {
@@ -63,7 +64,8 @@ public class GridPanel extends JPanel {
         tile.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                gameBoard.shift(gameBoard.get(row, col));
+                //gameBoard.shift(gameBoard.get(row, col));
+                gameWindow.getConnect().send(new DataUnit("r"+row+"c"+col,DataUnit.MsgID.C_SHIFT));
                 init();
             }
         });

@@ -75,12 +75,10 @@ public class Client
                 if(!ready) {
                     //blokuj tlacitko ZACIT HRAT
                     ClientFrame.getInstance().setNGButton(false);
-                    System.out.println("not ready kurna");
                     break;
                 }
                 ClientFrame.getInstance().setNGButton(true);
                 ClientFrame.getInstance().setLobbyButtons(true);
-                System.out.println("ready kurna");
                 break;
             }
             case S_READYFG: { //vyzva k pridani se do hry, dle hracova vyberu, otazka ano/ne
@@ -122,9 +120,11 @@ public class Client
                 break;
             }
             case S_DIRS: {
+                System.out.println("prijal jsem dirs");
                 break;
             }
             case S_GUPADATE: {
+                System.out.println("prijal jsem gameupdate");
                 break;
             }
             case S_ENDGAME: {
