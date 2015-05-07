@@ -121,10 +121,12 @@ public class Client
             }
             case S_DIRS: {
                 System.out.println("prijal jsem dirs");
+                ClientFrame.getInstance().refreshGame((MazeBoard) toParse.data);
                 break;
             }
             case S_GUPADATE: {
                 System.out.println("prijal jsem gameupdate");
+                ClientFrame.getInstance().refreshGame((MazeBoard) toParse.data);
                 break;
             }
             case S_ENDGAME: {
