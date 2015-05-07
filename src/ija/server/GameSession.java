@@ -91,9 +91,9 @@ public class GameSession {
         for(int i = 0; i < roommates.size() ; i++)  {      
                 roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
             if(i == onTurn)
-                roommates.get(i).send(new DataUnit(1,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));
             else
-                roommates.get(i).send(new DataUnit(0,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(false,DataUnit.MsgID.S_YOURTURN));
         }
     }
 

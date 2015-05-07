@@ -135,6 +135,11 @@ public class ClientFrame extends JFrame{
         //zakaz reakci na kliknuti na desku
     }
     
+    public void setLobbyButtons(boolean b) {
+        refreshButton.setEnabled(b);
+        lobbyPlayersList.setEnabled(b);
+    }
+    
     public void updateLobby(ArrayList<Integer> inLobby) {
         this.lobbyPlayersList.setVisible(false);
         DefaultListModel listModel = new DefaultListModel();
@@ -146,6 +151,8 @@ public class ClientFrame extends JFrame{
     }
     
     public void showChallDialog() {
+        setNGButton(false);
+        setLobbyButtons(false);
         JButton yesButton = new JButton("Ano");
         JButton noButton = new JButton("Ne");
         this.challDialog = new JDialog(this);
@@ -178,7 +185,7 @@ public class ClientFrame extends JFrame{
         challDialog.setLocationRelativeTo(this);
     }
     
-    public void challFailDialog() {
+    public void showChallFailDialog() {
         if(challDialog != null)
             challDialog.dispose();
         this.challFailDialog = new JDialog(this);
@@ -191,6 +198,7 @@ public class ClientFrame extends JFrame{
                 connect.send(new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY));
                 challFailDialog.dispose();
                 setNGButton(true);
+                setLobbyButtons(true);
             }
         });
         
