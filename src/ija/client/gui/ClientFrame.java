@@ -32,6 +32,7 @@ public class ClientFrame extends JFrame{
     private JList lobbyPlayersList;
     private GridTile freeStoneTile;
     private GridPanel maze;
+    JTextArea console;
     
     private JDialog newGameDialog;
     private JDialog challDialog;
@@ -320,9 +321,20 @@ public class ClientFrame extends JFrame{
         freeStonePane.add(maze.getFreeStone());
         eastPane.add(freeStonePane);
 
+        //Vytvoreni spodniho panelu v hlavnim panelu
+        String input = "Helooo";
+        JPanel southPane = new JPanel();
+        this.console = new JTextArea(1,200);
+        this.console.setBorder(new EmptyBorder(0, 0, 0, 0));
+        this.console.setBackground(Color.cyan);
+        this.console.setEditable(false);
+        console.append(input + "\n");
+        southPane.add(console);
+        
         //Pridani panelu do okna
         gamePane.add(westPane, BorderLayout.WEST);
         gamePane.add(eastPane, BorderLayout.EAST);
+        gamePane.add(southPane, BorderLayout.SOUTH);
 
         //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
@@ -331,7 +343,6 @@ public class ClientFrame extends JFrame{
     }
     
     public void refreshGame(MazeBoard g) {
-        //g.shift(g.get(1, 2));
         maze.setGameBoard(g);
         maze.init();
     }
@@ -339,7 +350,7 @@ public class ClientFrame extends JFrame{
     public void updateAfterShift(GridTile freeStone) {
         freeStone.revalidate();
     }
-
+    
     public static void main(String[] args) {
         ClientFrame window = ClientFrame.getInstance();
         java.awt.EventQueue.invokeLater(new Runnable() {
