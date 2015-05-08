@@ -160,6 +160,10 @@ public class Client
             client.stop();
     }
 
+    public int getMyID() {
+        return this.myID;
+    }
+
     public void send(DataUnit toSend) {   
         try {
             streamOut.writeObject(toSend);

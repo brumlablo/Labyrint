@@ -95,6 +95,11 @@ public class GameSession {
             this.game = savedGame;
         else {
             this.game = MazeBoard.createMazeBoard(N,K,roommates.size(),colors);
+            int col = 0;
+            for(Session el : this.roommates) {
+                this.game.bindID2col(el.getID(), col);
+                col++;
+            }
             this.game.newGame();
         }
         //nacitani hry

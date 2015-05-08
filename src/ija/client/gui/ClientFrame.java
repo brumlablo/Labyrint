@@ -294,7 +294,6 @@ public class ClientFrame extends JFrame{
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         newGameDialog.setBounds(800, 300, 100, 100);
-        //TODO Sprav to, zmenit velikosti oken a vycentrovat, vscka stejnou velikost
         newGameDialog.pack();
         newGameDialog.setLocationRelativeTo(this);
         newGameDialog.setVisible(true);
@@ -320,6 +319,27 @@ public class ClientFrame extends JFrame{
         freeStonePane.add(maze.getFreeStone());
         eastPane.add(freeStonePane);
 
+        JPanel karel = new JPanel();
+        switch(g.getPlayerByID(connect.getMyID()).getColor()) {
+            case 0:
+                karel.setBackground(Color.BLUE);
+                break;
+
+            case 1:
+                karel.setBackground(Color.GREEN);
+                break;
+
+            case 2:
+                karel.setBackground(Color.RED);
+                break;
+
+            case 3:
+                karel.setBackground(Color.YELLOW);
+                break;
+        }
+        eastPane.add(karel);
+
+
         //Pridani panelu do okna
         gamePane.add(westPane, BorderLayout.WEST);
         gamePane.add(eastPane, BorderLayout.EAST);
@@ -331,13 +351,8 @@ public class ClientFrame extends JFrame{
     }
     
     public void refreshGame(MazeBoard g) {
-        //g.shift(g.get(1, 2));
         maze.setGameBoard(g);
         maze.init();
-    }
-
-    public void updateAfterShift(GridTile freeStone) {
-        freeStone.revalidate();
     }
 
     public static void main(String[] args) {

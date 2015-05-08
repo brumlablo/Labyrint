@@ -27,6 +27,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     private ArrayList<Player> players;
     private PathFinder finder;
     private ArrayList<MazeField> finderPaths;
+    private Map<Integer, Integer> id2col;
 
     /** 
     * Konstruktor tridy 
@@ -40,12 +41,24 @@ public class MazeBoard implements Serializable { /*hraci deska*/
       this.deckSize = p;
       this.players = new ArrayList<Player>();
       this.finder = new PathFinder();
+      this.id2col = new HashMap<Integer, Integer>();
       createDeck();
 
-      for(int i = 0; i < h; i++ )
+      for(int i = 0; i < h; i++ ) {
          this.players.add(new Player(colors.get(i), this.deck.popCard()));
+      }
     }  
     
+
+   /** 
+    * Provazani ID klienta s jeho barvou 
+    * 
+    * @param ID klientovo ID
+    * @param color klientova barva
+    */
+   public void bindID2col(int ID, int color) {
+      this.id2col.put(ID, color);
+   }
 
     /** 
      * Metoda pro vytvoreni herni desky o velikosti n*n a prida na 
@@ -185,10 +198,17 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * @return hrace na zadanem indexu
      */
     public Player getPlayer(int index) {
-       if(players.get(index) != null)
-          return players.get(index);
-       else
-          return null;
+       return players.get(index);
+    }
+
+    /** 
+     * Ziskani hrace dle klientova ID 
+     * 
+     * @param ID klientovo ID
+     * @return 
+     */
+    public Player getPlayerByID(int ID) {
+       return this.players.get(id2col.get(ID));
     }
 
 

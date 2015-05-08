@@ -275,7 +275,7 @@ public class Server implements Runnable
                     player.send(toSend);
                 }
                 
-                Player p = board.getPlayer(autor.getID());
+                Player p = board.getPlayerByID(autor.getID());
                 PathFinder finder = new PathFinder();
                 ArrayList <MazeField> paths = finder.findRoutes(p, board);
                 

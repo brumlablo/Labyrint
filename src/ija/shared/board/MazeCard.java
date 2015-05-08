@@ -113,8 +113,8 @@ public class MazeCard implements Serializable{
      * @param n pocet pravotocivych otoceni
      */
     public void turnForN(int n) {
-        for(int i = 0; i < n; i++)
-            this.turnRight();
+       while(this.rotationVec != n)
+           this.turnRight();
     }
 
     public String getType() {

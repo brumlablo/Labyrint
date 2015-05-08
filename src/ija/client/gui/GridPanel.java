@@ -29,12 +29,13 @@ public class GridPanel extends JPanel {
         this.tiles = new GridTile[size*size];
         this.textures = new TextureCache();
         this.gameBoard = gameBoard;
+        freeStoneTile = new GridTile(gameBoard.getFreeStone(), textures);
+        addFreeStoneListener(freeStoneTile);
         init();
     }
 
     public void init() {
         this.removeAll();
-        freeStoneTile = null;
         tiles = null;
         this.tiles = new GridTile[size*size];
         setLayout(new GridLayout(this.size, this.size, 5, 5));
@@ -45,16 +46,6 @@ public class GridPanel extends JPanel {
                 add(tiles[ (row-1)+(col-1) ]);
             }
         }
-        freeStoneTile = new GridTile(gameBoard.getFreeStone(), null, textures);
-        freeStoneTile.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent e) {
-                gameBoard.getFreeStone().turnRight();
-                //gameWindow.updateAfterShift(getFreeStone());
-                init();
-            }
-        });
-
         revalidate();
     }
     
@@ -63,13 +54,27 @@ public class GridPanel extends JPanel {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
-                //init();
+            }
+        });
+    }
+
+    private void addFreeStoneListener(GridTile freestone) {
+        freeStoneTile.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                freeStoneTile.setVisible(false);
+                gameBoard.getFreeStone().turnRight();
+                freeStoneTile.setCard(gameBoard.getFreeStone());
+                freeStoneTile.setVisible(true);
             }
         });
     }
 
     public void setGameBoard(MazeBoard mb) {
         this.gameBoard = mb;
+        this.freeStoneTile.setVisible(false);
+        this.freeStoneTile.setCard(mb.getFreeStone());
+        this.freeStoneTile.setVisible(true);
     }
     
     public GridTile getFreeStone() {
