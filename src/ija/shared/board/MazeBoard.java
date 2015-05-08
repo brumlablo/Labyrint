@@ -26,6 +26,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     private CardPack deck = null;
     private ArrayList<Player> players;
     private PathFinder finder;
+    private ArrayList<MazeField> finderPaths;
 
     /** 
     * Konstruktor tridy 
@@ -189,6 +190,15 @@ public class MazeBoard implements Serializable { /*hraci deska*/
        else
           return null;
     }
+
+
+    public void findRoutes(int playerIndex) {
+        //vycisteni predchozich cest
+        this.finderPaths = null;
+
+        this.finderPaths = finder.findRoutes(getPlayer(playerIndex), this);
+    }
+
 
     /**
      * Vlozi do rohu herni desky hrace 
