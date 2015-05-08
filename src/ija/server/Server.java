@@ -281,17 +281,25 @@ public class Server implements Runnable
                     tmpgs.getRoommates().get(i).send(toSend);
                     }
                 }
-                
-                Player p = board.getPlayerByID(autor.getID());
-                PathFinder finder = new PathFinder();
-                ArrayList <MazeField> paths = finder.findRoutes(p, board);
-                
                 toSend = new DataUnit(board,DataUnit.MsgID.S_DIRS);
                 autor.send(toSend);
+                break;
             }
             /*----------------------------------------------------------------*/
             case C_MOVE: { //vzal poklad?
-                 break;
+                MazeField goal = (MazeField) toParse.data;
+                tmpgs = findRoom(autor.getRoomID());
+                MazeBoard board = tmpgs.getGame();
+                if(true){//je tam poklad?) {
+                    //odebrat z balicku, predat opet novy tah, ne - predat tah dalsimu hraci
+                    autor.send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));        
+                }
+                else {
+                    tmpgs.nextTurn();
+                }
+                tmpgs.setGame(board);
+                tmpgs.multicast(new DataUnit(board,DataUnit.MsgID.S_GUPADATE),false);
+                break;
             }
             /*----------------------------------------------------------------*/
             case C_UNAV: {

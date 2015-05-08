@@ -30,6 +30,16 @@ public class GameSession {
         p.setRoomID(roomID);
     }
     
+    public void nextTurn() {
+        onTurn = (++onTurn) %roommates.size();
+        for(int i = 0; i < roommates.size() ; i++)  {      
+             if(i == onTurn)
+                roommates.get(i).send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));
+            else
+                roommates.get(i).send(new DataUnit(false,DataUnit.MsgID.S_YOURTURN));
+        }
+    }
+    
     public void destroyer () {
        for(Session najemnik : roommates) {
            najemnik.setRoomID(-1);

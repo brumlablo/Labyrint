@@ -124,9 +124,13 @@ public class Client
                 System.out.println("prijal jsem dirs");
                 MazeBoard board = (MazeBoard) toParse.data;
                 ArrayList <MazeField> paths = board.getFinderPaths();
+                ClientFrame.getInstance().refreshGame(board);
                 for(MazeField el : paths)
                     System.out.println("r: " + el.row() + ", c: " + el.col());
-                ClientFrame.getInstance().refreshGame(board);
+                //tady budu porovnavat na jakou MazeField hrac klikl s povolenymi paths
+                //ulozim do Mazefieldu
+                MazeField mf = new MazeField(4,5);
+                send(new DataUnit(mf,DataUnit.MsgID.C_MOVE));
                 break;
             }
             case S_GUPADATE: {
@@ -171,6 +175,7 @@ public class Client
 
     public void send(DataUnit toSend) {   
         try {
+            streamOut.reset();
             streamOut.writeObject(toSend);
             streamOut.flush();
         }
