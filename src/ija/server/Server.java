@@ -8,6 +8,9 @@ import java.net.*;
 import java.io.*;
 import java.util.ArrayList;
 import ija.shared.*;
+import ija.shared.board.MazeField;
+import ija.shared.board.PathFinder;
+import ija.shared.player.Player;
 import java.util.Arrays;
 
 /**
@@ -257,27 +260,27 @@ public class Server implements Runnable
                 //System.out.println(input);
                 tmpgs = findRoom(autor.getRoomID());
                 String [] coords = input.split("i|j|r"); //radek,sloupec,otoceni
+
+                MazeBoard board = tmpgs.getGame();
+                board.getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
+                board.shift(board.get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2]))); //shift     
+                tmpgs.setGame(board);
                 
-                System.out.println(Arrays.toString(coords));
-               // System.out.println(coords[1].toString());
-               // System.out.println(coords[2].toString());
-               // System.out.println(coords[3].toString());
-                tmpgs.getGame().getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
-                tmpgs.getGame().shift(tmpgs.getGame().get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2])));
-                
-                //tmpgs.setGame(board);
-                
-                toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_DIRS);
-                autor.send(toSend);
-                
-                toSend = new DataUnit(tmpgs.getGame(),DataUnit.MsgID.S_GUPADATE);
+                //odeslani update desky pro ostatni hrace
+                toSend = new DataUnit(board,DataUnit.MsgID.S_GUPADATE);
                 ArrayList<Session> gsPlayers = tmpgs.getRoommates();
                 for(Session player : gsPlayers) {
                     if(player.getID() == autor.getID())
                         continue;
                     player.send(toSend);
                 }
-                break;
+                
+                Player p = board.getPlayer(autor.getID());
+                PathFinder finder = new PathFinder();
+                ArrayList <MazeField> paths = finder.findRoutes(p, board);
+                
+                toSend = new DataUnit(board,DataUnit.MsgID.S_DIRS);
+                autor.send(toSend);
             }
             /*----------------------------------------------------------------*/
             case C_MOVE: { //vzal poklad?
