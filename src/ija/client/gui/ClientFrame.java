@@ -32,7 +32,7 @@ public class ClientFrame extends JFrame{
     private JList lobbyPlayersList;
     private GridTile freeStoneTile;
     private GridPanel maze;
-    JTextArea console;
+    private JTextArea console;
     
     private JDialog newGameDialog;
     private JDialog challDialog;
@@ -306,41 +306,43 @@ public class ClientFrame extends JFrame{
 
         //Vytvoreni panelu s herni deskou
         this.maze = new GridPanel(this, g);
-
         gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
         JPanel westPane = new JPanel();
+        westPane.setBackground(new Color(0xFFC373));
         westPane.setLayout(new FlowLayout());
+
         westPane.add(maze);
 
         //Vytvoreni bocniho panelu
         JPanel eastPane = new JPanel();
         eastPane.setPreferredSize(new Dimension(200, 100));
-        eastPane.setBackground(Color.GRAY);
+        eastPane.setBackground(new Color(0x25567B));//(0x17577e));
         freeStonePane = new JPanel();
         freeStonePane.add(maze.getFreeStone());
         eastPane.add(freeStonePane);
 
-        //Vytvoreni spodniho panelu v hlavnim panelu
-        String input = "Helooo";
-        JPanel southPane = new JPanel();
-        this.console = new JTextArea(1,200);
-        this.console.setBorder(new EmptyBorder(0, 0, 0, 0));
-        this.console.setBackground(Color.cyan);
-        this.console.setEditable(false);
-        console.append(input + "\n");
-        southPane.add(console);
+        //JPanel southPane = new JPanel();
+        this.console = new JTextArea();
+        console.setBackground(Color.DARK_GRAY);
+        console.setForeground(Color.WHITE);
+        console.setEditable(false);
         
         //Pridani panelu do okna
-        gamePane.add(westPane, BorderLayout.WEST);
-        gamePane.add(eastPane, BorderLayout.EAST);
-        gamePane.add(southPane, BorderLayout.SOUTH);
+        gamePane.add(westPane, BorderLayout.CENTER);
+        gamePane.add(eastPane, BorderLayout.LINE_END);
+        gamePane.add(console, BorderLayout.SOUTH);
 
         //Zobrazeni herniho rozlozeni
         this.cardLayout.show(MAINPane, "game");
         setVisible(true);
         pack();
     }
+    
+    public void setConsoleText(String input) {
+        this.console.setText(input);
+    }
+    
     
     public void refreshGame(MazeBoard g) {
         maze.setGameBoard(g);
