@@ -21,6 +21,7 @@ public class Client
     private ObjectOutputStream streamOut = null;
     private ClientHelper client = null;
     private int myID = -1;
+    private MazeBoard board = null;
     
     public Client() {
         System.out.println("Establishing connection. Please wait ...");
@@ -113,22 +114,27 @@ public class Client
             }
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
-                ClientFrame.getInstance().showGame((MazeBoard) toParse.data);
+                this.board = (MazeBoard) toParse.data;
+                ClientFrame.getInstance().showGame(this.board);
                 break;
             }
             case S_YOURTURN: {
-                ClientFrame.getInstance().setGButtons((boolean) toParse.data);
-                boolean onTurn = false;
-                onTurn = (boolean) toParse.data;
-                if(onTurn)
-                    ClientFrame.getInstance().setConsoleText("Jsi na tahu.");
-                else
-                    ClientFrame.getInstance().setConsoleText("Hraje jiný hráč.");
+                int onTurnID = (int) toParse.data;
+                if(onTurnID == this.myID) {
+                    ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
+                    ClientFrame.getInstance().setGButtons(true);
+                }
+                else {
+                    String [] who = {"Modrý","Zelený","Červený","Žlutý"};
+                    int color = board.getPlayerByID(onTurnID).getColor();
+                    ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč je na tahu.");
+                    ClientFrame.getInstance().setGButtons(false);
+                }
                 break;
             }
             case S_DIRS: {
                 System.out.println("prijal jsem dirs");
-                MazeBoard board = (MazeBoard) toParse.data;
+                this.board = (MazeBoard) toParse.data;
                 ArrayList <MazeField> paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
                 for(MazeField el : paths)
@@ -141,7 +147,8 @@ public class Client
             }
             case S_GUPADATE: {
                 System.out.println("prijal jsem gameupdate");
-                ClientFrame.getInstance().refreshGame((MazeBoard) toParse.data);
+                this.board = (MazeBoard) toParse.data;
+                ClientFrame.getInstance().refreshGame(board);
                 break;
             }
             case S_ENDGAME: {
@@ -160,7 +167,7 @@ public class Client
         streamOut = new ObjectOutputStream(socket.getOutputStream());
         streamOut.flush();
         client = new ClientHelper(this, socket);
-        send(new DataUnit("Hello.",DataUnit.MsgID.C_HELLO));
+        send(new DataUnit("",DataUnit.MsgID.C_HELLO));
     }
 
     public synchronized void stop() {
