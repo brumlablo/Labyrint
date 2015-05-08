@@ -264,15 +264,22 @@ public class Server implements Runnable
                 MazeBoard board = tmpgs.getGame();
                 board.getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
                 board.shift(board.get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2]))); //shift     
+                board.noRoutes();
                 tmpgs.setGame(board);
                 
-                //odeslani update desky pro ostatni hrace
-                toSend = new DataUnit(board,DataUnit.MsgID.S_GUPADATE);
-                ArrayList<Session> gsPlayers = tmpgs.getRoommates();
-                for(Session player : gsPlayers) {
-                    if(player.getID() == autor.getID())
-                        continue;
-                    player.send(toSend);
+                for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
+                    if (tmpgs.getRoommates().get(i).getID() == autor.getID()) {
+                        //pro autora naleznu cesty, kam muze jit
+                        board.findRoutes(i);
+                        toSend = new DataUnit(board,DataUnit.MsgID.S_DIRS);
+                        autor.send(toSend);
+                        board.noRoutes();
+                    }
+                    else {
+                    //odeslani update desky pro ostatni hrace
+                    toSend = new DataUnit(board,DataUnit.MsgID.S_GUPADATE);
+                    tmpgs.getRoommates().get(i).send(toSend);
+                    }
                 }
                 
                 Player p = board.getPlayerByID(autor.getID());

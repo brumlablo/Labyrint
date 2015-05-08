@@ -9,6 +9,7 @@ import java.net.*;
 import java.io.*;
 import java.util.*;
 import ija.shared.*;
+import ija.shared.board.MazeField;
 /**
  * Trida pro klienta-hrace
  * @author babu
@@ -121,7 +122,11 @@ public class Client
             }
             case S_DIRS: {
                 System.out.println("prijal jsem dirs");
-                ClientFrame.getInstance().refreshGame((MazeBoard) toParse.data);
+                MazeBoard board = (MazeBoard) toParse.data;
+                ArrayList <MazeField> paths = board.getFinderPaths();
+                for(MazeField el : paths)
+                    System.out.println("r: " + el.row() + ", c: " + el.col());
+                ClientFrame.getInstance().refreshGame(board);
                 break;
             }
             case S_GUPADATE: {
