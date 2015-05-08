@@ -184,13 +184,13 @@ public class ClientFrame extends JFrame{
         challDialog.add(yesButton);
         challDialog.add(noButton);
 
-        challDialog.setVisible(true);
         challDialog.setModal(true);
         challDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) challDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         challDialog.pack();
         challDialog.setLocationRelativeTo(this);
+        challDialog.setVisible(true);
     }
     
     public void showChallFailDialog() {
@@ -213,13 +213,13 @@ public class ClientFrame extends JFrame{
         challFailDialog.add(label);
         challFailDialog.add(okButton);
 
-        challFailDialog.setVisible(true);
         challFailDialog.setModal(true);
         challFailDialog.setLayout(new GridLayout(2, 0, 10, 10));
         JPanel pane = (JPanel) challFailDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        pane.setBorder(new EmptyBorder(0, 60,20 ,60));
         challFailDialog.pack(); 
         challFailDialog.setLocationRelativeTo(this);
+        challFailDialog.setVisible(true);
     }
 
     public void chooseGDialog() {
@@ -250,13 +250,13 @@ public class ClientFrame extends JFrame{
         newGameDialog.add(ngButton);
         newGameDialog.add(sgButton);
 
-        newGameDialog.setVisible(true);
         newGameDialog.setModal(true);
         newGameDialog.setLayout(new GridLayout(2, 0, 10, 10));
         JPanel pane = (JPanel) newGameDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        pane.setBorder(new EmptyBorder(5, 50,20 ,50));
         newGameDialog.pack();
         newGameDialog.setLocationRelativeTo(this);
+        newGameDialog.setVisible(true);
     }
 
     private void createNGDialog() {
@@ -289,7 +289,6 @@ public class ClientFrame extends JFrame{
         newGameDialog.add(edgeCB);
         newGameDialog.add(confirmButton);
 
-        newGameDialog.setVisible(true);
         newGameDialog.setModal(true);
         newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) newGameDialog.getContentPane();
@@ -298,6 +297,7 @@ public class ClientFrame extends JFrame{
         //TODO Sprav to, zmenit velikosti oken a vycentrovat, vscka stejnou velikost
         newGameDialog.pack();
         newGameDialog.setLocationRelativeTo(this);
+        newGameDialog.setVisible(true);
     }
 
     public void showGame(MazeBoard g) {
