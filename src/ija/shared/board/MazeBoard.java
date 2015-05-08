@@ -226,30 +226,22 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         return finderPaths;
     }
     
-    
-
-
     /**
      * Vlozi do rohu herni desky hrace 
      */
     private void putPlayers() {
        for(int i = 0; i < this.players.size(); i++) {
-          
           switch(i) {
              case 0:
-                get(1, 1).putPlayer(this.players.get(i));
                 this.players.get(i).seizePosition(get(1,1));
                 break;
              case 1:
-                get(this.size, this.size).putPlayer(this.players.get(i));
                 this.players.get(i).seizePosition(get(this.size, this.size));
                 break;
              case 2:
-                get(this.size, 1).putPlayer(this.players.get(i));
                 this.players.get(i).seizePosition(get(this.size, 1));
                 break;
              case 3:
-                get(1, this.size).putPlayer(this.players.get(i));
                 this.players.get(i).seizePosition(get(1, this.size));
                 break;
           }

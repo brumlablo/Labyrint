@@ -256,9 +256,12 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
-                String input = (String) toParse.data;
-                //System.out.println(input);
                 tmpgs = findRoom(autor.getRoomID());
+                for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
+                    if ((tmpgs.getRoommates().get(i).getID() == autor.getID()) && (i != tmpgs.getOnTurn()))
+                        return;
+                }
+                String input = (String) toParse.data;
                 String [] coords = input.split("i|j|r"); //radek,sloupec,otoceni
 
                 MazeBoard board = tmpgs.getGame();
@@ -281,8 +284,6 @@ public class Server implements Runnable
                     tmpgs.getRoommates().get(i).send(toSend);
                     }
                 }
-                toSend = new DataUnit(board,DataUnit.MsgID.S_DIRS);
-                autor.send(toSend);
                 break;
             }
             /*----------------------------------------------------------------*/
@@ -290,6 +291,13 @@ public class Server implements Runnable
                 MazeField goal = (MazeField) toParse.data;
                 tmpgs = findRoom(autor.getRoomID());
                 MazeBoard board = tmpgs.getGame();
+                Player clientFigure = board.getPlayerByID(autor.getID());
+                
+                //Odstraneni hrace z desky a posunuti na novou pozici
+                /**********************/
+                clientFigure.seizePosition(board.get(1, 4));
+                /**********************/
+                
                 if(true){//je tam poklad?) {
                     //odebrat z balicku, predat opet novy tah, ne - predat tah dalsimu hraci
                     autor.send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));        

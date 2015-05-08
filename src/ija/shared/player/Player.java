@@ -66,9 +66,10 @@ public class Player implements Serializable{
     public void seizePosition(MazeField mf) {
         if(this.position != null)
             this.position.removePlayer(this);
+        
         this.position = mf;
         mf.putPlayer(this);
-
+        
         if(mf.getCard().getTreasure() == this.activeCard.getTreasure())
             this.treasureCount++;
     }
@@ -81,6 +82,21 @@ public class Player implements Serializable{
      */
     public TreasureCard getActiveCard() {
         return this.activeCard;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Player other = (Player) obj;
+        if (this.color != other.color) {
+            return false;
+        }
+        return true;
     }
 
 

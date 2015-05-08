@@ -118,6 +118,12 @@ public class Client
             }
             case S_YOURTURN: {
                 ClientFrame.getInstance().setGButtons((boolean) toParse.data);
+                boolean onTurn = false;
+                onTurn = (boolean) toParse.data;
+                if(onTurn)
+                    ClientFrame.getInstance().setConsoleText("Jsi na tahu.");
+                else
+                    ClientFrame.getInstance().setConsoleText("Hraje jiný hráč.");
                 break;
             }
             case S_DIRS: {

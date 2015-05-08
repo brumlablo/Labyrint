@@ -39,6 +39,12 @@ public class GameSession {
                 roommates.get(i).send(new DataUnit(false,DataUnit.MsgID.S_YOURTURN));
         }
     }
+
+    public int getOnTurn() {
+        return onTurn;
+    }
+    
+    
     
     public void destroyer () {
        for(Session najemnik : roommates) {
