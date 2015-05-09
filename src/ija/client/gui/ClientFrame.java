@@ -14,7 +14,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.border.EmptyBorder;
 
@@ -38,6 +40,8 @@ public class ClientFrame extends JFrame{
     private JDialog newGameDialog;
     private JDialog challDialog;
     private JDialog challFailDialog;
+    
+    private Map<Integer, JLabel> scoreLabels;
     
     private Client connect;
     private static ClientFrame instance; //singleton!
@@ -409,10 +413,12 @@ public class ClientFrame extends JFrame{
         eastPane.setPreferredSize(new Dimension(200, 100));
         eastPane.setBackground(new Color(0x25567B));//(0x17577e)); //blue
         GridBagConstraints c = new GridBagConstraints();
+ 
               
         //Ziskani barev ostanich hracu
         ArrayList <JPanel> plBoxes = new ArrayList <JPanel>();
         ArrayList<Player> players = g.getPlayers();
+        this.scoreLabels = new HashMap<Integer, JLabel>();
 
         for(int i = 0; i < players.size() ; i++) {
             if(g.getPlayerByID(connect.getMyID()).getColor() == players.get(i).getColor()) {
@@ -422,11 +428,11 @@ public class ClientFrame extends JFrame{
                 JPanel tmp = new JPanel();
                 JLabel tmpLabel = new JLabel();
                 tmpLabel.setFont(new Font("Verdana", Font.BOLD, 12));
-                tmpLabel.setForeground(Color.WHITE); 
                 tmpLabel.setVerticalAlignment(JLabel.CENTER);
                 tmpLabel.setHorizontalAlignment(JLabel.CENTER);
                 tmpLabel.setPreferredSize(new Dimension(40,40));
                 tmpLabel.setText(players.get(i).getTreasureCount() + "/" + (g.getDeckSize()/players.size()));
+                scoreLabels.put(i, tmpLabel);
                 switch(players.get(i).getColor()) {
                     case 0:
                         tmp.setBackground(Color.BLUE);
@@ -441,13 +447,23 @@ public class ClientFrame extends JFrame{
                         tmp.setBackground(Color.YELLOW);
                         break;
                 }
+                Color bgcol = tmp.getBackground();
+                Color fgcol = ((bgcol.getAlpha()*0.299+bgcol.getGreen()*0.587+bgcol.getBlue()*0.114)>186)?Color.BLACK:Color.WHITE;
+                tmpLabel.setForeground(fgcol); 
                 tmp.add(tmpLabel);
                 plBoxes.add(tmp);
             }
         }
         
         freeStonePane = new JPanel();
-        freeStonePane.add(maze.getFreeStone());
+        freeStonePane.setPreferredSize(new Dimension(100,100));
+        freeStonePane.setLayout(new GridBagLayout());
+        c.weightx = 1.0;
+        c.weighty = 1.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.anchor = GridBagConstraints.CENTER;
+        freeStonePane.add(maze.getFreeStone(),c);
         freeStonePane.setBackground(new Color(0x96ADC2));
         c.weightx = 0.0;
         c.weighty = 0.0;
@@ -460,6 +476,8 @@ public class ClientFrame extends JFrame{
         
          //Ziskani barvy hrace       
         JPanel playerColBox = new JPanel();
+        playerColBox.setLayout(new BorderLayout());
+        playerColBox.setPreferredSize(new Dimension(100, 100));
         switch(g.getPlayerByID(connect.getMyID()).getColor()) {
             case 0:
                 playerColBox.setBackground(Color.BLUE);
@@ -474,9 +492,24 @@ public class ClientFrame extends JFrame{
                 playerColBox.setBackground(Color.YELLOW);
                 break;
         }
+        TextureCache tmp = new TextureCache();
+        JLabel treasureImg = new JLabel(new ImageIcon(tmp.getTreasureTexture(g.getPlayerByID(connect.getMyID()).getActiveCard().getTreasure().getCode())));
+        playerColBox.add(treasureImg, BorderLayout.CENTER);
         
-        c.ipady = 80;
-        c.ipadx = 80;
+        JLabel score = new JLabel();
+        score.setFont(new Font("Verdana", Font.BOLD, 16));
+        Color bgcol = playerColBox.getBackground();
+        Color fgcol = ((bgcol.getAlpha()*0.299+bgcol.getGreen()*0.587+bgcol.getBlue()*0.114)>186)?Color.BLACK:Color.WHITE;
+        score.setForeground(fgcol); 
+        score.setVerticalAlignment(JLabel.CENTER);
+        score.setHorizontalAlignment(JLabel.CENTER);
+        score.setPreferredSize(new Dimension(40,40));
+        score.setText(g.getPlayerByID(connect.getMyID()).getTreasureCount() + "/" + (g.getDeckSize()/players.size()));
+        playerColBox.add(score, BorderLayout.SOUTH);
+        
+        scoreLabels.put(5, score);
+        scoreLabels.put(6, treasureImg);
+
         c.gridwidth = plBoxes.size();
         c.gridx = 0;
         c.gridy = 1;
@@ -576,6 +609,23 @@ public class ClientFrame extends JFrame{
     
     
     public void refreshGame(MazeBoard g) {
+        //Prepsani labelu se skore
+        /************************/
+        ArrayList<Player> players = g.getPlayers();
+        for(int i = 0; i < players.size() ; i++) {
+            if(g.getPlayerByID(connect.getMyID()).getColor() == players.get(i).getColor()) {
+                continue;
+            }
+            else {
+                scoreLabels.get(i).setText(players.get(i).getTreasureCount() + "/" + (g.getDeckSize()/players.size()));
+            }
+        }
+        //refresh hracova skore
+        scoreLabels.get(5).setText(g.getPlayerByID(connect.getMyID()).getTreasureCount() + "/" + (g.getDeckSize()/players.size()));
+        //refresh obrazku pokladu
+        TextureCache tmp = new TextureCache();
+        scoreLabels.get(6).setIcon(new ImageIcon(tmp.getTreasureTexture(g.getPlayerByID(connect.getMyID()).getActiveCard().getTreasure().getCode())));
+        /************************/
         maze.setGameBoard(g);
         maze.init();
     }

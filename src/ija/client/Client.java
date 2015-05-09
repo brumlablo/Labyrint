@@ -127,13 +127,11 @@ public class Client
 
                 if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
-                    //ClientFrame.getInstance().setGButtons(true);
                 }
                 else {
                     String [] who = {"Modrý","Zelený","Červený","Žlutý"};
                     int color = board.getPlayerByID(onTurnID).getColor();
                     ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč je na tahu.");
-                    //ClientFrame.getInstance().setGButtons(false);
                 }
                 break;
             }
@@ -142,9 +140,6 @@ public class Client
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
-                //tady budu porovnavat na jakou MazeField hrac klikl s povolenymi paths
-                //ulozim do Mazefieldu
-                //send(new DataUnit(mf,DataUnit.MsgID.C_MOVE));
                 break;
             }
             case S_GUPADATE: {
