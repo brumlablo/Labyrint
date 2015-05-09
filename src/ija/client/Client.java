@@ -121,10 +121,10 @@ public class Client
                 break;
             }
             case S_YOURTURN: {
-                Object[] data = (Object[]) toParse.data;
-                int onTurnID = (Integer) data[0];
-                this.paths = (ArrayList<MazeField>) data[1];
-                //Tady
+                Object[] recData = (Object[]) toParse.data;
+                int onTurnID = (int) recData[0];
+                this.paths = (ArrayList<MazeField>) recData[1];
+
                 if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
                     //ClientFrame.getInstance().setGButtons(true);
@@ -141,7 +141,6 @@ public class Client
                 System.out.println("prijal jsem dirs");
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
-                //Tady
                 ClientFrame.getInstance().refreshGame(board);
                 //tady budu porovnavat na jakou MazeField hrac klikl s povolenymi paths
                 //ulozim do Mazefieldu

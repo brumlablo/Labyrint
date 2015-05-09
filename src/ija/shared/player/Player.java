@@ -70,8 +70,8 @@ public class Player implements Serializable{
         this.position = mf;
         mf.putPlayer(this);
         
-        if(mf.getCard().getTreasure() == this.activeCard.getTreasure())
-            this.treasureCount++;
+        //if(mf.getCard().getTreasure() == this.activeCard.getTreasure())
+            //this.treasureCount++;
     }
 
     /**Ziskani aktivni pokladove karty
@@ -82,6 +82,19 @@ public class Player implements Serializable{
      */
     public TreasureCard getActiveCard() {
         return this.activeCard;
+    }
+
+    /** 
+     * Zkontroluje, jestli se na pozici, kde se hrac nachazi, nenachazi poklad, 
+     * ktery ma sebrat
+     * @return true pokud ano, jinak false
+     */
+    public boolean checkTreasure() {
+        if(this.position.getCard().getTreasure() == this.activeCard.getTreasure()) {
+            this.treasureCount++;
+            return true;
+        }
+        return false;
     }
 
     @Override

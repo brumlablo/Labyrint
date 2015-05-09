@@ -299,13 +299,12 @@ public class Server implements Runnable
                 Player clientFigure = board.getPlayerByID(autor.getID());
                 
                 //Odstraneni hrace z desky a posunuti na novou pozici
-                /**********************/
                 clientFigure.seizePosition(board.get(goal.row(), goal.col()));
-                /**********************/
-                
-                if(false){//je tam poklad, co hledam?) {
+
+                if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
                     //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jeslti neni konec hry, predat opet novy tah
-                    autor.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_YOURTURN));        
+                    board.findRoutes(autor.getID());
+                    autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));        
                 }
                 else {
                     tmpgs.nextTurn();

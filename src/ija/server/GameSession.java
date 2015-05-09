@@ -35,15 +35,14 @@ public class GameSession {
         onTurn = (++onTurn) %roommates.size();
         for(int i = 0; i < roommates.size() ; i++)  {      
              if(i == onTurn) {
-                game.findRoutes(onTurn);
-
+                game.findRoutes(roommates.get(i).getID());
                 Object[] data= new Object[2];
                 data[0] = roommates.get(i).getID();
                 data[1] = game.getFinderPaths();
-                roommates.get(i).send(new DataUnit(data,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit((Object[])data,DataUnit.MsgID.S_YOURTURN));
              }
             else
-                roommates.get(i).send(new DataUnit(roommates.get(onTurn).getID(),DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(new Object[]{roommates.get(onTurn).getID(), null},DataUnit.MsgID.S_YOURTURN));
         }
     }
 
@@ -122,14 +121,15 @@ public class GameSession {
                 col++;
             }
             this.game.newGame();
+            this.game.findRoutes(roommates.get(onTurn).getID());
         }
         //nacitani hry
         for(int i = 0; i < roommates.size() ; i++)  {      
                 roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
             if(i == onTurn)
-                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(new Object[]{roommates.get(i).getID(), game.getFinderPaths()},DataUnit.MsgID.S_YOURTURN));
             else
-                roommates.get(i).send(new DataUnit(roommates.get(onTurn).getID(),DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(new Object[]{roommates.get(onTurn).getID(), null}, DataUnit.MsgID.S_YOURTURN));
         }
     }
 
