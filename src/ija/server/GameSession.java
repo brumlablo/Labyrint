@@ -4,6 +4,7 @@
 
 package ija.server;
 import ija.shared.board.MazeBoard;
+import ija.shared.board.MazeField;
 import java.util.*;
 import ija.shared.*;
 
@@ -33,18 +34,22 @@ public class GameSession {
     public void nextTurn() {
         onTurn = (++onTurn) %roommates.size();
         for(int i = 0; i < roommates.size() ; i++)  {      
-             if(i == onTurn)
-                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
+             if(i == onTurn) {
+                game.findRoutes(onTurn);
+
+                Object[] data= new Object[2];
+                data[0] = roommates.get(i).getID();
+                data[1] = game.getFinderPaths();
+                roommates.get(i).send(new DataUnit(data,DataUnit.MsgID.S_YOURTURN));
+             }
             else
-                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(roommates.get(onTurn).getID(),DataUnit.MsgID.S_YOURTURN));
         }
     }
 
     public int getOnTurn() {
         return onTurn;
     }
-    
-    
     
     public void destroyer () {
        for(Session najemnik : roommates) {

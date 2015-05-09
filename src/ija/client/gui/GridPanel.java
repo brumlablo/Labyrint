@@ -57,13 +57,16 @@ public class GridPanel extends JPanel {
         tile.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                if(SwingUtilities.isRightMouseButton(e))
-                        gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
-
-                else if(SwingUtilities.isLeftMouseButton(e))
+                if(SwingUtilities.isLeftMouseButton(e)) {
+                    if(gameWindow.getConnect().getPaths() == null)
+                        return;
                     for(MazeField el : gameWindow.getConnect().getPaths())
                         if(el.row() == row && el.col() == col)
                             gameWindow.getConnect().send(new DataUnit(gameBoard.get(row, col), DataUnit.MsgID.C_MOVE));
+                }
+
+                else if(SwingUtilities.isRightMouseButton(e))
+                        gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
 
             }
         });
