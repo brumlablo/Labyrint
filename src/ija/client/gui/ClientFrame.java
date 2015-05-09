@@ -55,7 +55,19 @@ public class ClientFrame extends JFrame{
     public Client getConnect() {
         return connect;
     }
-
+    
+    public class SelectedListCellRenderer extends DefaultListCellRenderer {
+     @Override
+     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+         Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+         if (isSelected) {
+             c.setBackground(new Color(0xFFC373));
+             c.setFont(new Font("Verdana", Font.BOLD, 15));
+             //c.setForeground(new Color(0x25567B));
+         }
+         return c;
+     }
+}
     
     private void init() {
         this.MAINPane = new JPanel();
@@ -76,17 +88,25 @@ public class ClientFrame extends JFrame{
         MAINPane.add(gamePane,"game");
 
         //Jmeno hry
-        JLabel name = new JLabel("LABYRINTUSUS", SwingConstants.CENTER);
+        JLabel name = new JLabel("LABYRINT", SwingConstants.CENTER);
+        name.setFont(new Font("Verdana", Font.PLAIN, 22));
+        name.setForeground(new Color(0xFFC373)); //yellow
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
         lobbyPane.add(name, BorderLayout.NORTH);
 
         this.lobbyPlayersList = new JList();
-        this.lobbyPlayersList.setSelectionModel(new DefaultListSelectionModel(){
-            public void setSelectionInterval(int index0,int index1){
+        lobbyPlayersList.setCellRenderer(new SelectedListCellRenderer());
+        lobbyPlayersList.setBackground(Color.WHITE);
+        lobbyPlayersList.setFont(new Font("Verdana", Font.PLAIN, 15));
+        lobbyPlayersList.setForeground(new Color(0x25567B));
+        lobbyPlayersList.setSelectionModel(new DefaultListSelectionModel(){
+            @Override
+            public void setSelectionInterval(int index0, int index1) {
                 if(index1-index0>= 3)
                     index1=index0+2;
                 super.setSelectionInterval(index0, index1);
             }
+            @Override
             public void addSelectionInterval(int index0,int index1){
                 int selLen = lobbyPlayersList.getSelectedIndices().length;
                 if(selLen >= 3) //osetreni vybrani maximalne tri hracu
@@ -102,7 +122,16 @@ public class ClientFrame extends JFrame{
         lobbyPane.add(lobbyPlayersList);
         
         //Tlacitko obnoveni seznamu hracu
-        refreshButton = new JButton("OBNOVIT");
+        this.refreshButton = new JButton("OBNOVIT");
+        refreshButton.setFont(new Font("Verdana", Font.BOLD, 16));
+        if (refreshButton.isEnabled()){
+            refreshButton.setBackground(new Color(0x25567B)); //blue
+            refreshButton.setForeground(new Color(0xFFC373)); //yellow
+        }
+        else {
+            refreshButton.setBackground(new Color(0x96ADC2));
+            refreshButton.setForeground(Color.DARK_GRAY);
+        }
         refreshButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -112,8 +141,17 @@ public class ClientFrame extends JFrame{
         lobbyPane.add(refreshButton, BorderLayout.EAST);
         
         //Tlacitko zacit hru
-        newGameButton = new JButton("VYZVAT HRACE A HRAT");
+        newGameButton = new JButton("VYZVAT HRÁČE A HRÁT");
         newGameButton.setPreferredSize( new Dimension(this.getWidth(), 50));
+        newGameButton.setFont(new Font("Verdana", Font.BOLD, 16));
+        if (newGameButton.isEnabled()){
+            newGameButton.setBackground(new Color(0x25567B)); //blue
+            newGameButton.setForeground(new Color(0xFFC373)); //yellow
+        }
+        else {
+            newGameButton.setBackground(new Color(0x96ADC2));
+            newGameButton.setForeground(Color.DARK_GRAY);
+        }
         newGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -130,12 +168,22 @@ public class ClientFrame extends JFrame{
         lobbyPane.add(newGameButton, BorderLayout.SOUTH);
         connect = new Client();
         
+        lobbyPane.setBackground(Color.GRAY);
+        
         add(MAINPane);
         this.cardLayout.show(MAINPane,"lobby");
     }
-    
+   
     public void setNGButton(boolean b) {
         newGameButton.setEnabled(b);
+        if (newGameButton.isEnabled()){
+            newGameButton.setBackground(new Color(0x25567B)); //blue
+            newGameButton.setForeground(new Color(0xFFC373)); //yellow
+        }
+        else {
+            newGameButton.setBackground(new Color(0x96ADC2)); //light blue
+            newGameButton.setForeground(Color.DARK_GRAY);
+        }
     }
     
     public void setGButtons(boolean b) {
@@ -146,6 +194,14 @@ public class ClientFrame extends JFrame{
     
     public void setLobbyButtons(boolean b) {
         refreshButton.setEnabled(b);
+        if (refreshButton.isEnabled()){
+            refreshButton.setBackground(new Color(0x25567B)); //blue
+            refreshButton.setForeground(new Color(0xFFC373)); //yellow
+        }
+        else {
+            refreshButton.setBackground(new Color(0x96ADC2));
+            refreshButton.setForeground(Color.DARK_GRAY);
+        }
         lobbyPlayersList.setEnabled(b);
     }
     
@@ -164,8 +220,18 @@ public class ClientFrame extends JFrame{
         setLobbyButtons(false);
         JButton yesButton = new JButton("Ano");
         JButton noButton = new JButton("Ne");
+        yesButton.setFont(new Font("Verdana", Font.PLAIN, 15));
+        yesButton.setBackground(new Color(0x25567B)); //blue
+        yesButton.setForeground(new Color(0xFFC373)); //yellow
+        noButton.setFont(new Font("Verdana", Font.PLAIN, 15));
+        noButton.setBackground(new Color(0x25567B)); //blue
+        noButton.setForeground(new Color(0xFFC373)); //yellow
         this.challDialog = new JDialog(this);
-        JLabel label = new JLabel("Jsi vyzvan ke hre, prijimas?");
+        challDialog.getContentPane().setBackground(Color.GRAY);
+        
+        JLabel label = new JLabel("Jsi vyzván ke hře, přijímáš?");
+        label.setFont(new Font("Verdana", Font.PLAIN, 15));
+        label.setForeground(new Color(0xFFC373)); 
         challDialog.setBounds(200, 300, 100, 100);
         yesButton.addActionListener(new ActionListener() {
             @Override
@@ -184,7 +250,6 @@ public class ClientFrame extends JFrame{
         challDialog.add(label);
         challDialog.add(yesButton);
         challDialog.add(noButton);
-
         challDialog.setModal(true);
         challDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) challDialog.getContentPane();
@@ -198,8 +263,14 @@ public class ClientFrame extends JFrame{
         if(challDialog != null)
             challDialog.dispose();
         this.challFailDialog = new JDialog(this);
-        JLabel label = new JLabel("Vyzva selhala.");
+        challFailDialog.getContentPane().setBackground(Color.DARK_GRAY);
+        JLabel label = new JLabel("Výzva selhala.");
+        label.setFont(new Font("Verdana", Font.BOLD, 16));
+        label.setForeground(new Color(0xFFC373)); //yellow
         JButton okButton = new JButton("OK");
+        okButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        okButton.setBackground(new Color(0x25567B)); //blue
+        okButton.setForeground(new Color(0xFFC373)); //yellow
         challFailDialog.setBounds(200, 300, 100, 100);
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -224,11 +295,17 @@ public class ClientFrame extends JFrame{
     }
 
     public void chooseGDialog() {
-        //if(this.newGameDialog != null)
-            //return;
-        JButton ngButton = new JButton("NOVA HRA");
-        JButton sgButton = new JButton("ULOZENA HRA");
+        JButton ngButton = new JButton("NOVÁ HRA");
+        JButton sgButton = new JButton("ULOŽENÁ HRA");
+        ngButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        ngButton.setBackground(new Color(0x25567B)); //blue
+        ngButton.setForeground(new Color(0xFFC373)); //yellow
+        sgButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        sgButton.setBackground(new Color(0x25567B)); //blue
+        sgButton.setForeground(new Color(0xFFC373)); //yellow        
+        
         this.newGameDialog = new JDialog(this);
+        newGameDialog.getContentPane().setBackground(Color.GRAY);
 
         //this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
         newGameDialog.setBounds(200, 300, 100, 100);
@@ -262,13 +339,30 @@ public class ClientFrame extends JFrame{
 
     private void createNGDialog() {
 
-        JButton confirmButton = new JButton("POTVRDIT");
+        JButton confirmButton = new JButton("POTVRDIT");      
+        confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        confirmButton.setBackground(new Color(0x25567B)); //blue
+        confirmButton.setForeground(new Color(0xFFC373)); //yellow
+        
         String[] treasureNumber = {"12", "24"};
-        JLabel treasureLabel = new JLabel("POCET POKLADU");
+        JLabel treasureLabel = new JLabel("POČET POKLADŮ");
+        treasureLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        treasureLabel.setForeground(new Color(0xFFC373)); 
         final JComboBox<String> treasureCB = new JComboBox<>(treasureNumber);
+        
         JLabel sizeLabel = new JLabel("VELIKOST HRANY DESKY");
+        sizeLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        sizeLabel.setForeground(new Color(0xFFC373));
         String [] edgeNumber = {"5*5","6*6","7*7","8*8","9*9","10*10","11*11"};
         final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
+        
+        treasureCB.setFont(new Font("Verdana", Font.BOLD, 14));
+        treasureCB.setBackground(new Color(0x25567B)); //blue
+        treasureCB.setForeground(new Color(0xFFC373));
+        
+        edgeCB.setFont(new Font("Verdana", Font.BOLD, 14));
+        edgeCB.setBackground(new Color(0x25567B)); //blue
+        edgeCB.setForeground(new Color(0xFFC373)); //yellow
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -283,6 +377,7 @@ public class ClientFrame extends JFrame{
         });
 
         this.newGameDialog = new JDialog(this);
+        newGameDialog.getContentPane().setBackground(Color.GRAY);
 
         newGameDialog.add(treasureLabel);
         newGameDialog.add(treasureCB);
@@ -316,30 +411,27 @@ public class ClientFrame extends JFrame{
         //Vytvoreni bocniho panelu
         JPanel eastPane = new JPanel();
         eastPane.setPreferredSize(new Dimension(200, 100));
-        eastPane.setBackground(new Color(0x25567B));//(0x17577e));
+        eastPane.setBackground(new Color(0x25567B));//(0x17577e)); //blue
         freeStonePane = new JPanel();
         freeStonePane.add(maze.getFreeStone());
         eastPane.add(freeStonePane);
 
-        JPanel karel = new JPanel();
+        JPanel playerColBox = new JPanel();
         switch(g.getPlayerByID(connect.getMyID()).getColor()) {
             case 0:
-                karel.setBackground(Color.BLUE);
+                playerColBox.setBackground(Color.BLUE);
                 break;
-
             case 1:
-                karel.setBackground(Color.GREEN);
+                playerColBox.setBackground(Color.GREEN);
                 break;
-
             case 2:
-                karel.setBackground(Color.RED);
+                playerColBox.setBackground(Color.RED);
                 break;
-
             case 3:
-                karel.setBackground(Color.YELLOW);
+                playerColBox.setBackground(Color.YELLOW);
                 break;
         }
-        eastPane.add(karel);
+        eastPane.add(playerColBox);
 
         //JPanel southPane = new JPanel();
         this.console = new JTextArea();
@@ -347,7 +439,6 @@ public class ClientFrame extends JFrame{
         console.setForeground(Color.WHITE);
         console.setEditable(false);
         
-
         //Pridani panelu do okna
         gamePane.add(westPane, BorderLayout.CENTER);
         gamePane.add(eastPane, BorderLayout.LINE_END);
