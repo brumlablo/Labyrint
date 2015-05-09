@@ -5,6 +5,7 @@
 package ija.client.gui;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import java.awt.Color;
 import java.awt.GridLayout;
@@ -13,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import ija.client.gui.ClientFrame;
 import ija.shared.DataUnit;
 import ija.shared.board.MazeBoard;
+import ija.shared.board.MazeField;
 
 public class GridPanel extends JPanel {
 
@@ -31,6 +33,8 @@ public class GridPanel extends JPanel {
         this.gameBoard = gameBoard;
         freeStoneTile = new GridTile(gameBoard.getFreeStone(), textures);
         addFreeStoneListener(freeStoneTile);
+        setBackground(new Color(0xFFC373));
+
         init();
     }
 
@@ -38,7 +42,7 @@ public class GridPanel extends JPanel {
         this.removeAll();
         tiles = null;
         this.tiles = new GridTile[size*size];
-        setLayout(new GridLayout(this.size, this.size, 5, 5));
+        setLayout(new GridLayout(this.size, this.size, 3, 3));
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
                 tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), gameBoard.get(row, col).getPlayers(), textures);
@@ -53,7 +57,13 @@ public class GridPanel extends JPanel {
         tile.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(java.awt.event.MouseEvent e) {
-                gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
+                if(SwingUtilities.isRightMouseButton(e))
+                        gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
+                else if(SwingUtilities.isLeftMouseButton(e))
+                    for(MazeField el : gameWindow.getConnect().getPaths())
+                        if(el.row() == row && el.col() == col)
+                            gameWindow.getConnect().send(new DataUnit(gameBoard.get(row, col), DataUnit.MsgID.C_MOVE));
+
             }
         });
     }

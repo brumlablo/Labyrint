@@ -289,13 +289,14 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/
             case C_MOVE: { //vzal poklad?
                 MazeField goal = (MazeField) toParse.data;
+                System.out.println("Mam jit na: "+ goal.row() + "-" + goal.col());
                 tmpgs = findRoom(autor.getRoomID());
                 MazeBoard board = tmpgs.getGame();
                 Player clientFigure = board.getPlayerByID(autor.getID());
                 
                 //Odstraneni hrace z desky a posunuti na novou pozici
                 /**********************/
-                clientFigure.seizePosition(board.get(1, 4));
+                clientFigure.seizePosition(board.get(goal.row(), goal.col()));
                 /**********************/
                 
                 if(true){//je tam poklad?) {

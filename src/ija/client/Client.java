@@ -21,6 +21,7 @@ public class Client
     private ObjectOutputStream streamOut = null;
     private ClientHelper client = null;
     private int myID = -1;
+    private ArrayList <MazeField> paths;
     
     public Client() {
         System.out.println("Establishing connection. Please wait ...");
@@ -129,14 +130,13 @@ public class Client
             case S_DIRS: {
                 System.out.println("prijal jsem dirs");
                 MazeBoard board = (MazeBoard) toParse.data;
-                ArrayList <MazeField> paths = board.getFinderPaths();
+                paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
                 for(MazeField el : paths)
                     System.out.println("r: " + el.row() + ", c: " + el.col());
                 //tady budu porovnavat na jakou MazeField hrac klikl s povolenymi paths
                 //ulozim do Mazefieldu
-                MazeField mf = new MazeField(4,5);
-                send(new DataUnit(mf,DataUnit.MsgID.C_MOVE));
+                //send(new DataUnit(mf,DataUnit.MsgID.C_MOVE));
                 break;
             }
             case S_GUPADATE: {
@@ -177,6 +177,10 @@ public class Client
 
     public int getMyID() {
         return this.myID;
+    }
+
+    public ArrayList<MazeField> getPaths() {
+        return this.paths;
     }
 
     public void send(DataUnit toSend) {   
