@@ -7,6 +7,7 @@ package ija.client.gui;
 import ija.client.*;
 import ija.shared.board.MazeBoard;
 import ija.shared.*;
+import ija.shared.player.Player;
 
 import javax.swing.*;
 
@@ -89,7 +90,7 @@ public class ClientFrame extends JFrame{
 
         //Jmeno hry
         JLabel name = new JLabel("LABYRINT", SwingConstants.CENTER);
-        name.setFont(new Font("Verdana", Font.PLAIN, 22));
+        name.setFont(new Font("Verdana", Font.PLAIN, 24));
         name.setForeground(new Color(0xFFC373)); //yellow
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
         lobbyPane.add(name, BorderLayout.NORTH);
@@ -185,13 +186,7 @@ public class ClientFrame extends JFrame{
             newGameButton.setForeground(Color.DARK_GRAY);
         }
     }
-    
-    public void setGButtons(boolean b) {
-        //GameButton.setEnabled(b);
-        //zakaz orotovane free card
-        //zakaz reakci na kliknuti na desku
-    }
-    
+
     public void setLobbyButtons(boolean b) {
         refreshButton.setEnabled(b);
         if (refreshButton.isEnabled()){
@@ -410,12 +405,27 @@ public class ClientFrame extends JFrame{
 
         //Vytvoreni bocniho panelu
         JPanel eastPane = new JPanel();
+        eastPane.setLayout(new GridBagLayout());
         eastPane.setPreferredSize(new Dimension(200, 100));
         eastPane.setBackground(new Color(0x25567B));//(0x17577e)); //blue
+        GridBagConstraints c = new GridBagConstraints();
+        //natural height, maximum width
+        //c.fill = GridBagConstraints.PAGE_START;
+        
         freeStonePane = new JPanel();
         freeStonePane.add(maze.getFreeStone());
-        eastPane.add(freeStonePane);
-
+        freeStonePane.setBackground(new Color(0x96ADC2));
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridheight = 3;
+        c.gridwidth = 3;
+        c.anchor = GridBagConstraints.PAGE_START;
+        c.insets = new Insets(20,0,0,15);  //bottom,left, right,top
+        eastPane.add(freeStonePane,c);
+        
+         //Ziskani barvy hrace       
         JPanel playerColBox = new JPanel();
         switch(g.getPlayerByID(connect.getMyID()).getColor()) {
             case 0:
@@ -431,9 +441,122 @@ public class ClientFrame extends JFrame{
                 playerColBox.setBackground(Color.YELLOW);
                 break;
         }
-        eastPane.add(playerColBox);
-
-        //JPanel southPane = new JPanel();
+        c.ipady = 80;
+        c.ipadx = 80;
+        c.weightx = 0.5;
+        c.weighty = 0.5;
+        c.gridwidth = 3;
+        c.gridheight = 3;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.anchor = GridBagConstraints.CENTER;
+        c.insets = new Insets(0,0,0,15);  //bottom,left, right,top
+        eastPane.add(playerColBox,c);
+        
+        //Ziskani barev ostanich hracu
+        ArrayList <JPanel> plBoxes = new ArrayList <JPanel>();
+        ArrayList<Player> players = g.getPlayers();
+        for(int i = 0; i < players.size() ; i++) {
+            if(g.getPlayerByID(connect.getMyID()).getColor() == players.get(i).getColor()) {
+                continue;
+            }
+            else {
+                JPanel tmp = new JPanel();
+                switch(players.get(i).getColor()) {
+                    case 0:
+                        tmp.setBackground(Color.BLUE);
+                        plBoxes.add(tmp);
+                        break;
+                    case 1:
+                        tmp.setBackground(Color.GREEN);
+                        plBoxes.add(tmp);
+                        break;
+                    case 2:
+                        tmp.setBackground(Color.RED);
+                        plBoxes.add(tmp);
+                        break;
+                    case 3:
+                        tmp.setBackground(Color.YELLOW);
+                        plBoxes.add(tmp);
+                        break;
+                }
+            }
+        }
+        switch(plBoxes.size()) {
+            case 1:
+                c.ipady = 30;
+                c.ipadx = 30;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 3;
+                c.gridheight = 3;
+                c.gridx = 0;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.CENTER;
+                c.insets = new Insets(15,0,0,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(0),c);
+                break;
+            case 2:
+                c.ipady = 30;
+                c.ipadx = 30;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                c.gridx = 0;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.WEST;
+                c.insets = new Insets(15,5,2,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(0),c);
+                c.ipady = 30;
+                c.ipadx = 30;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                c.gridx = 1;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.EAST;
+                c.insets = new Insets(15,2,5,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(1),c);
+                break;
+            case 3:
+                c.ipady = 30;
+                c.ipadx = 30;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                c.gridx = 0;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.WEST;
+                c.insets = new Insets(15,5,2,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(0),c);
+                c.ipady = 30;
+                c.ipadx = 30;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                c.gridx = 1;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.CENTER;
+                c.insets = new Insets(15,2,2,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(1),c);
+                c.ipady = 50;
+                c.ipadx = 50;
+                c.weightx = 0.5;
+                c.weighty = 0.5;
+                c.gridwidth = 1;
+                c.gridheight = 1;
+                c.gridx = 2;
+                c.gridy = 0;
+                c.anchor = GridBagConstraints.EAST;
+                c.insets = new Insets(15,2,5,15);  //bottom,left, right,top
+                eastPane.add(plBoxes.get(2),c);
+                break;    
+        }
+        
         this.console = new JTextArea();
         console.setBackground(Color.DARK_GRAY);
         console.setForeground(Color.WHITE);

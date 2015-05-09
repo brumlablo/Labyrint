@@ -48,7 +48,12 @@ public class MazeBoard implements Serializable { /*hraci deska*/
          this.players.add(new Player(colors.get(i), this.deck.popCard()));
       }
     }  
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
     
+   
 
    /** 
     * Provazani ID klienta s jeho barvou 
