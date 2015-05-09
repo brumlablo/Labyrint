@@ -218,8 +218,8 @@ public class ClientFrame extends JFrame{
     public void showChallDialog() {
         setNGButton(false);
         setLobbyButtons(false);
-        JButton yesButton = new JButton("Ano");
-        JButton noButton = new JButton("Ne");
+        JButton yesButton = new JButton("ANO");
+        JButton noButton = new JButton("NE");
         yesButton.setFont(new Font("Verdana", Font.PLAIN, 15));
         yesButton.setBackground(new Color(0x25567B)); //blue
         yesButton.setForeground(new Color(0xFFC373)); //yellow
@@ -230,9 +230,9 @@ public class ClientFrame extends JFrame{
         challDialog.getContentPane().setBackground(Color.GRAY);
         
         JLabel label = new JLabel("Jsi vyzván ke hře, přijímáš?");
-        label.setFont(new Font("Verdana", Font.PLAIN, 15));
-        label.setForeground(new Color(0xFFC373)); 
-        challDialog.setBounds(200, 300, 100, 100);
+        label.setFont(new Font("Verdana", Font.BOLD, 15));
+        label.setForeground(Color.WHITE); 
+        challDialog.setBounds(300, 400, 100, 100);
         yesButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -263,15 +263,15 @@ public class ClientFrame extends JFrame{
         if(challDialog != null)
             challDialog.dispose();
         this.challFailDialog = new JDialog(this);
-        challFailDialog.getContentPane().setBackground(Color.DARK_GRAY);
+        challFailDialog.getContentPane().setBackground(Color.GRAY);
         JLabel label = new JLabel("Výzva selhala.");
-        label.setFont(new Font("Verdana", Font.BOLD, 16));
-        label.setForeground(new Color(0xFFC373)); //yellow
+        label.setFont(new Font("Verdana", Font.BOLD, 15));
+        label.setForeground(Color.WHITE); 
         JButton okButton = new JButton("OK");
         okButton.setFont(new Font("Verdana", Font.BOLD, 15));
         okButton.setBackground(new Color(0x25567B)); //blue
         okButton.setForeground(new Color(0xFFC373)); //yellow
-        challFailDialog.setBounds(200, 300, 100, 100);
+        challFailDialog.setBounds(300, 400, 100, 100);
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -308,7 +308,7 @@ public class ClientFrame extends JFrame{
         newGameDialog.getContentPane().setBackground(Color.GRAY);
 
         //this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
-        newGameDialog.setBounds(200, 300, 100, 100);
+        newGameDialog.setBounds(300, 400, 100, 100);
         ngButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -347,12 +347,12 @@ public class ClientFrame extends JFrame{
         String[] treasureNumber = {"12", "24"};
         JLabel treasureLabel = new JLabel("POČET POKLADŮ");
         treasureLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-        treasureLabel.setForeground(new Color(0xFFC373)); 
+        treasureLabel.setForeground(Color.WHITE); 
         final JComboBox<String> treasureCB = new JComboBox<>(treasureNumber);
         
         JLabel sizeLabel = new JLabel("VELIKOST HRANY DESKY");
         sizeLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-        sizeLabel.setForeground(new Color(0xFFC373));
+        sizeLabel.setForeground(Color.WHITE); 
         String [] edgeNumber = {"5*5","6*6","7*7","8*8","9*9","10*10","11*11"};
         final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
         
