@@ -99,5 +99,10 @@ public class Player implements Serializable{
         return true;
     }
 
+    public int getTreasureCount() {
+        return treasureCount;
+    }
+
+    
 
 }
