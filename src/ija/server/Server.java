@@ -267,13 +267,12 @@ public class Server implements Runnable
                 MazeBoard board = tmpgs.getGame();
                 board.getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
                 board.shift(board.get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2]))); //shift     
-                board.noRoutes();
                 tmpgs.setGame(board);
                 
                 for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
                     if (tmpgs.getRoommates().get(i).getID() == autor.getID()) {
                         //pro autora naleznu cesty, kam muze jit
-                        board.findRoutes(i);
+                        board.findRoutes(autor.getID());
                         toSend = new DataUnit(board,DataUnit.MsgID.S_DIRS);
                         autor.send(toSend);
                         board.noRoutes();
@@ -288,6 +287,11 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_MOVE: { //vzal poklad?
+                tmpgs = findRoom(autor.getRoomID());
+                for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
+                    if ((tmpgs.getRoommates().get(i).getID() == autor.getID()) && (i != tmpgs.getOnTurn()))
+                        return;
+                }
                 MazeField goal = (MazeField) toParse.data;
                 System.out.println("Mam jit na: "+ goal.row() + "-" + goal.col());
                 tmpgs = findRoom(autor.getRoomID());
@@ -295,13 +299,12 @@ public class Server implements Runnable
                 Player clientFigure = board.getPlayerByID(autor.getID());
                 
                 //Odstraneni hrace z desky a posunuti na novou pozici
-                /**********************/
                 clientFigure.seizePosition(board.get(goal.row(), goal.col()));
-                /**********************/
-                
-                if(true){//je tam poklad, co hledam?) {
+
+                if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
                     //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jeslti neni konec hry, predat opet novy tah
-                    autor.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_YOURTURN));        
+                    board.findRoutes(autor.getID());
+                    autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));        
                 }
                 else {
                     tmpgs.nextTurn();

@@ -21,7 +21,7 @@ public class Client
     private ObjectOutputStream streamOut = null;
     private ClientHelper client = null;
     private int myID = -1;
-    private ArrayList <MazeField> paths;
+    private ArrayList <MazeField> paths = null;
     private MazeBoard board = null;
     
     public Client() {
@@ -116,12 +116,15 @@ public class Client
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
                 this.board = (MazeBoard) toParse.data;
+                this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().showGame(this.board);
                 break;
             }
             case S_YOURTURN: {
-                int onTurnID = (int) toParse.data;
-                this.paths = board.getFinderPaths();
+                Object[] recData = (Object[]) toParse.data;
+                int onTurnID = (int) recData[0];
+                this.paths = (ArrayList<MazeField>) recData[1];
+
                 if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
                     //ClientFrame.getInstance().setGButtons(true);
@@ -139,8 +142,6 @@ public class Client
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
-                for(MazeField el : paths)
-                    System.out.println("r: " + el.row() + ", c: " + el.col());
                 //tady budu porovnavat na jakou MazeField hrac klikl s povolenymi paths
                 //ulozim do Mazefieldu
                 //send(new DataUnit(mf,DataUnit.MsgID.C_MOVE));

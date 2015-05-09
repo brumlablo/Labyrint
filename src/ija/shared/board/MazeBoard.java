@@ -225,15 +225,15 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         this.finderPaths = null;
     }
 
-    public void findRoutes(int playerIndex) {
+    public void findRoutes(int ID) {
         //vycisteni predchozich cest
         this.finderPaths = null;
 
-        this.finderPaths = finder.findRoutes(getPlayer(playerIndex), this);
+        this.finderPaths = finder.findRoutes(getPlayerByID(ID), this);
     }
 
     public ArrayList<MazeField> getFinderPaths() {
-        return finderPaths;
+        return this.finderPaths;
     }
     
     /**
