@@ -59,6 +59,7 @@ public class GridPanel extends JPanel {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if(SwingUtilities.isRightMouseButton(e))
                         gameWindow.getConnect().send(new DataUnit("i"+row+"j"+col+"r"+gameBoard.getFreeStone().getRotation(), DataUnit.MsgID.C_SHIFT));
+
                 else if(SwingUtilities.isLeftMouseButton(e))
                     for(MazeField el : gameWindow.getConnect().getPaths())
                         if(el.row() == row && el.col() == col)

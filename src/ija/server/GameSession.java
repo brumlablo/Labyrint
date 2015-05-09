@@ -34,9 +34,9 @@ public class GameSession {
         onTurn = (++onTurn) %roommates.size();
         for(int i = 0; i < roommates.size() ; i++)  {      
              if(i == onTurn)
-                roommates.get(i).send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
             else
-                roommates.get(i).send(new DataUnit(false,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
         }
     }
 
@@ -122,9 +122,9 @@ public class GameSession {
         for(int i = 0; i < roommates.size() ; i++)  {      
                 roommates.get(i).send(new DataUnit(this.game,DataUnit.MsgID.S_NEWGAME));
             if(i == onTurn)
-                roommates.get(i).send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(roommates.get(i).getID(),DataUnit.MsgID.S_YOURTURN));
             else
-                roommates.get(i).send(new DataUnit(false,DataUnit.MsgID.S_YOURTURN));
+                roommates.get(i).send(new DataUnit(roommates.get(onTurn).getID(),DataUnit.MsgID.S_YOURTURN));
         }
     }
 

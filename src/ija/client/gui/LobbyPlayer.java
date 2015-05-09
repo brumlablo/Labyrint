@@ -15,7 +15,7 @@ public class LobbyPlayer {
 
     public LobbyPlayer(int ID) {
         this.ID = ID;
-        name = "hrac " + ID;
+        name = "hráč " + ID;
     }
 
     public String getName() {

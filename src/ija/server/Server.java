@@ -299,9 +299,9 @@ public class Server implements Runnable
                 clientFigure.seizePosition(board.get(goal.row(), goal.col()));
                 /**********************/
                 
-                if(true){//je tam poklad?) {
-                    //odebrat z balicku, predat opet novy tah, ne - predat tah dalsimu hraci
-                    autor.send(new DataUnit(true,DataUnit.MsgID.S_YOURTURN));        
+                if(true){//je tam poklad, co hledam?) {
+                    //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jeslti neni konec hry, predat opet novy tah
+                    autor.send(new DataUnit(autor.getID(),DataUnit.MsgID.S_YOURTURN));        
                 }
                 else {
                     tmpgs.nextTurn();
@@ -312,7 +312,7 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_UNAV: {
-                //pokud bude v mistnosti mene jak dva hraci, poslu je do lobby
+                //kdy muze klient koncit? lobby, cekani na novou hru, pri hre!!!
                 System.out.println( who + ": " + (String)toParse.data);
                 break;
             }
