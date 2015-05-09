@@ -124,13 +124,13 @@ public class Client
                 this.paths = board.getFinderPaths();
                 if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
-                    ClientFrame.getInstance().setGButtons(true);
+                    //ClientFrame.getInstance().setGButtons(true);
                 }
                 else {
                     String [] who = {"Modrý","Zelený","Červený","Žlutý"};
                     int color = board.getPlayerByID(onTurnID).getColor();
                     ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč je na tahu.");
-                    ClientFrame.getInstance().setGButtons(false);
+                    //ClientFrame.getInstance().setGButtons(false);
                 }
                 break;
             }
