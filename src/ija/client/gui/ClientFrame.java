@@ -46,6 +46,8 @@ public class ClientFrame extends JFrame{
     
     private Client connect;
     private static ClientFrame instance; //singleton!
+    private boolean isEnd;
+    private JDialog leaveGameDialog;
 
     private ClientFrame() {
         this.connect = null;
@@ -338,7 +340,6 @@ public class ClientFrame extends JFrame{
     }
 
     private void createNGDialog() {
-
         JButton confirmButton = new JButton("POTVRDIT");      
         confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
         confirmButton.setBackground(new Color(0x25567B)); //blue
@@ -393,6 +394,59 @@ public class ClientFrame extends JFrame{
         newGameDialog.pack();
         newGameDialog.setLocationRelativeTo(this);
         newGameDialog.setVisible(true);
+    }
+    
+    public void showLeaveGameDialog() {
+    this.leaveGameDialog = new JDialog(this);
+    leaveGameDialog.getContentPane().setBackground(Color.GRAY);
+    JLabel label = new JLabel("Opravdu chceš skončit hru?");
+    label.setFont(new Font("Verdana", Font.BOLD, 15));
+    label.setForeground(Color.WHITE); 
+    JButton joButton = new JButton("Opravdu JO.");
+    joButton.setFont(new Font("Verdana", Font.BOLD, 15));
+    joButton.setBackground(new Color(0x25567B)); //blue
+    joButton.setForeground(new Color(0xFFC373)); //yellow
+    leaveGameDialog.setBounds(300, 400, 100, 100);
+    joButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            setLobbyButtons(true);
+            cardLayout.show(MAINPane, "lobby");
+            connect.send(new DataUnit(true,DataUnit.MsgID.C_LEFT_GAME)); //hrac opustil rozehranou hru
+            leaveGameDialog.dispose();
+        }
+    });
+    JButton noButton = new JButton("Nakonec NE.");
+    noButton.setFont(new Font("Verdana", Font.BOLD, 15));
+    noButton.setBackground(new Color(0x25567B)); //blue
+    noButton.setForeground(new Color(0xFFC373)); //yellow
+    leaveGameDialog.setBounds(300, 400, 100, 100);
+    noButton.addActionListener(new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            leaveGameDialog.dispose();
+        }
+    });
+    
+    leaveGameDialog.add(label);
+    leaveGameDialog.add(joButton);
+    leaveGameDialog.add(noButton);
+
+    leaveGameDialog.setModal(true);
+    leaveGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
+    JPanel pane = (JPanel) leaveGameDialog.getContentPane();
+    pane.setBorder(new EmptyBorder(0,60,20,60));
+    leaveGameDialog.pack(); 
+    leaveGameDialog.setLocationRelativeTo(this);
+    leaveGameDialog.setVisible(true);
+}
+    
+    public void showView(String type){
+        cardLayout.show(MAINPane, type);
+    }
+    
+    public void setIsEnd(boolean b) {
+        this.isEnd = b;
     }
 
     public void showGame(MazeBoard g) {
@@ -529,7 +583,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,0,0,0);
+                c.insets = new Insets(20,0,50,0);
                 eastPane.add(plBoxes.get(0),c);
                 break;
             case 2:
@@ -541,7 +595,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,0,2);
+                c.insets = new Insets(20,0,50,2);
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -551,7 +605,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,0);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 break;
             case 3:
@@ -563,7 +617,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,0,2);  //bottom,left, right,top
+                c.insets = new Insets(20,0,50,2);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -573,7 +627,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,2,0,2);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,2);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -583,7 +637,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 2;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,0);
                 eastPane.add(plBoxes.get(2),c);
                 break;    
         }
@@ -591,24 +645,39 @@ public class ClientFrame extends JFrame{
         saveGameButton.setBackground(new Color(0x96ADC2));
         saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         saveGameButton.setForeground(Color.BLACK);
+        saveGameButton.setPreferredSize(new Dimension(170,30));
         c.weightx = 0.0;
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 3;
-        c.anchor = GridBagConstraints.CENTER;
-       // c.insets = new Insets(20,2,0,2);
+        c.anchor = GridBagConstraints.SOUTH;
+        c.insets = new Insets(0,0,10,0);
         eastPane.add(saveGameButton,c);
         JButton toLobbyButton = new JButton("NÁVRAT DO LOBBY");
         toLobbyButton.setBackground(new Color(0x96ADC2));
         toLobbyButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         toLobbyButton.setForeground(Color.BLACK);
-        //c.weightx = 0.5;
+        toLobbyButton.setPreferredSize(new Dimension(170,30));
+        toLobbyButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(isEnd) {
+                    //Zobrazeni lobby rozlozeni
+                    cardLayout.show(MAINPane, "lobby");
+                    connect.send(new DataUnit(false,DataUnit.MsgID.C_LEFT_GAME)); //hra konci 
+                }
+                else {
+                    showLeaveGameDialog();  
+                }
+            }
+        });
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 4;
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.NORTH;
+        c.insets = new Insets(0,0,0,0);
         eastPane.add(toLobbyButton,c);
         
         c.weighty = 1.0;
@@ -642,6 +711,8 @@ public class ClientFrame extends JFrame{
     
     
     public void refreshGame(MazeBoard g) {
+        if(isEnd)
+            return;
         //Prepsani labelu se skore
         /************************/
         ArrayList<Player> players = g.getPlayers();

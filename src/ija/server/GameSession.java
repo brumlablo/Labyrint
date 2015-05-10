@@ -32,6 +32,14 @@ public class GameSession {
         p.setRoomID(roomID);
     }
     
+    public void removePlayer(Session p) {
+        System.out.println("odebran hrac: " + p.getID() + " v mistnosti " + this.roomID);
+        this.roommates.remove(p);
+        p.setRoomID(-1);
+        onTurn = -1;
+    }
+    
+    
     public void nextTurn() {
         onTurn = (++onTurn) %roommates.size();
         for(int i = 0; i < roommates.size() ; i++)  {      
