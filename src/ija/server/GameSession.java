@@ -34,7 +34,7 @@ public class GameSession {
      * @param p 
      */
     public void addPlayer(Session p) {
-        System.out.println("pridan hrac: " + p.getID() + " v mistnosti " + this.roomID);
+        //System.out.println("pridan hrac: " + p.getID() + " v mistnosti " + this.roomID);
         this.roommates.add(p);
         p.setRoomID(roomID);
     }
@@ -43,7 +43,7 @@ public class GameSession {
      * @param p 
      */
     public void removePlayer(Session p) {
-        System.out.println("odebran hrac: " + p.getID() + " v mistnosti " + this.roomID);
+        //System.out.println("odebran hrac: " + p.getID() + " v mistnosti " + this.roomID);
         this.roommates.remove(p);
         p.setRoomID(-1);
         onTurn = -1;
@@ -110,7 +110,7 @@ public class GameSession {
         for(Session najemnik : roommates) {
             if((notLeader) && (i++ == 0))
                 continue;
-            System.out.println("odeslano klientovi: " + najemnik.getID());
+            //System.out.println("odeslano klientovi: " + najemnik.getID());
             najemnik.send(toSend);
         }
     }
@@ -154,7 +154,7 @@ public class GameSession {
             colors.add(i);
         }
         Collections.shuffle(colors);
-        System.out.println("barvy: " + Arrays.toString(colors.toArray()));
+        //System.out.println("barvy: " + Arrays.toString(colors.toArray()));
         
         this.onTurn = 0; //ID hrace na tahu 
         Random rand = new Random();
