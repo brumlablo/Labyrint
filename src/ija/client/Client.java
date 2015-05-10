@@ -64,7 +64,7 @@ public class Client
                 send(toSend);
                 break;
             }
-            case S_CLOBBY: { //na vypis: novy klient v lobby
+            case S_CLOBBY: { //novy klient v lobby
                 ArrayList <Integer> inLobby = (ArrayList <Integer>) toParse.data;
                 inLobby.remove((Integer) myID); //sebe vypsat nechci
                 if(inLobby.size() < 1)
@@ -99,13 +99,11 @@ public class Client
                 ClientFrame.getInstance().showChallDialog();
                 break;
             }
-            case S_WAITFG: { //+nastaveni mistnosti
+            case S_WAITFG: { //cekani na nastaveni parametru hry
                 System.out.println("Leader vybira parametry hry...");
                 break;
             }
             case S_CHOOSEG: { //pro leadera: vybrat hru novou nebo ulozenou
-                //GUI s oknem na vyber hry
-                //tlacitko nova hra a pole s N a K
                 System.out.println("Leadere, vyber hru.");
                 ClientFrame.getInstance().chooseGDialog();
                 break;
@@ -122,14 +120,14 @@ public class Client
                 ClientFrame.getInstance().showGame(this.board);
                 break;
             }
-            case S_YOURTURN: {
+            case S_YOURTURN: { //predavani tahu popr.  hlaskka o vynucenem konci hry
                 Object[] recData = (Object[]) toParse.data;
                 int onTurnID = (int) recData[0];
                 this.paths = (ArrayList<MazeField>) recData[1];
                 String [] who = {"Modrý","Zelený","Červený","Žlutý"};
                 if(onTurnID < 0) { //klient opustil hru
                     int color = board.getPlayerByID(-onTurnID).getColor();
-                    ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč opustil hru. Hra vynuceně končí. Pokud chceš ulož si ji.");
+                    ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč opustil hru. Hra vynuceně končí. Pokud chceš, ulož si ji.");
                 }
                 else if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
@@ -140,20 +138,20 @@ public class Client
                 }
                 break;
             }
-            case S_DIRS: {
+            case S_DIRS: { //cesty, kam muze jit aktivni hrac
                 System.out.println("prijal jsem dirs");
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
                 break;
             }
-            case S_GUPADATE: {
+            case S_GUPADATE: { //prekresleni herni desky
                 System.out.println("prijal jsem gameupdate");
                 this.board = (MazeBoard) toParse.data;
                 ClientFrame.getInstance().refreshGame(board);
                 break;
             }
-            case S_ENDGAME: {
+            case S_ENDGAME: { //konec hry - vypisy
                 int winnerID = (int) toParse.data;
                 ClientFrame.getInstance().setIsEnd(true);
                 if(this.myID == winnerID) {

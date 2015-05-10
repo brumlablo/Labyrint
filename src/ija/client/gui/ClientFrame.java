@@ -28,6 +28,7 @@ public class ClientFrame extends JFrame{
     private JPanel gamePane;
     private JPanel MAINPane;
     private JPanel sidePane;
+    private String shownPanel = "";
     private JPanel freeStonePane;
     private CardLayout cardLayout = new CardLayout();
     
@@ -179,7 +180,24 @@ public class ClientFrame extends JFrame{
         lobbyPane.setBackground(Color.GRAY);
         
         add(MAINPane);
-        this.cardLayout.show(MAINPane,"lobby");
+        showView("lobby");
+        
+        addWindowListener(new WindowAdapter()
+        {
+            @Override
+            public void windowClosing(WindowEvent e)
+            {
+                switch(shownPanel){
+                    case "lobby":
+                        e.getWindow().dispose();
+                        break;
+                    case "game":
+                        connect.send(new DataUnit(!isEnd,DataUnit.MsgID.C_LEFT_GAME));
+                        e.getWindow().dispose();
+                        break;
+                }
+            }
+        });
     }
    
     public void setNGButton(boolean b) {
@@ -345,7 +363,7 @@ public class ClientFrame extends JFrame{
         confirmButton.setBackground(new Color(0x25567B)); //blue
         confirmButton.setForeground(new Color(0xFFC373)); //yellow
         
-        String[] treasureNumber = {"12", "24"};
+        String[] treasureNumber = {"12"};
         JLabel treasureLabel = new JLabel("POČET POKLADŮ");
         treasureLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         treasureLabel.setForeground(Color.WHITE); 
@@ -356,6 +374,16 @@ public class ClientFrame extends JFrame{
         sizeLabel.setForeground(Color.WHITE); 
         String [] edgeNumber = {"5*5","6*6","7*7","8*8","9*9","10*10","11*11"};
         final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
+        edgeCB.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                treasureCB.removeAllItems();
+                treasureCB.addItem("12");
+                if(edgeCB.getSelectedIndex() > 0) {
+                        treasureCB.addItem("24");
+                }
+            }
+        });
+
         
         treasureCB.setFont(new Font("Verdana", Font.BOLD, 14));
         treasureCB.setBackground(new Color(0x25567B)); //blue
@@ -411,7 +439,7 @@ public class ClientFrame extends JFrame{
         @Override
         public void actionPerformed(ActionEvent e) {
             setLobbyButtons(true);
-            cardLayout.show(MAINPane, "lobby");
+            //showView("lobby");
             connect.send(new DataUnit(true,DataUnit.MsgID.C_LEFT_GAME)); //hrac opustil rozehranou hru
             leaveGameDialog.dispose();
         }
@@ -442,6 +470,7 @@ public class ClientFrame extends JFrame{
 }
     
     public void showView(String type){
+        shownPanel = type;
         cardLayout.show(MAINPane, type);
     }
     
@@ -664,7 +693,7 @@ public class ClientFrame extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if(isEnd) {
                     //Zobrazeni lobby rozlozeni
-                    cardLayout.show(MAINPane, "lobby");
+                    showView("lobby");
                     connect.send(new DataUnit(false,DataUnit.MsgID.C_LEFT_GAME)); //hra konci 
                 }
                 else {
@@ -700,7 +729,7 @@ public class ClientFrame extends JFrame{
         gamePane.add(console, BorderLayout.SOUTH);
 
         //Zobrazeni herniho rozlozeni
-        this.cardLayout.show(MAINPane, "game");
+        showView("game");
         setVisible(true);
         pack();
     }
