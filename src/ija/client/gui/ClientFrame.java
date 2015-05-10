@@ -16,6 +16,8 @@ import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.FileInputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,7 @@ public class ClientFrame extends JFrame{
     
     private JButton newGameButton;
     private JButton refreshButton;
+    private JButton saveGameButton;
     private JList lobbyPlayersList;
     private GridTile freeStoneTile;
     private GridPanel maze;
@@ -49,14 +52,16 @@ public class ClientFrame extends JFrame{
     private JDialog newGameDialog;
     private JDialog challDialog;
     private JDialog challFailDialog;
+    private JDialog leaveGameDialog;
+    private JDialog saveGameDialog;
     
     private Map<Integer, JLabel> scoreLabels;
     
     private Client connect;
     private static ClientFrame instance; //singleton!
     private boolean isEnd;
-    private JDialog leaveGameDialog;
-    private JDialog saveGameDialog;
+    private JDialog savedGamesDialog;
+
 
     /**
      * Inicializace GUI
@@ -99,6 +104,7 @@ public class ClientFrame extends JFrame{
          return c;
      }
 }
+    
     /**
      * Inicializace GUI pro klienta
      */
@@ -224,6 +230,7 @@ public class ClientFrame extends JFrame{
                 }
             }
         });
+        saveGameButton = new JButton();
     }
    
     /**
@@ -387,6 +394,7 @@ public class ClientFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
+                findSavedGamesDialog();
                 newGameDialog.dispose();
                 //createGDialog();
             }
@@ -405,9 +413,100 @@ public class ClientFrame extends JFrame{
     }
     
     /**
+     * Dialog pro vybrani ulozene hry
+     */
+    public void findSavedGamesDialog() {
+        //connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
+        this.savedGamesDialog = new JDialog();
+        savedGamesDialog.getContentPane().setBackground(Color.GRAY);
+        
+        JLabel listLabel = new JLabel("SEZNAM ULOŽENÝCH HER");
+        listLabel.setForeground(Color.WHITE);
+        listLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        
+        JList savedGamesList = new JList();
+        savedGamesList.setBackground(Color.WHITE);
+        savedGamesList.setFont(new Font("Verdana", Font.PLAIN, 13));
+        savedGamesList.setForeground(new Color(0x25567B));
+        savedGamesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        String path = "./lib/savedGames/"; 
+        String files;
+        File folder = new File(path);
+        File[] listOfFiles = folder.listFiles();
+        savedGamesList.setVisible(false);
+        DefaultListModel listModel = new DefaultListModel();
+        for (int i = 0; i < listOfFiles.length; i++) 
+        {
+            if (listOfFiles[i].isFile()) {
+                files = listOfFiles[i].getName();
+                if (files.endsWith(".sav"))
+                   listModel.addElement(files);
+            }
+        }
+        savedGamesList.setModel(listModel);
+        savedGamesList.setVisible(true);
+        
+        JButton okButton = new JButton("POTVRDIT");
+        okButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        okButton.setBackground(new Color(0x25567B)); //blue
+        okButton.setForeground(new Color(0xFFC373)); //yellow
+        savedGamesDialog.setBounds(300, 400, 100, 100);
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //posilani na server
+                String toLoad = (String) savedGamesList.getSelectedValue();
+                if(toLoad == null)
+                    return;
+                FileInputStream fis;
+                ObjectInputStream ois;
+                try {
+                    fis = new FileInputStream("./lib/savedGames/"+toLoad);
+                    ois = new ObjectInputStream(fis);
+                    MazeBoard foundBoard = (MazeBoard) ois.readObject();
+                    connect.send(new DataUnit(foundBoard,DataUnit.MsgID.C_CHOSENG));
+                    ois.close();
+                    fis.close();
+                }
+                catch(IOException iox) {
+                    System.err.println("Error reading file: " + iox);
+                }
+                catch(ClassNotFoundException cnfe) {
+                    System.err.println("Programming error: " + cnfe);
+                }
+                savedGamesDialog.dispose();
+            }
+        });
+        JButton cancelButton = new JButton("ZPĚT");
+        cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        cancelButton.setBackground(new Color(0x25567B)); //blue
+        cancelButton.setForeground(new Color(0xFFC373)); //yellow
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { 
+                savedGamesDialog.dispose();
+                chooseGDialog();
+            }
+        });
+        savedGamesDialog.add(listLabel,BorderLayout.NORTH);
+        savedGamesDialog.add(savedGamesList,BorderLayout.CENTER);
+        savedGamesDialog.add(okButton,BorderLayout.SOUTH);
+        savedGamesDialog.add(cancelButton,BorderLayout.EAST);
+        
+        savedGamesDialog.setModal(true);
+        newGameDialog.setLayout(new BorderLayout());
+        JPanel pane = (JPanel) savedGamesDialog.getContentPane();
+        pane.setBorder(new EmptyBorder(5, 50,20 ,50));
+        savedGamesDialog.pack();
+        savedGamesDialog.setLocationRelativeTo(this);
+        savedGamesDialog.setVisible(true);
+        
+    }
+    
+    /**
      * Ukaze dialog s nastavenim parametru hry
      */
-    private void createNGDialog() {
+    public void createNGDialog() {
         JButton confirmButton = new JButton("POTVRDIT");      
         confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
         confirmButton.setBackground(new Color(0x25567B)); //blue
@@ -477,7 +576,7 @@ public class ClientFrame extends JFrame{
     /**
      * Ukaze dialog ve hre pro ulozeni rozehrane hry
      */
-    private void saveGameDialog(){
+    public void saveGameDialog(){
         this.saveGameDialog = new JDialog(this);
         saveGameDialog.getContentPane().setBackground(Color.GRAY);
         JLabel label = new JLabel("Uložit hru?");
@@ -660,6 +759,7 @@ public class ClientFrame extends JFrame{
      */
     public void setIsEnd(boolean b) {
         this.isEnd = b;
+        saveGameButton.setEnabled(!b);
     }
 
     /**
@@ -858,7 +958,7 @@ public class ClientFrame extends JFrame{
                 eastPane.add(plBoxes.get(2),c);
                 break;    
         }
-        JButton saveGameButton = new JButton("ULOŽIT HRU");
+        this.saveGameButton.setText("ULOŽIT HRU");
         saveGameButton.setBackground(new Color(0x96ADC2));
         saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         saveGameButton.setForeground(Color.BLACK);
