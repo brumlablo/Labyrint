@@ -1,10 +1,5 @@
 /* file name  : Player.java
  * authors    : xhajek33, xblozo00
- * created    : Tue 28 Apr 2015 04:43:51 PM CEST
- * copyright  : 
- *
- * modifications:
- *
  */
 
 package ija.shared.player;
@@ -17,7 +12,7 @@ import java.io.Serializable;
 import java.lang.String;
 
 /**Trida reprezentujici jednoho hrace unikatniho
- * jeho jmenem/barvou
+ * jeho barvou
  *  
  * 
  * @author xhajek33
@@ -58,6 +53,11 @@ public class Player implements Serializable{
         return position;
     }
 
+    /** 
+     * Nastaveni nove pozice hrace 
+     * 
+     * @param mf policko, na ktere se hrac umisti
+     */
     public void setPosition(MazeField mf) {
         this.position = mf;
     }
@@ -89,6 +89,11 @@ public class Player implements Serializable{
         return this.activeCard;
     }
     
+    /** 
+     * Nastaveni ukolove karty hrace 
+     * 
+     * @param card karta s pokladem, kterou ma hrac hledat
+     */
     public void setActiveCard(TreasureCard card) {
         this.activeCard = card;
     } 
@@ -121,6 +126,11 @@ public class Player implements Serializable{
         return true;
     }
 
+    /** 
+     * Ziskani poctu pokladu, ktere uz hrac nasel 
+     * 
+     * @return pocet pokladu ziskanych hracem
+     */
     public int getTreasureCount() {
         return treasureCount;
     }

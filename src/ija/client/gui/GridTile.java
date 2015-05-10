@@ -16,6 +16,11 @@ import ija.shared.player.Player;
 import ija.client.gui.TextureCache;
 import ija.shared.treasure.Treasure;
 
+/** 
+ * Trida predstavujici jedno policko na vykresleni 
+ * 
+ * @author xhajek33
+ */
 public class GridTile extends JComponent {
 
     private String type;
@@ -25,7 +30,13 @@ public class GridTile extends JComponent {
     private TextureCache textures;
     private float scaleFactor;
 
-    //public GridTile(MazeField mf, TextureCache textures) {
+    /** 
+     * Vytvori jedno policko desky 
+     * 
+     * @param card karta, ze ktere se vyberou vsechny dulezite hodnoty
+     * @param players seznam hracu
+     * @param textures kolekce textur, ze kterych se vykresluje
+     */
     public GridTile(MazeCard card, ArrayList<Player> players, TextureCache textures) {
 
         this.type = card.getType();
@@ -34,9 +45,15 @@ public class GridTile extends JComponent {
         this.players = players;
         this.textures = textures;
         this.scaleFactor = 1.0f;
-        //setPreferredSize(new Dimension(80, 80));
     }
 
+    /** 
+     * Vytvori jedno policko desky 
+     * 
+     * @param card karta, ze ktere se vyberou vsechny dulezite hodnoty
+     * @param players seznam hracu
+     * @param textures kolekce textur, ze kterych se vykresluje
+     */
     public GridTile(MazeCard card, TextureCache textures) {
         this.type = card.getType();
         this.rotationVec = card.getRotation();
@@ -46,24 +63,49 @@ public class GridTile extends JComponent {
         //setPreferredSize(new Dimension(80, 80));
     }
 
+    /** 
+     * Nastaveni karty z desky 
+     * 
+     * @param card karta, ze ktere se vytahnou dulezite hodnoty
+     */
     public void setCard(MazeCard card) {
         this.type = card.getType();
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
     }
 
+    /** 
+     * Ziskani minimalni velikosti komponenty 
+     * 
+     * @return min. velikost komponenty
+     */
     public Dimension getMinimumSize() {
       return getPreferredSize();
     }
 
+    /** 
+     * Ziskani maximalni velikosti komponenty 
+     * 
+     * @return max. velikost komponenty
+     */
     public Dimension getMaximumSize() {
         return getPreferredSize();
     }
 
+    /** 
+     * Ziskani preferovane velikosti komponenty 
+     * 
+     * @return preferovana velikost komponenty
+     */
     public Dimension getPreferredSize() {
         return new Dimension(80, 80);
     }
 
+    /** 
+     * Nastaveni faktoru skalovani obrazku podle velikosti desky 
+     * 
+     * @param size velikost herni desky
+     */
     public void setScale(int size) {
         switch(size) {
             case 8:

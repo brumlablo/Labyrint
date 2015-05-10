@@ -10,8 +10,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 
-/**Reprezentuje kamen na hraci desce 
- *  
+/** 
+ * Reprezentuje kamen na hraci desce 
  * 
  * @author xhajek33
  * @author xblozo00
@@ -31,8 +31,8 @@ public class MazeCard implements Serializable{
         DOWN
     };
     
-    /**Konstruktor tridy 
-     *  
+    /** 
+     * Konstruktor tridy 
      * 
      * @param type jeden ze tri typu karty: C, L, F
      */
@@ -64,8 +64,8 @@ public class MazeCard implements Serializable{
         }
     }   
 
-    /**Metoda pro vytvoreni jednoho herniho kamene 
-     *  
+    /** 
+     * Metoda pro vytvoreni jednoho herniho kamene 
      * 
      * @param type jeden ze tri typu karty: C, L, F
      * @return herni kamen
@@ -80,8 +80,8 @@ public class MazeCard implements Serializable{
             throw new IllegalArgumentException();            
     }
     
-    /**Overuje, jestli je mozne herni kamen danym smerem opustit 
-     *  
+    /** 
+     * Overuje, jestli je mozne herni kamen danym smerem opustit 
      * 
      * @param dir smer, na ktery se kamen testuje
      * @return true pokud lze timhle smerem oopustit, jinak false
@@ -94,8 +94,8 @@ public class MazeCard implements Serializable{
         return false;
     }
     
-    /**Otoci herni kamen o 90° doprava 
-     *  
+    /** 
+     * Otoci herni kamen o 90° doprava
      */
     public void turnRight() {
         int index = 0;
@@ -107,8 +107,8 @@ public class MazeCard implements Serializable{
         }
     }
 
-    /**Otoci herni kamen n-krat doprava 
-     *  
+    /** 
+     * Otoci herni kamen n-krat doprava 
      * 
      * @param n pocet pravotocivych otoceni
      */
@@ -117,18 +117,38 @@ public class MazeCard implements Serializable{
            this.turnRight();
     }
 
+    /** 
+     * Ziskani typu karty/kamene 
+     * 
+     * @return typ karty [C,L,F]
+     */
     public String getType() {
         return type;
     }
 
+    /** 
+     * Ziskani rotace kart 
+     * 
+     * @return rotace kamene [0-3]
+     */
     public int getRotation() {
         return this.rotationVec;
     }
     
+    /** 
+     * Nastavi poklad karte 
+     * 
+     * @param tr poklad pro kartu
+     */
     public void setTreasure(Treasure tr) {
         this.treasure = tr;
     }
 
+    /** 
+     * Ziskani pokladu z karty 
+     * 
+     * @return poklad karty
+     */
     public Treasure getTreasure() {
         return this.treasure;
     }

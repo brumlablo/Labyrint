@@ -79,10 +79,22 @@ public class TextureCache {
         }
     }
 
+    /** 
+     * Ziskani textury pro poklady 
+     * 
+     * @param code kod pokladu
+     * @return textura zadaneho pokladu
+     */
     public Image getTreasureTexture(int code) {
         return treasureTextures[code];
     }
 
+    /** 
+     * Ziskani textury pro hrace 
+     * 
+     * @param color barva hrace
+     * @return textura zadaneho hrace
+     */
     public Image getPlayerTexture(int color) {
         return playerTextures[color];   
     }
