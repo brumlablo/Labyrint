@@ -180,7 +180,15 @@ public class MazeBoard implements Serializable { /*hraci deska*/
          while(cards != 0) {
             randX = rand.nextInt(this.size);
             randY = rand.nextInt(this.size);
-            
+
+            //Osetreni, ze poklady nejsou v rozich
+            if( (randX == 0 && randY == 0) ||                   //Levy horni roh
+                (randX == 0 && randY == this.size-1) ||         //Pravy horni
+                (randX == this.size-1 && randY == 0) ||         //Levy spodni
+                (randX == this.size-1 && randY == this.size-1)  //Pravy spodni
+                  )
+               continue;
+
             if( gameBoard[randX][randY].getCard().getTreasure() == null ) {
                gameBoard[randX][randY].getCard().setTreasure(Treasure.getTreasure(cards-1));
                cards--;
@@ -293,9 +301,10 @@ public class MazeBoard implements Serializable { /*hraci deska*/
        return this.freeStone;
     }
     
+
     /**
      * Vlozi volny kamen na zadanou pozici a posune sloupec/radek;
-     * Zaroven overuje posouvani hracu
+     * Zaroven overuje posouvani hracu a nemoznost provadet inverzni tahy
      *
      * 
      * @param mf Kamen, na jehoz pozici se vlozi volny kamen.
@@ -307,6 +316,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         ArrayList<Player> tmpPL = null;
         
         //SHIFT DOLU
+        /*********************************************************************/
         if( (r == 1) && ((c & 1) == 0) ) {
             //Kontrola na inverzni tah
             if(this.prevShift != null)
@@ -321,8 +331,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
                get(row, c).putCard(get(row-1, c).getCard());
             }
         }
+        /*********************************************************************/
+
 
         //SHIFT NAHORU
+        /*********************************************************************/
         else if( (r == this.size) && ((c & 1) == 0) ) {
 
             //Kontrola na inverzni tah
@@ -338,8 +351,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
                 get(row, c).putCard(get(row+1, c).getCard());
             }
         }
+        /*********************************************************************/
         
+
         //SHIFT DOPRAVA
+        /*********************************************************************/
         else if( ((r & 1) == 0) && (c == 1) ) {
 
             //Kontrola na inverzni tah
@@ -355,8 +371,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
                 get(r, col).putCard(get(r, col-1).getCard());
             }
         }
+        /*********************************************************************/
         
+
         //SHIFT DOLEVA
+        /*********************************************************************/
         else if( ((r & 1) == 0) && (c == this.size) ) {
 
             //Kontrola na inverzni tah
@@ -372,6 +391,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
                 get(r, col).putCard(get(r, col+1).getCard());
             }
         }
+        /*********************************************************************/
         
         //NIC SE NEDEJE
         else {
@@ -392,6 +412,6 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * @return velikost hrany desky
      */
     public int getSize() {
-      return this.size;
+       return this.size;
     }
 }

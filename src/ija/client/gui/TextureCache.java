@@ -33,7 +33,6 @@ public class TextureCache {
 
         //Textury pokladu
         /*****************/
-        //Coming soon
         for(int i = 0; i < 24; i++)
             if(i < 10)
                 treasureTextures[i] = new javax.swing.ImageIcon("lib/textures/treasures/tr0" + i + ".png").getImage();
@@ -49,6 +48,16 @@ public class TextureCache {
         playerTextures[3] = new javax.swing.ImageIcon("lib/textures/players/player4.png").getImage();
         /*****************/
 
+        //ScaleDown(30);
+    }
+
+    private void ScaleDown(int size) {
+        mazeTextures[0] = mazeTextures[0].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
+        mazeTextures[1] = mazeTextures[1].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
+        mazeTextures[2] = mazeTextures[2].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
+
+        for(int i = 0; i < 24; i++)
+            treasureTextures[i] = treasureTextures[i].getScaledInstance(2*size, 2*size, java.awt.Image.SCALE_SMOOTH);
     }
 
     /** 

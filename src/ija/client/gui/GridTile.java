@@ -32,7 +32,7 @@ public class GridTile extends JComponent {
         this.treasure = card.getTreasure();
         this.players = players;
         this.textures = textures;
-        setPreferredSize(new Dimension(80, 80));
+        //setPreferredSize(new Dimension(80, 80));
     }
 
     public GridTile(MazeCard card, TextureCache textures) {
@@ -40,7 +40,7 @@ public class GridTile extends JComponent {
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
         this.textures = textures;
-        setPreferredSize(new Dimension(80, 80));
+        //setPreferredSize(new Dimension(80, 80));
     }
 
     public void setCard(MazeCard card) {
@@ -66,6 +66,7 @@ public class GridTile extends JComponent {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform old = g2.getTransform();
+
 
         //Kresleni textury labyrintu
         /**************************/
