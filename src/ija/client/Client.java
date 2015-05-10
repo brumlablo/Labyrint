@@ -98,24 +98,24 @@ public class Client
                     ClientFrame.getInstance().showChallFailDialog();
                     break;
                 }
-                System.out.println("Jsi vyzvan ke hre, prijimas?");
+                //System.out.println("Jsi vyzvan ke hre, prijimas?");
                 ClientFrame.getInstance().showChallDialog();
                 break;
             }
             /*----------------------------------------------------------------*/
             case S_WAITFG: { //cekani na nastaveni parametru hry
-                System.out.println("Leader vybira parametry hry...");
+                //System.out.println("Leader vybira parametry hry...");
                 break;
             }
             /*----------------------------------------------------------------*/
             case S_CHOOSEG: { //pro leadera: vybrat hru novou nebo ulozenou
-                System.out.println("Leadere, vyber hru.");
+                //System.out.println("Leadere, vyber hru.");
                 ClientFrame.getInstance().chooseGDialog();
                 break;
             }
             /*----------------------------------------------------------------*/
             case S_NEWGAME: { //nova hra, barva hrace
-                System.out.println("Toto je moje skvela hra. Moc se mi libi.");
+                //System.out.println("Toto je moje skvela hra. Moc se mi libi.");
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().setIsEnd(false);
@@ -143,7 +143,7 @@ public class Client
             }
             /*----------------------------------------------------------------*/
             case S_DIRS: { //cesty, kam muze jit aktivni hrac
-                System.out.println("prijal jsem dirs");
+                //System.out.println("prijal jsem dirs");
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
                 ClientFrame.getInstance().refreshGame(board);
@@ -151,7 +151,7 @@ public class Client
             }
             /*----------------------------------------------------------------*/
             case S_GUPADATE: { //prekresleni herni desky
-                System.out.println("prijal jsem gameupdate");
+                //System.out.println("prijal jsem gameupdate");
                 this.board = (MazeBoard) toParse.data;
                 ClientFrame.getInstance().refreshGame(board);
                 break;

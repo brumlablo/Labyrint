@@ -422,14 +422,15 @@ public class ClientFrame extends JFrame{
         
         JLabel listLabel = new JLabel("SEZNAM ULOŽENÝCH HER");
         listLabel.setForeground(Color.WHITE);
-        listLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        listLabel.setFont(new Font("Verdana", Font.BOLD, 15));
+        
         
         final JList savedGamesList = new JList();
         savedGamesList.setBackground(Color.WHITE);
-        savedGamesList.setFont(new Font("Verdana", Font.PLAIN, 13));
+        savedGamesList.setFont(new Font("Verdana", Font.BOLD, 13));
         savedGamesList.setForeground(new Color(0x25567B));
         savedGamesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        String path = "./lib/savedGames/"; 
+        String path = "./examples/savedGames/"; 
         String files;
         File folder = new File(path);
         File[] listOfFiles = folder.listFiles();
@@ -461,7 +462,7 @@ public class ClientFrame extends JFrame{
                 FileInputStream fis;
                 ObjectInputStream ois;
                 try {
-                    fis = new FileInputStream("./lib/savedGames/"+toLoad);
+                    fis = new FileInputStream("./examples/savedGames/"+toLoad);
                     ois = new ObjectInputStream(fis);
                     MazeBoard foundBoard = (MazeBoard) ois.readObject();
                     connect.send(new DataUnit(foundBoard,DataUnit.MsgID.C_CHOSENG));
@@ -609,7 +610,7 @@ public class ClientFrame extends JFrame{
 		File file;
 		try {
  
-			file = new File("./lib/savedGames/"+gameName+".sav");
+			file = new File("./examples/savedGames/"+gameName+".sav");
 			fop = new FileOutputStream(file);
 			
                         // if file doesnt exists, then create it

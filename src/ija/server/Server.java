@@ -173,7 +173,6 @@ public class Server implements Runnable
                     }
                 }
                 toSend = new DataUnit(true,DataUnit.MsgID.S_READYFG); //prijmete vyzvu?
-                System.out.println("jsem tu");
                 gs.multicast(toSend,true);
                 gameRooms.add(gs);
                 break;
