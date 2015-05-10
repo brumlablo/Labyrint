@@ -59,6 +59,7 @@ public class Client
             }
             case S_LOBBY: {
                 myID = (int) toParse.data;
+                ClientFrame.getInstance().showView("lobby");
                 toSend = new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY);
                 send(toSend);
                 break;
@@ -117,6 +118,7 @@ public class Client
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
                 this.board = (MazeBoard) toParse.data;
                 this.paths = board.getFinderPaths();
+                ClientFrame.getInstance().setIsEnd(false);
                 ClientFrame.getInstance().showGame(this.board);
                 break;
             }
@@ -124,12 +126,15 @@ public class Client
                 Object[] recData = (Object[]) toParse.data;
                 int onTurnID = (int) recData[0];
                 this.paths = (ArrayList<MazeField>) recData[1];
-
-                if(onTurnID == this.myID) {
+                String [] who = {"Modrý","Zelený","Červený","Žlutý"};
+                if(onTurnID < 0) { //klient opustil hru
+                    int color = board.getPlayerByID(-onTurnID).getColor();
+                    ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč opustil hru. Hra vynuceně končí. Pokud chceš ulož si ji.");
+                }
+                else if(onTurnID == this.myID) {
                     ClientFrame.getInstance().setConsoleText("Jsi na tahu!");
                 }
                 else {
-                    String [] who = {"Modrý","Zelený","Červený","Žlutý"};
                     int color = board.getPlayerByID(onTurnID).getColor();
                     ClientFrame.getInstance().setConsoleText(who[color].toString() + " hráč je na tahu.");
                 }
@@ -150,6 +155,7 @@ public class Client
             }
             case S_ENDGAME: {
                 int winnerID = (int) toParse.data;
+                ClientFrame.getInstance().setIsEnd(true);
                 if(this.myID == winnerID) {
                     ClientFrame.getInstance().setConsoleText("Dobrá práce - jsi VÍTĚZ!");
                 }

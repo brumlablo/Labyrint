@@ -28,6 +28,7 @@ public class DataUnit implements Serializable{
         C_RESP_CHALLPL(11), //klient response for game
         S_CLOBBY(12), //novy hrac v lobby
         C_UPDLOBBY(13), //update lobby
+        C_LEFT_GAME(14),
         //server - kody
         S_OK(21),       
         S_UNAV(22),  //server nedostupny
@@ -43,7 +44,6 @@ public class DataUnit implements Serializable{
         S_YOURTURN(32), //jsi na tahu
         S_ENDGAME(33), //kdo vyhral, kdo prohral, remiza atd...
         //dalsi
-        DENIED(98),
         UNKNOWN(99),
         NONE(100);
         private int code;

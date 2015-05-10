@@ -323,6 +323,19 @@ public class Server implements Runnable
                 break;
             }
             /*----------------------------------------------------------------*/
+            case C_LEFT_GAME: {
+                //klient odesel z rozehrane hry
+                System.out.println( "-" + who + ": " + "opustil hru.");
+                tmpgs = findRoom(autor.getRoomID());
+                tmpgs.removePlayer(autor);
+                if((boolean) toParse.data) //vsem  se odesle zprava o odejiti hrace ze hry
+                    tmpgs.multicast(new DataUnit(new Object[]{-autor.getID(),null},DataUnit.MsgID.S_YOURTURN), false);
+                toSend = new DataUnit(autor.getID(),DataUnit.MsgID.S_LOBBY);
+                autor.send(toSend); //hra skoncila normalne, autor jde do lobby
+                
+                break;
+            }
+            /*----------------------------------------------------------------*/
             case C_UNAV: {
                 //kdy muze klient koncit? lobby, cekani na novou hru, pri hre!!!
                 System.out.println( who + ": " + (String)toParse.data);
@@ -331,7 +344,7 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/
             default:
                 System.out.println("Tady jsme v defaultni vetvi");
-                autor.send(new DataUnit("OK",DataUnit.MsgID.DENIED));
+                autor.send(new DataUnit("OK",DataUnit.MsgID.UNKNOWN));
                 break;
 
         }
