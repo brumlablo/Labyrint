@@ -12,7 +12,7 @@ import ija.shared.*;
  *
  * 
  * Generator sezeni pro klienty
- * @author babu
+ * @author xblozo00
  **/
 public class Session extends Thread
 {  
@@ -28,12 +28,22 @@ public class Session extends Thread
    private ObjectInputStream  streamIn = null;
    private ObjectOutputStream streamOut = null;
 
+   /**
+    * Dostava server,socket a ID clienta ze serveru
+    * @param server
+    * @param socket
+    * @param clientId 
+    */
    public Session(Server server,Socket socket,int clientId) {
       this.server = server;
       this.socket = socket;
       this.clientID = clientId;
    }
    
+   /**
+    * Odesila data ze serveru
+    * @param msg zprava
+    */
    public void send(DataUnit msg) {
        try {
            this.streamOut.reset();
@@ -41,55 +51,86 @@ public class Session extends Thread
            this.streamOut.flush();
        }
        catch(IOException ioe) {
-           System.out.println(this.clientID + " ERROR sending: " + ioe.getMessage());
+           System.err.println(this.clientID + " ERROR sending: " + ioe.getMessage());
            server.remove(this.clientID);
            stop();
        }
    }
    
+   /**
+    * Vraci ID hrace
+    * @return ID hrace 
+    */
    public int getID() {  
        return this.clientID;
    }
    
+   /**
+    * Vraci cislo "pokoje"
+    * @return roomID
+    */
    public int getRoomID() {
       return this.roomID; 
     }
 
+   /**
+    * Vraci stav hrace
+    * @return stav hrace
+    */
     public PlState getClientState() {
         return clientState;
     }
 
+    /**
+     * Nastaveni ID pokoje
+     * @param roomID 
+     */
     public void setRoomID(int roomID) {
         this.roomID = roomID;
     }
 
+    /**
+     * Nastaveni stavu hrace
+     * @param clientState 
+     */
     public void setClientState(PlState clientState) {
         this.clientState = clientState;
     }
 
+    /**
+     * Spustnei vlakna
+     */
    @Override
    public void run() {
-       System.out.println("Server Thread " + this.clientID + " running.");
+       //System.out.println("Server Thread " + this.clientID + " running.");
        while (true) {
            try {
                server.dataHandler(this.clientID, (DataUnit) streamIn.readObject());
             }
             catch(IOException ioe){
-                System.out.println(this.clientID + " ERROR reading: " + ioe.getMessage());
+                System.err.println(this.clientID + " ERROR reading: " + ioe.getMessage());
                 server.remove(this.clientID);
                 stop();
             } catch (ClassNotFoundException cnfe) {
-               System.out.println(this.clientID + " Programming ERROR: " + cnfe.getMessage());
+               System.err.println(this.clientID + " Programming ERROR: " + cnfe.getMessage());
            }
         }
    }
    
+   /**
+    * Otevreni vstupnich a vystupnich streamu
+    * @throws IOException 
+    */
    public void open() throws IOException {  
        streamOut = new ObjectOutputStream(socket.getOutputStream());
        streamOut.flush();
        streamIn = new ObjectInputStream(socket.getInputStream());
     }
    
+   /**
+    * Ukonceni vstupnich a vystupnich streamu
+    * @throws IOException 
+    */
    public void close() throws IOException {  
        if (socket != null)
        socket.close();

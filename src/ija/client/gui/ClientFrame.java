@@ -8,11 +8,15 @@ import ija.client.*;
 import ija.shared.board.MazeBoard;
 import ija.shared.*;
 import ija.shared.player.Player;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import javax.swing.*;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +25,10 @@ import java.util.Map;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-
+/**
+ * Trida pro vykresleni GUI klientovi
+ * @author xblozo00,xhajek33
+ */
 public class ClientFrame extends JFrame{
 
     private JPanel lobbyPane;
@@ -49,35 +56,52 @@ public class ClientFrame extends JFrame{
     private static ClientFrame instance; //singleton!
     private boolean isEnd;
     private JDialog leaveGameDialog;
+    private JDialog saveGameDialog;
 
+    /**
+     * Inicializace GUI
+     */
     private ClientFrame() {
         this.connect = null;
         this.init();
     }
     
+    /**
+     * Singleton pro ClientFrame
+     * @return instance ClientFrame
+     */
     public static ClientFrame getInstance() {
         if(instance == null)
             instance = new ClientFrame();
         return instance;
     }
 
+    /**
+     * Ziskani vlakna hrace
+     * @return Client
+     */
     public Client getConnect() {
         return connect;
     }
     
+    /**
+     * Nastaveni barvy vybranym polozkam v JListu
+     */
     public class SelectedListCellRenderer extends DefaultListCellRenderer {
      @Override
      public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
          Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
          if (isSelected) {
              c.setBackground(new Color(0xFFC373));
-             c.setFont(new Font("Verdana", Font.BOLD, 15));
+             c.setFont(new Font("Verdana", Font.PLAIN, 15));
              //c.setForeground(new Color(0x25567B));
          }
          return c;
      }
 }
-    
+    /**
+     * Inicializace GUI pro klienta
+     */
     private void init() {
         this.MAINPane = new JPanel();
         this.MAINPane.setLayout(new BorderLayout());
@@ -170,6 +194,7 @@ public class ClientFrame extends JFrame{
                 for(Object o : lobbyPlayersList.getSelectedValuesList()) {
                     selected.add(((LobbyPlayer) o).getID());
                 }
+                setNGButton(false);
                 //createDialog();
                 connect.send(new DataUnit(selected,DataUnit.MsgID.C_CHALLPL));
             }
@@ -182,6 +207,7 @@ public class ClientFrame extends JFrame{
         add(MAINPane);
         showView("lobby");
         
+        //odchyt zavirani celeho okna
         addWindowListener(new WindowAdapter()
         {
             @Override
@@ -200,6 +226,10 @@ public class ClientFrame extends JFrame{
         });
     }
    
+    /**
+     * Nastaveni aktivity newGameButton
+     * @param b 
+     */
     public void setNGButton(boolean b) {
         newGameButton.setEnabled(b);
         if (newGameButton.isEnabled()){
@@ -211,7 +241,11 @@ public class ClientFrame extends JFrame{
             newGameButton.setForeground(Color.DARK_GRAY);
         }
     }
-
+    
+    /**
+     * Nastaveni aktivity refreshButton a lobbyPlayerList
+     * @param b 
+     */
     public void setLobbyButtons(boolean b) {
         refreshButton.setEnabled(b);
         if (refreshButton.isEnabled()){
@@ -225,6 +259,10 @@ public class ClientFrame extends JFrame{
         lobbyPlayersList.setEnabled(b);
     }
     
+    /**
+     * Obnoveni poctu hracu v Lobby
+     * @param inLobby 
+     */
     public void updateLobby(ArrayList<Integer> inLobby) {
         this.lobbyPlayersList.setVisible(false);
         DefaultListModel listModel = new DefaultListModel();
@@ -235,6 +273,9 @@ public class ClientFrame extends JFrame{
         this.lobbyPlayersList.setVisible(true);
     }
     
+    /**
+     * Ukaze dialog vyzvy
+     */
     public void showChallDialog() {
         setNGButton(false);
         setLobbyButtons(false);
@@ -279,6 +320,9 @@ public class ClientFrame extends JFrame{
         challDialog.setVisible(true);
     }
     
+    /**
+     * Ukaze dialog nepovedene vyzvy
+     */
     public void showChallFailDialog() {
         if(challDialog != null)
             challDialog.dispose();
@@ -313,7 +357,10 @@ public class ClientFrame extends JFrame{
         challFailDialog.setLocationRelativeTo(this);
         challFailDialog.setVisible(true);
     }
-
+    
+    /**
+     * Ukaze dialog vybrani stylu hry pro Leadera
+     */
     public void chooseGDialog() {
         JButton ngButton = new JButton("NOVÁ HRA");
         JButton sgButton = new JButton("ULOŽENÁ HRA");
@@ -339,7 +386,7 @@ public class ClientFrame extends JFrame{
         sgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
+                //connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
                 newGameDialog.dispose();
                 //createGDialog();
             }
@@ -356,7 +403,10 @@ public class ClientFrame extends JFrame{
         newGameDialog.setLocationRelativeTo(this);
         newGameDialog.setVisible(true);
     }
-
+    
+    /**
+     * Ukaze dialog s nastavenim parametru hry
+     */
     private void createNGDialog() {
         JButton confirmButton = new JButton("POTVRDIT");      
         confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
@@ -424,6 +474,132 @@ public class ClientFrame extends JFrame{
         newGameDialog.setVisible(true);
     }
     
+    /**
+     * Ukaze dialog ve hre pro ulozeni rozehrane hry
+     */
+    private void saveGameDialog(){
+        this.saveGameDialog = new JDialog(this);
+        saveGameDialog.getContentPane().setBackground(Color.GRAY);
+        JLabel label = new JLabel("Uložit hru?");
+        label.setFont(new Font("Verdana", Font.BOLD, 15));
+        label.setForeground(Color.WHITE); 
+        JLabel nameLabel = new JLabel("JMÉNO");
+        nameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        nameLabel.setForeground(Color.WHITE);
+        JTextField nameField = new JTextField("",15);
+        nameField.setBackground(new Color(0x96ADC2));
+        nameField.setFont(new Font("Verdana", Font.BOLD, 13));
+        label.setForeground(Color.WHITE); 
+        JButton okButton = new JButton("POTVRDIT");
+        okButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        okButton.setBackground(new Color(0x25567B)); //blue
+        okButton.setForeground(new Color(0xFFC373)); //yellow
+        saveGameDialog.setBounds(300, 400, 100, 100);
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //ulozeni hry pod nazvem s poctem hracu a stavy
+                String gameName = nameField.getText();
+                if(gameName.length() < 1)
+                    return;
+                MazeBoard board = connect.getBoard();
+		FileOutputStream fop = null;
+		File file;
+		try {
+ 
+			file = new File("./lib/savedGames/"+gameName+".sav");
+			fop = new FileOutputStream(file);
+			
+                        // if file doesnt exists, then create it
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+ 
+			ObjectOutputStream oos = new ObjectOutputStream(fop);
+                        oos.writeObject(board);
+			oos.flush();
+			oos.close();
+ 
+			System.out.println("Done saving file.");
+		} catch (IOException ex) {
+                    System.err.println("Error saving file: " + ex);
+		} finally {
+			try {
+				if (fop != null) {
+					fop.close();
+				}
+			} catch (IOException exe) {
+                            System.err.println("Error closing file: " + exe);
+                            
+			}
+		}
+                saveGameDialog.dispose();
+            }
+        });
+        JButton cancelButton = new JButton("ZRUŠIT");
+        cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        cancelButton.setBackground(new Color(0x25567B)); //blue
+        cancelButton.setForeground(new Color(0xFFC373)); //yellow
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveGameDialog.dispose();
+            }
+        });
+        saveGameDialog.setLayout(new GridBagLayout());
+        GridBagConstraints c = new GridBagConstraints();
+        c.weightx = 0.5;
+        c.weighty = 0.0;
+        c.gridx = 0;
+        c.gridy = 0;
+        c.gridwidth = 2;
+        c.anchor = GridBagConstraints.PAGE_START;
+        c.insets = new Insets(40,0,10,0);  //top,left, bottom, right
+        saveGameDialog.add(label,c);
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        c.gridx = 0;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(10,0,10,5); 
+        saveGameDialog.add(nameLabel,c);
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        c.gridx = 1;
+        c.gridy = 1;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(10,5,10,0); 
+        saveGameDialog.add(nameField,c);
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        c.gridx = 0;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.WEST;
+        c.insets = new Insets(10,0,10,5); 
+        saveGameDialog.add(okButton,c);
+        c.weightx = 0.0;
+        c.weighty = 0.0;
+        c.gridx = 1;
+        c.gridy = 2;
+        c.gridwidth = 1;
+        c.anchor = GridBagConstraints.EAST;
+        c.insets = new Insets(10,5,10,0);
+        saveGameDialog.add(cancelButton,c);
+
+        saveGameDialog.setModal(true);
+        JPanel pane = (JPanel) saveGameDialog.getContentPane();
+        pane.setBorder(new EmptyBorder(20, 30,20 ,30));
+        saveGameDialog.pack(); 
+        saveGameDialog.setLocationRelativeTo(this);
+        saveGameDialog.setVisible(true);
+    }
+    
+    /**
+     * Ukaze dialog otazky, jestli chce hrac opravdu ukoncit hru
+     */
     public void showLeaveGameDialog() {
     this.leaveGameDialog = new JDialog(this);
     leaveGameDialog.getContentPane().setBackground(Color.GRAY);
@@ -469,15 +645,27 @@ public class ClientFrame extends JFrame{
     leaveGameDialog.setVisible(true);
 }
     
+    /**
+     * Zmena karet tzn. celych oken
+     * @param type 
+     */
     public void showView(String type){
         shownPanel = type;
         cardLayout.show(MAINPane, type);
     }
     
+    /**
+     * Zjisteni stavu hry - jestli se jeste hraje, nebo uz je konec hry.
+     * @param b 
+     */
     public void setIsEnd(boolean b) {
         this.isEnd = b;
     }
 
+    /**
+     * Vykresli herni okno
+     * @param g 
+     */
     public void showGame(MazeBoard g) {
         setVisible(false);
 
@@ -497,7 +685,7 @@ public class ClientFrame extends JFrame{
         eastPane.setPreferredSize(new Dimension(200, 100));
         eastPane.setBackground(new Color(0x25567B));//(0x17577e)); //blue
         GridBagConstraints c = new GridBagConstraints();
- 
+        
               
         //Ziskani barev ostanich hracu
         ArrayList <JPanel> plBoxes = new ArrayList <JPanel>();
@@ -675,6 +863,12 @@ public class ClientFrame extends JFrame{
         saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         saveGameButton.setForeground(Color.BLACK);
         saveGameButton.setPreferredSize(new Dimension(170,30));
+        saveGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveGameDialog();
+            }
+        });
         c.weightx = 0.0;
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
@@ -734,11 +928,18 @@ public class ClientFrame extends JFrame{
         pack();
     }
     
+    /**
+     * Nastaveni vypisu na dolni liste
+     * @param input text na vypsani
+     */
     public void setConsoleText(String input) {
         this.console.setText(input);
     }
     
-    
+    /**
+     * Obnoveni herni desky
+     * @param g herni deska
+     */
     public void refreshGame(MazeBoard g) {
         if(isEnd)
             return;
@@ -763,6 +964,10 @@ public class ClientFrame extends JFrame{
         maze.init();
     }
 
+    /**
+     * Spousteni GUI pro klienta
+     * @param args 
+     */
     public static void main(String[] args) {
         ClientFrame window = ClientFrame.getInstance();
         java.awt.EventQueue.invokeLater(new Runnable() {

@@ -12,7 +12,7 @@ import ija.shared.*;
 import ija.shared.board.MazeField;
 /**
  * Trida pro klienta-hrace
- * @author babu
+ * @author xblozo00
  */
 public class Client
 {  
@@ -24,23 +24,30 @@ public class Client
     private ArrayList <MazeField> paths = null;
     private MazeBoard board = null;
     
+    /**
+     * Pripojeni na server
+     */
     public Client() {
-        System.out.println("Establishing connection. Please wait ...");
+        //System.out.println("Establishing connection. Please wait ...");
         try {
             socket = new Socket("127.0.0.1", 12345);
-            System.out.println("Connected: " + socket);
+            //System.out.println("Connected: " + socket);
             start();
          }
          catch(UnknownHostException uhe) {
-             System.out.println("Host unknown: " + uhe.getMessage());
+             System.err.println("Host unknown: " + uhe.getMessage());
          }
          catch(IOException ioe) {
-             System.out.println("Unexpected exception: " + ioe.getMessage());
+             System.err.println("Unexpected exception: " + ioe.getMessage());
          }
     }
 
+    public MazeBoard getBoard() {
+        return board;
+    }
+    
     /**
-     * Nacteni prichoziho objektu, notifikace na event pro handle 
+     * Nacteni prichozi zpravy ze serveru, provedeni zmen,generace prislusne odpovedi
      * @param toParse
      */
     public void dataHandler(DataUnit toParse) {
@@ -49,21 +56,15 @@ public class Client
         System.out.println("------------------c------------------");
         System.out.println( toParse.objCode + ", " + toParse.data);
         switch(toParse.objCode) {
-            case S_OK: {
-                send(toSend);
-                break;
-            }
-            case S_UNAV: {
-                send(toSend);
-                break;
-            }
-            case S_LOBBY: {
+            /*----------------------------------------------------------------*/
+            case S_LOBBY: { //hrac ma jit do lobby
                 myID = (int) toParse.data;
                 ClientFrame.getInstance().showView("lobby");
                 toSend = new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY);
                 send(toSend);
                 break;
             }
+            /*----------------------------------------------------------------*/        
             case S_CLOBBY: { //novy klient v lobby
                 ArrayList <Integer> inLobby = (ArrayList <Integer>) toParse.data;
                 inLobby.remove((Integer) myID); //sebe vypsat nechci
@@ -74,6 +75,7 @@ public class Client
                 ClientFrame.getInstance().updateLobby(inLobby);
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_READY: { //server ready na vyzvani
                 boolean ready = (boolean)toParse.data;
                 if(!ready) {
@@ -85,6 +87,7 @@ public class Client
                 ClientFrame.getInstance().setLobbyButtons(true);
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_READYFG: { //vyzva k pridani se do hry, dle hracova vyberu, otazka ano/ne
                 boolean readyyy = false;
                 readyyy = (boolean) toParse.data;
@@ -99,19 +102,23 @@ public class Client
                 ClientFrame.getInstance().showChallDialog();
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_WAITFG: { //cekani na nastaveni parametru hry
                 System.out.println("Leader vybira parametry hry...");
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_CHOOSEG: { //pro leadera: vybrat hru novou nebo ulozenou
                 System.out.println("Leadere, vyber hru.");
                 ClientFrame.getInstance().chooseGDialog();
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_SHOWGS: { //vybrat hru a do C_CHOSENSG
                //POSLE C_CHOSENSG
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
                 this.board = (MazeBoard) toParse.data;
@@ -120,6 +127,7 @@ public class Client
                 ClientFrame.getInstance().showGame(this.board);
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_YOURTURN: { //predavani tahu popr.  hlaskka o vynucenem konci hry
                 Object[] recData = (Object[]) toParse.data;
                 int onTurnID = (int) recData[0];
@@ -138,6 +146,7 @@ public class Client
                 }
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_DIRS: { //cesty, kam muze jit aktivni hrac
                 System.out.println("prijal jsem dirs");
                 this.board = (MazeBoard) toParse.data;
@@ -145,12 +154,14 @@ public class Client
                 ClientFrame.getInstance().refreshGame(board);
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_GUPADATE: { //prekresleni herni desky
                 System.out.println("prijal jsem gameupdate");
                 this.board = (MazeBoard) toParse.data;
                 ClientFrame.getInstance().refreshGame(board);
                 break;
             }
+            /*----------------------------------------------------------------*/
             case S_ENDGAME: { //konec hry - vypisy
                 int winnerID = (int) toParse.data;
                 ClientFrame.getInstance().setIsEnd(true);
@@ -174,33 +185,51 @@ public class Client
         System.out.println("------------------c------------------"); 
     }
 
-    public synchronized void start() throws IOException {  
+    /**
+     * start vlakna
+     * @throws IOException 
+     */
+    public void start() throws IOException {  
         streamOut = new ObjectOutputStream(socket.getOutputStream());
         streamOut.flush();
         client = new ClientHelper(this, socket);
         send(new DataUnit("",DataUnit.MsgID.C_HELLO));
     }
 
-    public synchronized void stop() {
-        send(new DataUnit("Ending...",DataUnit.MsgID.C_UNAV)); 
+    /**
+     * konec vlakna
+     */
+    public void stop() {
         try {
             if (streamOut != null)  streamOut.close();
             if (socket    != null)  socket.close();
         }
         catch(IOException ioe) {
-            System.out.println("Error closing ..."); }
+            System.err.println("Error closing ..."); }
             client.close();  
             client.stop();
     }
 
+    /**
+     * Navraceni ID hrace.
+     * @return 
+     */
     public int getMyID() {
         return this.myID;
     }
 
+    /**
+     * Vraci mozne policka pro vstup hrace.
+     * @return 
+     */
     public ArrayList<MazeField> getPaths() {
         return this.paths;
     }
 
+    /**
+     * Odeslani zpravy klientem
+     * @param toSend odesilana zprava
+     */
     public void send(DataUnit toSend) {   
         try {
             streamOut.reset();
