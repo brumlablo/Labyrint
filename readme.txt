@@ -1,0 +1,27 @@
+Nazev: IJA-Labyrinth
+
+
+Clenove tymu:
+			xblozo00
+			xhajek33
+
+
+Popis:
+
+	Projekt do předmětu IJA. Úkolem bylo navrhnout a implementovat počítačovou
+verzi deskové hry Labyrinth. Pravidla pro hru jsou z většiny stejná (přesné
+znění je k dostání na WIKI stránkach předmětu IJA).
+	Hra je určena pro 2-4 hráče. Hra je realizovaná stylem klient-server, proto
+je potřeba, aby se jako první vždy zapl server hry, na který se hráči automaticky
+(bez vlastního přičinění) připojí a vstoupí do herního lobby. Zde vidí ostatní
+připojené hráče, kteří čekají na hru. Jeden z hráčů (leader) může ostatní (1-3) vyzvat
+ke hře (držením klávesy CTRL a klikáním na jednotlivé hráče).Po přijmutí všech 
+výzev nastaví leader parametry hry a poté může hra začít.
+
+
+Ovládání:
+
+	Levý klik  - pohyb hráče
+	Pravý klik - vsunutí volného kamene na pozici
+	Sebrání pokladu probíhá automaticky vkročením hráče na políčko.
+	Fáze vsunutí volného kamene se přeskočí, jestli se hráč předtím pohne.
