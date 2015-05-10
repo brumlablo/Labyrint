@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 
 public class ClientFrame extends JFrame{
@@ -478,18 +479,19 @@ public class ClientFrame extends JFrame{
         JPanel playerColBox = new JPanel();
         playerColBox.setLayout(new BorderLayout());
         playerColBox.setPreferredSize(new Dimension(100, 100));
+        playerColBox.setBackground(Color.WHITE);
         switch(g.getPlayerByID(connect.getMyID()).getColor()) {
             case 0:
-                playerColBox.setBackground(Color.BLUE);
+                playerColBox.setBorder(new MatteBorder(5,5,5,5,Color.BLUE));
                 break;
             case 1:
-                playerColBox.setBackground(Color.GREEN);
+                playerColBox.setBorder(new MatteBorder(5,5,5,5,Color.GREEN));
                 break;
             case 2:
-                playerColBox.setBackground(Color.RED);
+                playerColBox.setBorder(new MatteBorder(5,5,5,5,Color.RED));
                 break;
             case 3:
-                playerColBox.setBackground(Color.YELLOW);
+                playerColBox.setBorder(new MatteBorder(5,5,5,5,Color.YELLOW));
                 break;
         }
         TextureCache tmp = new TextureCache();
@@ -523,6 +525,7 @@ public class ClientFrame extends JFrame{
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
@@ -534,18 +537,20 @@ public class ClientFrame extends JFrame{
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 0;
                 c.gridy = 2;
-                c.anchor = GridBagConstraints.WEST;
+                c.anchor = GridBagConstraints.EAST;
                 c.insets = new Insets(20,0,0,2);
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 1;
                 c.gridy = 2;
-                c.anchor = GridBagConstraints.EAST;
+                c.anchor = GridBagConstraints.WEST;
                 c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 break;
@@ -554,15 +559,17 @@ public class ClientFrame extends JFrame{
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 0;
                 c.gridy = 2;
-                c.anchor = GridBagConstraints.WEST;
+                c.anchor = GridBagConstraints.EAST;
                 c.insets = new Insets(20,0,0,2);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
@@ -572,21 +579,47 @@ public class ClientFrame extends JFrame{
                 c.ipadx = 0;
                 c.gridwidth = 1;
                 c.gridheight = 1;
+                c.weightx = 0.5;
                 c.gridx = 2;
                 c.gridy = 2;
-                c.anchor = GridBagConstraints.EAST;
+                c.anchor = GridBagConstraints.WEST;
                 c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(2),c);
                 break;    
         }
-        c.weighty = 1.0;
+        JButton saveGameButton = new JButton("ULOŽIT HRU");
+        saveGameButton.setBackground(new Color(0x96ADC2));
+        saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
+        saveGameButton.setForeground(Color.BLACK);
+        c.weightx = 0.0;
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 3;
         c.anchor = GridBagConstraints.CENTER;
-        eastPane.add(new JLabel(),c);
+       // c.insets = new Insets(20,2,0,2);
+        eastPane.add(saveGameButton,c);
+        JButton toLobbyButton = new JButton("NÁVRAT DO LOBBY");
+        toLobbyButton.setBackground(new Color(0x96ADC2));
+        toLobbyButton.setFont(new Font("Verdana", Font.PLAIN, 13));
+        toLobbyButton.setForeground(Color.BLACK);
+        //c.weightx = 0.5;
+        c.gridwidth = plBoxes.size();
+        c.gridheight = 1;
+        c.gridx = 0;
+        c.gridy = 4;
+        c.anchor = GridBagConstraints.CENTER;
+        eastPane.add(toLobbyButton,c);
         
+        c.weighty = 1.0;
+        c.weightx = 0.0;
+        c.gridwidth = plBoxes.size();
+        c.gridheight = 1;
+        c.gridx = 0;
+        c.gridy = 5;
+        c.anchor = GridBagConstraints.CENTER;
+        eastPane.add(new JLabel(),c);
+
         this.console = new JTextArea();
         console.setBackground(Color.DARK_GRAY);
         console.setForeground(Color.WHITE);

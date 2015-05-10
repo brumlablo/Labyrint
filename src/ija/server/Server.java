@@ -293,19 +293,27 @@ public class Server implements Runnable
                         return;
                 }
                 MazeField goal = (MazeField) toParse.data;
-                System.out.println("Mam jit na: "+ goal.row() + "-" + goal.col());
                 tmpgs = findRoom(autor.getRoomID());
                 MazeBoard board = tmpgs.getGame();
                 Player clientFigure = board.getPlayerByID(autor.getID());
                 
                 //Odstraneni hrace z desky a posunuti na novou pozici
                 clientFigure.seizePosition(board.get(goal.row(), goal.col()));
-
+                
                 if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
-                    //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jeslti neni konec hry, predat opet novy tah
-                    board.findRoutes(autor.getID());
-                    board.setNewCard(clientFigure);
-                    autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));        
+                    //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jestli neni konec hry, predat opet novy tah
+                    if(clientFigure.getTreasureCount() == tmpgs.getGoalScore()) {
+                        
+                        tmpgs.setGame(board);
+                        tmpgs.multicast(new DataUnit(board,DataUnit.MsgID.S_GUPADATE),false);
+                        tmpgs.multicast(new DataUnit(autor.getID(),DataUnit.MsgID.S_ENDGAME),false);
+                        break;
+                    }
+                    else {    
+                        board.findRoutes(autor.getID());
+                        board.setNewCard(clientFigure);
+                        autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));
+                    }        
                 }
                 else {
                     tmpgs.nextTurn();
