@@ -128,11 +128,16 @@ public class GridTile extends JComponent {
 
         //Vykresleni hracu
         /**************************/
-        if(players != null)
+        if(players != null) {
+          int x = 0;
+          int y = 0;
           for(Player p : players) {
             Image pl = textures.getPlayerTexture(p.getColor());
-            g2.drawImage(pl, 0, 0, this);
+            g2.drawImage(pl, x, y, this);
+            x += 5;
+            y += 5;
           }
+        }
         /**************************/
   }
 }
