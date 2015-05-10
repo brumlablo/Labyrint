@@ -424,7 +424,7 @@ public class ClientFrame extends JFrame{
         listLabel.setForeground(Color.WHITE);
         listLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         
-        JList savedGamesList = new JList();
+        final JList savedGamesList = new JList();
         savedGamesList.setBackground(Color.WHITE);
         savedGamesList.setFont(new Font("Verdana", Font.PLAIN, 13));
         savedGamesList.setForeground(new Color(0x25567B));
