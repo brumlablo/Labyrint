@@ -23,6 +23,7 @@ public class GridTile extends JComponent {
     private Treasure treasure;
     private ArrayList<Player> players;
     private TextureCache textures;
+    private float scaleFactor;
 
     //public GridTile(MazeField mf, TextureCache textures) {
     public GridTile(MazeCard card, ArrayList<Player> players, TextureCache textures) {
@@ -32,6 +33,7 @@ public class GridTile extends JComponent {
         this.treasure = card.getTreasure();
         this.players = players;
         this.textures = textures;
+        this.scaleFactor = 1.0f;
         //setPreferredSize(new Dimension(80, 80));
     }
 
@@ -40,6 +42,7 @@ public class GridTile extends JComponent {
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
         this.textures = textures;
+        this.scaleFactor = 1.0f;
         //setPreferredSize(new Dimension(80, 80));
     }
 
@@ -59,6 +62,26 @@ public class GridTile extends JComponent {
 
     public Dimension getPreferredSize() {
         return new Dimension(80, 80);
+    }
+
+    public void setScale(int size) {
+        switch(size) {
+            case 8:
+               this.scaleFactor = 0.8f;
+               break;
+
+            case 9:
+               this.scaleFactor = 0.7f;
+               break;
+
+            case 10:
+               this.scaleFactor = 0.6f;
+               break;
+
+            case 11:
+               this.scaleFactor = 0.5f;
+               break;
+        }
     }
 
     @Override
@@ -90,7 +113,7 @@ public class GridTile extends JComponent {
             default:
                 break;
         }
-        g2.drawImage(img, 0,0, this);
+        g2.drawImage(img, 0, 0, this);
         /**************************/
 
         //Kresleni pokladu
@@ -99,7 +122,7 @@ public class GridTile extends JComponent {
         g2.rotate(Math.toRadians(0.0));
         if(treasure != null) {
           Image tr = textures.getTreasureTexture(treasure.getCode());
-          g2.drawImage(tr, 15, 15, this);
+          g2.drawImage(tr, 0, 0, this);
         }
         /**************************/
 

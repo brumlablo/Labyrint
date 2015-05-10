@@ -309,7 +309,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * 
      * @param mf Kamen, na jehoz pozici se vlozi volny kamen.
      */
-    public void shift(MazeField mf) {
+    public boolean shift(MazeField mf) {
         int r = mf.row();
         int c = mf.col();
         MazeCard tmp = null;
@@ -321,7 +321,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             //Kontrola na inverzni tah
             if(this.prevShift != null)
                if( (prevShift.row() == this.size) && (prevShift.col() == c) )
-                  return;
+                  return false;
 
             tmp = get(size, c).getCard();
             tmpPL = (ArrayList<Player>) get(size, c).getPlayers().clone();
@@ -341,7 +341,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             //Kontrola na inverzni tah
             if(this.prevShift != null)
                if( (prevShift.row() == 1) && (prevShift.col() == c) )
-                  return;
+                  return false;
 
             tmp = get(1, c).getCard();
             tmpPL = (ArrayList<Player>) get(1, c).getPlayers().clone();
@@ -361,7 +361,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             //Kontrola na inverzni tah
             if(this.prevShift != null)
                if( (prevShift.row() == r) && (prevShift.col() == this.size) )
-                  return;
+                  return false;
 
             tmp = get(r, size).getCard();
             tmpPL = (ArrayList<Player>) get(r, size).getPlayers().clone();
@@ -381,7 +381,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             //Kontrola na inverzni tah
             if(this.prevShift != null)
                if( (prevShift.row() == r) && (prevShift.col() == 1) )
-                  return;
+                  return false;
 
             tmp = get(r, 1).getCard();
             tmpPL = (ArrayList<Player>) get(r, 1).getPlayers().clone();
@@ -395,7 +395,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         
         //NIC SE NEDEJE
         else {
-            return;
+           return false;
         }
 
         //Uchovani pro kontrolu na inverzni tah
@@ -404,6 +404,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         get(r, c).setPlayers(tmpPL);
         get(r, c).putCard(this.freeStone);
         this.freeStone= tmp;
+
+        return true;
     }
     
     /** 

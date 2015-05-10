@@ -256,17 +256,28 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
+
+                //Kontrola, jestli ten kdo poslal zpravu je na tahu
+                /*************************************************/
                 tmpgs = findRoom(autor.getRoomID());
                 for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
                     if ((tmpgs.getRoommates().get(i).getID() == autor.getID()) && (i != tmpgs.getOnTurn()))
                         return;
                 }
+                /*************************************************/
+
+                if(!tmpgs.getCanShift())
+                     return;
+
                 String input = (String) toParse.data;
                 String [] coords = input.split("i|j|r"); //radek,sloupec,otoceni
 
                 MazeBoard board = tmpgs.getGame();
                 board.getFreeStone().turnForN(Integer.parseInt(coords[3])); // rotace
-                board.shift(board.get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2]))); //shift     
+                if(!board.shift(board.get(Integer.parseInt(coords[1]), Integer.parseInt(coords[2]))))
+                   return;
+
+                tmpgs.setCanShift(false);
                 tmpgs.setGame(board);
                 
                 for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
@@ -303,13 +314,14 @@ public class Server implements Runnable
                 if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
                     //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jestli neni konec hry, predat opet novy tah
                     if(clientFigure.getTreasureCount() == tmpgs.getGoalScore()) {
-                        
                         tmpgs.setGame(board);
+                        tmpgs.setCanShift(true);
                         tmpgs.multicast(new DataUnit(board,DataUnit.MsgID.S_GUPADATE),false);
                         tmpgs.multicast(new DataUnit(autor.getID(),DataUnit.MsgID.S_ENDGAME),false);
                         break;
                     }
                     else {    
+                        tmpgs.setCanShift(true);
                         board.findRoutes(autor.getID());
                         board.setNewCard(clientFigure);
                         autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));

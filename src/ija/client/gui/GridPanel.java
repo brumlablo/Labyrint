@@ -46,6 +46,7 @@ public class GridPanel extends JPanel {
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
                 tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), gameBoard.get(row, col).getPlayers(), textures);
+                tiles[ (row-1)+(col-1) ].setScale(gameBoard.getSize());
                 addListener(tiles[ (row-1)+(col-1) ], row, col);
                 add(tiles[ (row-1)+(col-1) ]);
             }

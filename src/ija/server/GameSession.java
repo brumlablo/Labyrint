@@ -20,6 +20,7 @@ public class GameSession {
     private MazeBoard game = null;
     private int onTurn;
     private int goalScore = 0;
+    private boolean canShift = true;
 
     public GameSession() {
         this.roomID = roomCounter++;
@@ -48,6 +49,7 @@ public class GameSession {
                 Object[] data= new Object[2];
                 data[0] = roommates.get(i).getID();
                 data[1] = game.getFinderPaths();
+                this.canShift = true;
                 roommates.get(i).send(new DataUnit((Object[])data,DataUnit.MsgID.S_YOURTURN));
              }
             else
@@ -59,6 +61,14 @@ public class GameSession {
         return onTurn;
     }
     
+    public boolean getCanShift() {
+        return this.canShift;
+    }
+
+    public void setCanShift(boolean b) {
+        this.canShift = b;
+    }
+
     public void destroyer () {
        for(Session najemnik : roommates) {
            najemnik.setRoomID(-1);
