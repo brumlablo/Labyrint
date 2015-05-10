@@ -1,13 +1,13 @@
+/* file name  : DataUnit.java
+ * authors    : xhajek33, xblozo00
+ */
+
 package ija.shared;
 import java.io.Serializable;
 
 /**
- *
- * @author babu
- */
-/**
  * Serializovana trida jako abstrakce jednotky dat.
- * @author babu
+ * @author xblozo00
  */
 public class DataUnit implements Serializable{
     
@@ -17,21 +17,19 @@ public class DataUnit implements Serializable{
     public static enum MsgID{
         //client - kody
         C_UNAV(1),
-        C_HELLO(2), //jsem tu
+        C_HELLO(2), //novy klient
         C_CHALLPL(3), //vyzvani hraci a hra
-        C_SHOWPL(5),
-        C_CHOSENG(6), //nova hra
-        C_LOADSG(7),
-        C_SHIFT(8),
-        C_MOVE(9),
-        C_OK_LOBBY(10),
-        C_RESP_CHALLPL(11), //klient response for game
-        S_CLOBBY(12), //novy hrac v lobby
-        C_UPDLOBBY(13), //update lobby
-        C_LEFT_GAME(14),
-        //server - kody
-        S_OK(21),       
-        S_UNAV(22),  //server nedostupny
+        C_SHOWPL(4),
+        C_CHOSENG(5), //nova hra
+        C_LOADSG(6),
+        C_SHIFT(7),
+        C_MOVE(8),
+        C_OK_LOBBY(9),
+        C_RESP_CHALLPL(10), //klient response for game
+        S_CLOBBY(11), //novy hrac v lobby
+        C_UPDLOBBY(12), //update lobby
+        C_LEFT_GAME(13),
+        //server - kody     
         S_LOBBY(23), //bez do lobby
         S_READY(24), //pripravenost serveru na vyzvani hracu
         S_READYFG(25), //pripravenost na hru

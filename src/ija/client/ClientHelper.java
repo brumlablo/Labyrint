@@ -12,7 +12,7 @@ import ija.shared.*;
 
 
 /**
- * Vlakno nacitani jednoho klienta ze serveru
+ * Vlakno nacitani vstupu(pro jednoho klienta) ze serveru
  * @author babu
  */
 public class ClientHelper extends Thread {  
@@ -32,7 +32,7 @@ public class ClientHelper extends Thread {
             streamIn  = new ObjectInputStream(socket.getInputStream());
         }
         catch(IOException ioe) {  
-            System.out.println("Error getting input stream: " + ioe);
+            System.err.println("Error getting input stream: " + ioe);
             client.stop();
         }
     }
@@ -43,7 +43,7 @@ public class ClientHelper extends Thread {
                streamIn.close();
         }
         catch(IOException ioe) {
-            System.out.println("Error closing input stream: " + ioe);
+            System.err.println("Error closing input stream: " + ioe);
         }
     }
 

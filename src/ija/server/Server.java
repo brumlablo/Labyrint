@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 /**
  * Trida reprezentujici asynchronni server
- * @author babu
+ * @author xblozo00
  */
 public class Server implements Runnable
 {
@@ -29,19 +29,21 @@ public class Server implements Runnable
     public int getPort() {
         return port;
     }
-    
+    /**
+     * Inicializace a nacteni klienta
+     */
     public Server() {  
         this.players = new ArrayList <Session>();
         this.gameRooms = new ArrayList <GameSession>();
         try {  
             this.port = 12345;
-            System.out.println("Binding to port " + port + ", please wait  ...");
+            //System.out.println("Binding to port " + port + ", please wait  ...");
 
             server = new ServerSocket(); //novy socket
             InetSocketAddress sAddr = new InetSocketAddress("127.0.0.1", port);
             server.bind(sAddr);
 
-            System.out.println("Server started: " + server);
+            //System.out.println("Server started: " + server);
             start();
         }
         catch(IOException ioe) {  
@@ -330,6 +332,7 @@ public class Server implements Runnable
                 tmpgs.removePlayer(autor);
                 if((boolean) toParse.data) //vsem  se odesle zprava o odejiti hrace ze hry
                     tmpgs.multicast(new DataUnit(new Object[]{-autor.getID(),null},DataUnit.MsgID.S_YOURTURN), false);
+                //tmpgs.destroyer();
                 toSend = new DataUnit(autor.getID(),DataUnit.MsgID.S_LOBBY);
                 autor.send(toSend); //hra skoncila normalne, autor jde do lobby
                 
@@ -353,23 +356,31 @@ public class Server implements Runnable
         System.out.println("------------------s------------------");
     }
     
+    /**
+     * Odstraneni hrace ze serveru
+     * @param ID 
+     */
     public synchronized void remove(int ID) {  
         int pos = findClient(ID);
         Session threadExitus = players.get(pos);
         players.remove(pos);
-        System.out.println("Removing client thread " + ID + " at " + pos);
+        //System.out.println("Removing client thread " + ID + " at " + pos);
         //playerCount--;
         try {  
             threadExitus.close();
         }
         catch(IOException ioe) {  
-            System.out.println("Error closing thread: " + ioe);
+            System.err.println("Error closing thread: " + ioe);
         }
         threadExitus.stop();
     }
 
+    /**
+     * Vytvoreni noveho sezeni pro klienta
+     * @param socket 
+     */
     private void newSession(Socket socket) {  
-        System.out.println("Client accepted: " + socket);
+        //System.out.println("Client accepted: " + socket);
         playerID++;
         Session newPlayer = new Session(this, socket,playerID);
         players.add(newPlayer);
@@ -378,12 +389,13 @@ public class Server implements Runnable
             newPlayer.start();  
         }
         catch(IOException ioe) {  
-            System.out.println("Error opening thread: " + ioe);
+            System.err.println("Error opening thread: " + ioe);
         }
     }     
   /**
-  * @param args the command line arguments
-  */
+   * Vytvoreni serveru
+   * @param args the command line arguments
+   */
    public static void main(String args[]) {  
       Server mujserver = null;
       mujserver = new Server();

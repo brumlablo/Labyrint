@@ -9,8 +9,8 @@ import java.util.*;
 import ija.shared.*;
 
 /**
- * Trida pro novou hru
- * @author babu
+ * Trida pro nove sezeni hry pro "pokoj" hracu
+ * @author xblozo00
  */
 public class GameSession {
     private int roomID;
@@ -21,17 +21,26 @@ public class GameSession {
     private int onTurn;
     private int goalScore = 0;
 
+    /**
+     * Kazde nove sezeni ma vlastni cislo "pokoje" a prirazena vlakna hracu
+     */
     public GameSession() {
         this.roomID = roomCounter++;
         this.roommates = new ArrayList <Session> ();
     }
-    
+    /**
+     * Pridani hrace
+     * @param p 
+     */
     public void addPlayer(Session p) {
         System.out.println("pridan hrac: " + p.getID() + " v mistnosti " + this.roomID);
         this.roommates.add(p);
         p.setRoomID(roomID);
     }
-    
+    /**
+     * Odebrani hrace
+     * @param p 
+     */
     public void removePlayer(Session p) {
         System.out.println("odebran hrac: " + p.getID() + " v mistnosti " + this.roomID);
         this.roommates.remove(p);
@@ -39,7 +48,9 @@ public class GameSession {
         onTurn = -1;
     }
     
-    
+    /**
+     * Predani noveho tahu
+     */
     public void nextTurn() {
         onTurn = (++onTurn) %roommates.size();
         for(int i = 0; i < roommates.size() ; i++)  {      
@@ -55,10 +66,17 @@ public class GameSession {
         }
     }
 
+    /**
+     * Ziskani ID hrace na tahu
+     * @return 
+     */
     public int getOnTurn() {
         return onTurn;
     }
     
+    /**
+     * Zniceni desky
+     */
     public void destroyer () {
        for(Session najemnik : roommates) {
            najemnik.setRoomID(-1);

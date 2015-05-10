@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/* file name  : LobbyPlayer.java
+ * authors    : xhajek33, xblozo00
  */
 package ija.client.gui;
 
 /**
  * Trida reprezentujici hrace v JListu pro Lobby
- * 
+ * @author xblozo00
  */
 public class LobbyPlayer {
     String name = "";
