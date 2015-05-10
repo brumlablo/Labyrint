@@ -149,8 +149,18 @@ public class Client
                 break;
             }
             case S_ENDGAME: {
+                int winnerID = (int) toParse.data;
+                if(this.myID == winnerID) {
+                    ClientFrame.getInstance().setConsoleText("Dobrá práce - jsi VÍTĚZ!");
+                }
+                else {
+                    String [] who = {"Modrý","Zelený","Červený","Žlutý"};
+                    int color = board.getPlayerByID(winnerID).getColor();
+                    ClientFrame.getInstance().setConsoleText("Hra skončila! " + who[color].toString() + " hráč vyhrál.");
+                }
+                toSend = new DataUnit(true,DataUnit.MsgID.C_OK_LOBBY);
+                send(toSend);
                 break;
-
             }      
             default:
                 //send(new DataUnit("OK",DataUnit.MsgID.DENIED));

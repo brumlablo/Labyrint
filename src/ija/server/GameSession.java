@@ -19,6 +19,7 @@ public class GameSession {
     private int ready = 0;
     private MazeBoard game = null;
     private int onTurn;
+    private int goalScore = 0;
 
     public GameSession() {
         this.roomID = roomCounter++;
@@ -79,8 +80,10 @@ public class GameSession {
     public void setGame(MazeBoard game) {
         this.game = game;
     }
-    
-    
+
+    public int getGoalScore() {
+        return goalScore;
+    }
 
     public void addReady() {
         this.ready++;
@@ -112,8 +115,9 @@ public class GameSession {
         onTurn = rand.nextInt(roommates.size());
         
         if(loadSaved)
-            this.game = savedGame;
+            this.game = savedGame; //je potreba zjistit goal score a vytahnout u ulozene hry n a k
         else {
+            this.goalScore = K/roommates.size();
             this.game = MazeBoard.createMazeBoard(N,K,roommates.size(),colors);
             int col = 0;
             for(Session el : this.roommates) {
