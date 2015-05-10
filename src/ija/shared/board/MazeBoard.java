@@ -308,6 +308,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      *
      * 
      * @param mf Kamen, na jehoz pozici se vlozi volny kamen.
+     * @return  true pokud se operace povedla, na inverzni pohyb ostatni false
      */
     public boolean shift(MazeField mf) {
         int r = mf.row();

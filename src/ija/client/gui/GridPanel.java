@@ -16,6 +16,11 @@ import ija.shared.DataUnit;
 import ija.shared.board.MazeBoard;
 import ija.shared.board.MazeField;
 
+/** 
+ * Trida reprezentujici herni desku GUI 
+ * 
+ * @author xhajek33
+ */
 public class GridPanel extends JPanel {
 
     private int size;
@@ -25,6 +30,13 @@ public class GridPanel extends JPanel {
     private MazeBoard gameBoard;
     private GridTile freeStoneTile;
 
+    /** 
+     * Vytvoreni matice policek typu GridTile reprezentujici
+     * herni desku v GUI
+     * 
+     * @param window okno, do ktereho se vykresluje
+     * @param gameBoard herni deska k vykresleni
+     */
     public GridPanel(ClientFrame window, MazeBoard gameBoard) {
         this.gameWindow = window;
         this.size = gameBoard.getSize();
@@ -38,6 +50,9 @@ public class GridPanel extends JPanel {
         init();
     }
 
+    /** 
+     * Inicializace vsech komponent 
+     */
     public void init() {
         this.removeAll();
         tiles = null;
@@ -54,6 +69,13 @@ public class GridPanel extends JPanel {
         revalidate();
     }
     
+    /** 
+     * Nastaveni akci pro kliknuti mysi na GUI policko 
+     * 
+     * @param tile policko, kteremu se ma nastavit ActionListener
+     * @param row radek policka
+     * @param col sloupec policka
+     */
     private void addListener(GridTile tile, final int row, final int col) {
         tile.addMouseListener(new MouseAdapter() {
             @Override
@@ -73,6 +95,11 @@ public class GridPanel extends JPanel {
         });
     }
 
+    /** 
+     * Nastaveni akci pro kliknuti mysi na GUI volny kamen 
+     * 
+     * @param freestone GUI reprezentace volneho kamene
+     */
     private void addFreeStoneListener(GridTile freestone) {
         freeStoneTile.addMouseListener(new MouseAdapter() {
             @Override
@@ -85,6 +112,11 @@ public class GridPanel extends JPanel {
         });
     }
 
+    /** 
+     * Nastaveni herni desky tride 
+     * 
+     * @param mb herni deska
+     */
     public void setGameBoard(MazeBoard mb) {
         this.gameBoard = mb;
         this.freeStoneTile.setVisible(false);
@@ -92,6 +124,11 @@ public class GridPanel extends JPanel {
         this.freeStoneTile.setVisible(true);
     }
     
+    /** 
+     * Ziskani GUI reprezentace volneho kamene  
+     * 
+     * @return volny kamen
+     */
     public GridTile getFreeStone() {
         return freeStoneTile;
     }
