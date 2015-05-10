@@ -28,6 +28,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     private PathFinder finder;
     private ArrayList<MazeField> finderPaths;
     private Map<Integer, Integer> id2col;
+    private MazeField prevShift;
 
     /** 
     * Konstruktor tridy 
@@ -292,9 +293,10 @@ public class MazeBoard implements Serializable { /*hraci deska*/
        return this.freeStone;
     }
     
-
     /**
-     * Vlozi volny kamen na zadanou pozici a posune sloupec/radek. 
+     * Vlozi volny kamen na zadanou pozici a posune sloupec/radek;
+     * Zaroven overuje posouvani hracu
+     *
      * 
      * @param mf Kamen, na jehoz pozici se vlozi volny kamen.
      */
@@ -302,25 +304,26 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         int r = mf.row();
         int c = mf.col();
         MazeCard tmp = null;
+        ArrayList<Player> tmpPL = null;
         
         //SHIFT DOLU
         if( (r == 1) && ((c & 1) == 0) ) {
             tmp = get(size, c).getCard();
-            if(get(size, c).getPlayers() != null) {
-               get(r, c).setPlayers(get(size, c).getPlayers());
-               get(size, c).setPlayers(null);
-            }
+            tmpPL = (ArrayList<Player>) get(size, c).getPlayers().clone();
             
             for(int row = this.size; row > 1; row--) {
-                get(row, c).putCard(get(row-1, c).getCard());
+               get(row, c).setPlayers( get(row-1, c).getPlayers() );
+               get(row, c).putCard(get(row-1, c).getCard());
             }
         }
 
         //SHIFT NAHORU
         else if( (r == this.size) && ((c & 1) == 0) ) {
             tmp = get(1, c).getCard();
+            tmpPL = (ArrayList<Player>) get(1, c).getPlayers().clone();
             
             for(int row = 1; row < this.size; row++) {
+               get(row, c).setPlayers( get(row+1, c).getPlayers() );
                 get(row, c).putCard(get(row+1, c).getCard());
             }
         }
@@ -328,8 +331,10 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         //SHIFT DOPRAVA
         else if( ((r & 1) == 0) && (c == 1) ) {
             tmp = get(r, size).getCard();
+            tmpPL = (ArrayList<Player>) get(r, size).getPlayers().clone();
             
             for(int col = this.size; col > 1; col--) {
+                get(r, col).setPlayers( get(r, col-1).getPlayers() );
                 get(r, col).putCard(get(r, col-1).getCard());
             }
         }
@@ -337,8 +342,10 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         //SHIFT DOLEVA
         else if( ((r & 1) == 0) && (c == this.size) ) {
             tmp = get(r, 1).getCard();
-            
+            tmpPL = (ArrayList<Player>) get(r, 1).getPlayers().clone();
+
             for(int col = 1; col < this.size; col++) {
+               get(r, col).setPlayers( get(r, col+1).getPlayers() );
                 get(r, col).putCard(get(r, col+1).getCard());
             }
         }
@@ -348,6 +355,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
             return;
         }
         
+        get(r, c).setPlayers(tmpPL);
         get(r, c).putCard(this.freeStone);
         this.freeStone= tmp;
     }

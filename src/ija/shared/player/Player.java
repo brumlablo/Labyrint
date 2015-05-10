@@ -57,6 +57,10 @@ public class Player implements Serializable{
     public MazeField getPosition() {
         return position;
     }
+
+    public void setPosition(MazeField mf) {
+        this.position = mf;
+    }
  
     /**Obsazeni policka hracem, zaroven overi, jestli se na danem policku
      * nenachazi poklad, ktery hrac hleda; pokud ano, je navyseno jeho skore.

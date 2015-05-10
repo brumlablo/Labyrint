@@ -57,10 +57,15 @@ public class MazeField implements Serializable{
     //}
 
     public ArrayList<Player> getPlayers() {
+        //if(players.isEmpty())
+            //return null;
         return players;
     }
 
     public void setPlayers(ArrayList<Player> newPlayers) {
-        this.players = newPlayers;
+        this.players.clear();
+        this.players.addAll(newPlayers);
+        for(Player el : players)
+            el.setPosition(this);
     }
 }
