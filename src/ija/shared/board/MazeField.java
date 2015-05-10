@@ -52,11 +52,15 @@ public class MazeField implements Serializable{
         this.players.remove(p);
     }
 
-    public boolean hasPlayer() {
-        return !players.isEmpty();
-    }
+    //public boolean hasPlayer() {
+        //return !players.isEmpty();
+    //}
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public void setPlayers(ArrayList<Player> newPlayers) {
+        this.players = newPlayers;
     }
 }

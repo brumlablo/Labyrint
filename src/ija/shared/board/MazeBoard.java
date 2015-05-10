@@ -305,13 +305,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         
         //SHIFT DOLU
         if( (r == 1) && ((c & 1) == 0) ) {
-            
-            if(get(size, c).getPlayers() != null) {
-               Iterator<Player> i = get(size, c).getPlayers().iterator();
-               while(i.hasNext())
-                  i.next().seizePosition(get(1, c));
-            }
             tmp = get(size, c).getCard();
+            if(get(size, c).getPlayers() != null) {
+               get(r, c).setPlayers(get(size, c).getPlayers());
+               get(size, c).setPlayers(null);
+            }
             
             for(int row = this.size; row > 1; row--) {
                 get(row, c).putCard(get(row-1, c).getCard());
