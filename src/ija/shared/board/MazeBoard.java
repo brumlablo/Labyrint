@@ -416,4 +416,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     public int getSize() {
        return this.size;
     }
+    
+    /**
+     * Reset namapovani hracu k barve
+     */
+    public void resetMap() {
+        this.id2col.clear();
+    }
 }

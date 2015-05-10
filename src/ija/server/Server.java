@@ -218,21 +218,11 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             case C_CHOSENG: { //nova nebo ulozena hra, inicializace
-                int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: pole s [-1][-1]
-                
-                tmpgs = findRoom(autor.getRoomID());
-                if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
-                    break;
-                }
-                else {
-                    //leader chce videt seznam ulozenych her
-                    if((newgame[0] == -1)&& (newgame[1] == -1)) {
-                        //vypis ulozene hry
-                        //tmpgs = nalezena hra;
-                        toSend = new DataUnit("seznam ulozenych her",toSend.objCode.S_SHOWGS);
-                        autor.send(toSend); //leaderovi seznam
-                        toSend = new DataUnit(true,DataUnit.MsgID.S_WAITFG); //ostatni dale cekaji
-                        tmpgs.multicast(toSend,true);
+                //nova hra
+                if(toParse.data instanceof int []) {
+                    int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: nactene pole
+                    tmpgs = findRoom(autor.getRoomID());
+                    if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                         break;
                     }
                     else {
@@ -240,21 +230,19 @@ public class Server implements Runnable
                         tmpgs.loader(newgame[0],newgame[1],null); //N,K,savedgame=null;
                         break;
                     }
+                    
                 }
-            }
-            /*----------------------------------------------------------------*/            
-            case C_LOADSG: {
-                //prisel mi objekt??? nebo ID ulozene hry, jak to propojit s GameSession
-                tmpgs = findRoom(autor.getRoomID());
-                if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                //ulozena hra
+                else if(toParse.data instanceof MazeBoard){
+                    tmpgs = findRoom(autor.getRoomID());
+                    if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                        return;
+                    }
+                    MazeBoard foundGame = (MazeBoard) toParse.data;
+                    tmpgs.loader(-1,-1,foundGame);
                     break;
                 }
-                else {
-                MazeBoard savedGame = (MazeBoard) toParse.data; //asi najdu id a podle nej najdu hru
-                //savedGame.setRoomID(tmpgs.getRoomID()); // jak resit roomID???
-                tmpgs.loader(0,0,savedGame);
                 break;
-                }
             }
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu

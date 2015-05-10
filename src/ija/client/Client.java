@@ -114,11 +114,6 @@ public class Client
                 break;
             }
             /*----------------------------------------------------------------*/
-            case S_SHOWGS: { //vybrat hru a do C_CHOSENSG
-               //POSLE C_CHOSENSG
-                break;
-            }
-            /*----------------------------------------------------------------*/
             case S_NEWGAME: { //nova hra, barva hrace
                 System.out.println("Toto je moje skvela hra. Moc se mi libi.");
                 this.board = (MazeBoard) toParse.data;

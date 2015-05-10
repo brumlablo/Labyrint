@@ -21,7 +21,6 @@ public class DataUnit implements Serializable{
         C_CHALLPL(3), //vyzvani hraci a hra
         C_SHOWPL(4),
         C_CHOSENG(5), //nova hra
-        C_LOADSG(6),
         C_SHIFT(7),
         C_MOVE(8),
         C_OK_LOBBY(9),
@@ -35,7 +34,6 @@ public class DataUnit implements Serializable{
         S_READYFG(25), //pripravenost na hru
         S_WAITFG(26), //vsichni krome leadera cekejte
         S_CHOOSEG(27), //leader vybere typ hry
-        S_SHOWGS(28), //server vypise klientovi ulozene hry
         S_NEWGAME(29), //hraci deska, barva hrace, pozice
         S_DIRS(30), //koordinaty hraci na tahu
         S_GUPADATE(31), //update s tahem  ostatnim v mistnosti

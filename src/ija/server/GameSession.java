@@ -160,8 +160,20 @@ public class GameSession {
         Random rand = new Random();
         onTurn = rand.nextInt(roommates.size());
         
-        if(loadSaved)
+        if(loadSaved) {
+            if(savedGame.getPlayers().size() != roommates.size()) {
+                this.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
+                this.destroyer();
+            }
+            this.goalScore = savedGame.getDeckSize()/roommates.size();
             this.game = savedGame; //je potreba zjistit goal score a vytahnout u ulozene hry n a k
+            int col = 0;
+            for(Session el : this.roommates) {
+                this.game.bindID2col(el.getID(), col);
+                col++;
+            }
+            this.game.findRoutes(roommates.get(onTurn).getID());
+        }
         else {
             this.goalScore = K/roommates.size();
             this.game = MazeBoard.createMazeBoard(N,K,roommates.size(),colors);
