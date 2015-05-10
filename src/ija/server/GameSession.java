@@ -164,6 +164,7 @@ public class GameSession {
             if(savedGame.getPlayers().size() != roommates.size()) {
                 this.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
                 this.destroyer();
+                return;
             }
             this.goalScore = savedGame.getDeckSize()/roommates.size();
             this.game = savedGame; //je potreba zjistit goal score a vytahnout u ulozene hry n a k
