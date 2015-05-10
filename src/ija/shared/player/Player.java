@@ -10,6 +10,7 @@
 package ija.shared.player;
 
 import ija.shared.board.MazeField;
+import ija.shared.treasure.Treasure;
 import ija.shared.treasure.TreasureCard;
 import java.io.Serializable;
 
@@ -83,6 +84,10 @@ public class Player implements Serializable{
     public TreasureCard getActiveCard() {
         return this.activeCard;
     }
+    
+    public void setActiveCard(TreasureCard card) {
+        this.activeCard = card;
+    } 
 
     /** 
      * Zkontroluje, jestli se na pozici, kde se hrac nachazi, nenachazi poklad, 
@@ -112,5 +117,10 @@ public class Player implements Serializable{
         return true;
     }
 
+    public int getTreasureCount() {
+        return treasureCount;
+    }
+
+    
 
 }

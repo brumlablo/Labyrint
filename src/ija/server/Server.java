@@ -304,6 +304,7 @@ public class Server implements Runnable
                 if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
                     //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jeslti neni konec hry, predat opet novy tah
                     board.findRoutes(autor.getID());
+                    board.setNewCard(clientFigure);
                     autor.send(new DataUnit(new Object[]{autor.getID(), board.getFinderPaths()}, DataUnit.MsgID.S_YOURTURN));        
                 }
                 else {

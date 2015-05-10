@@ -38,6 +38,7 @@ public class CardPack implements Serializable{
             for(int i=0; i < stackSize; i++) {
                 cardStack[i] = new TreasureCard(Treasure.getTreasure(stackSize-i-1));
             }
+            shuffle();
         }
     }
     

@@ -195,6 +195,13 @@ public class MazeBoard implements Serializable { /*hraci deska*/
        this.deck = new CardPack(this.deckSize);
     }
 
+    public int getDeckSize() {
+        return this.deckSize;
+    }
+
+    public void setNewCard(Player p) {
+        p.setActiveCard(this.deck.popCard());
+    }
 
     /** 
      * Ziskani hrace podle indexu 
