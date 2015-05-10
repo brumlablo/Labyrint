@@ -529,7 +529,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,0,0,0);
+                c.insets = new Insets(20,0,50,0);
                 eastPane.add(plBoxes.get(0),c);
                 break;
             case 2:
@@ -541,7 +541,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,0,2);
+                c.insets = new Insets(20,0,50,2);
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -551,7 +551,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,0);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 break;
             case 3:
@@ -563,7 +563,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,0,2);  //bottom,left, right,top
+                c.insets = new Insets(20,0,50,2);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -573,7 +573,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,2,0,2);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,2);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -583,7 +583,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 2;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,0,0);  //bottom,left, right,top
+                c.insets = new Insets(20,2,50,0);
                 eastPane.add(plBoxes.get(2),c);
                 break;    
         }
@@ -591,24 +591,28 @@ public class ClientFrame extends JFrame{
         saveGameButton.setBackground(new Color(0x96ADC2));
         saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         saveGameButton.setForeground(Color.BLACK);
+        saveGameButton.setPreferredSize(new Dimension(170,30));
         c.weightx = 0.0;
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 3;
-        c.anchor = GridBagConstraints.CENTER;
-       // c.insets = new Insets(20,2,0,2);
+        c.anchor = GridBagConstraints.SOUTH;
+        c.insets = new Insets(0,0,10,0);
+        //c.insets = new Insets(20,0,0,0);
         eastPane.add(saveGameButton,c);
         JButton toLobbyButton = new JButton("NÁVRAT DO LOBBY");
         toLobbyButton.setBackground(new Color(0x96ADC2));
         toLobbyButton.setFont(new Font("Verdana", Font.PLAIN, 13));
         toLobbyButton.setForeground(Color.BLACK);
+        toLobbyButton.setPreferredSize(new Dimension(170,30));
         //c.weightx = 0.5;
         c.gridwidth = plBoxes.size();
         c.gridheight = 1;
         c.gridx = 0;
         c.gridy = 4;
-        c.anchor = GridBagConstraints.CENTER;
+        c.anchor = GridBagConstraints.NORTH;
+        c.insets = new Insets(0,0,0,0);
         eastPane.add(toLobbyButton,c);
         
         c.weighty = 1.0;
