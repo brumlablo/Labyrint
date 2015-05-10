@@ -549,12 +549,12 @@ public class ClientFrame extends JFrame{
                 int n = 0,k = 0;
                 k = (treasureCB.getSelectedIndex() * 12) + 12;
                 n = edgeCB.getSelectedIndex() + 5;
-                System.out.println("n: " + n + ", k: " + k);
                 connect.send(new DataUnit(new int [] {n,k},DataUnit.MsgID.C_CHOSENG));
                 newGameDialog.dispose();
                 //createGDialog();
             }
         });
+        //zde lze pridat uzavreni okna
         //connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
 
         this.newGameDialog = new JDialog(this);
@@ -622,7 +622,7 @@ public class ClientFrame extends JFrame{
 			oos.flush();
 			oos.close();
  
-			System.out.println("Done saving file.");
+			//System.out.println("Done saving file.");
 		} catch (IOException ex) {
                     System.err.println("Error saving file: " + ex);
 		} finally {

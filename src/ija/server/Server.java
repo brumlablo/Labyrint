@@ -54,10 +54,10 @@ public class Server implements Runnable
     public void run() {
         while (thread != null) {
             try {  
-                System.out.println("Waiting for a client ..."); 
+                //System.out.println("Waiting for a client ..."); 
                 newSession(server.accept()); }
             catch(IOException ioe) {  
-                System.out.println("Server accept error: " + ioe);
+                //System.out.println("Server accept error: " + ioe);
                 stop();
             }
         }
@@ -93,7 +93,7 @@ public class Server implements Runnable
     }
 
     public synchronized void dataHandler(int ID, DataUnit toParse) {
-        System.out.println("------------------s------------------");
+        //System.out.println("------------------s------------------");
         int autorID = findClient(ID);
         Session autor = null;
         if(autorID >= 0) { //pokud client ID neexistuje, nacitame dal
@@ -102,8 +102,8 @@ public class Server implements Runnable
         else {
             return;
         }
-        String who = autor.getID() + ""; // pro vypisy
-        System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
+        //String who = autor.getID() + ""; // pro vypisy
+        //System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
         //if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
         //    return;
         DataUnit toSend = null;
@@ -205,7 +205,6 @@ public class Server implements Runnable
                             ArrayList<Session> gsPlayers = tmpgs.getRoommates();
                             for(Session player : gsPlayers) {
                                 player.setClientState(Session.PlState.INGAME);
-                                //tady by se uz nemeli vykreslovat v lobby
                             }
                             toSend = new DataUnit("",DataUnit.MsgID.S_CHOOSEG); //leader bude na klientove strane vybirat hru
                             leader.send(toSend);
@@ -220,7 +219,7 @@ public class Server implements Runnable
             case C_CHOSENG: { //nova nebo ulozena hra, inicializace
                 //nova hra
                 if(toParse.data instanceof int []) {
-                    int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: nactene pole
+                    int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: nacteny MazeBoard
                     tmpgs = findRoom(autor.getRoomID());
                     if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                         break;
@@ -335,7 +334,7 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/
             case C_LEFT_GAME: {
                 //klient odesel z rozehrane hry
-                System.out.println( "-" + who + ": " + "opustil hru.");
+                //System.out.println( "-" + who + ": " + "opustil hru.");
                 tmpgs = findRoom(autor.getRoomID());
                 tmpgs.removePlayer(autor);
                 if((boolean) toParse.data) //vsem  se odesle zprava o odejiti hrace ze hry
@@ -347,21 +346,15 @@ public class Server implements Runnable
                 break;
             }
             /*----------------------------------------------------------------*/
-            case C_UNAV: {
-                //kdy muze klient koncit? lobby, cekani na novou hru, pri hre!!!
-                System.out.println( who + ": " + (String)toParse.data);
-                break;
-            }
-            /*----------------------------------------------------------------*/
             default:
                 System.out.println("Tady jsme v defaultni vetvi");
                 autor.send(new DataUnit("OK",DataUnit.MsgID.UNKNOWN));
                 break;
 
         }
-        if(toSend != null)
-            System.out.println(who +": "+ toSend.data + ".");
-        System.out.println("------------------s------------------");
+        //if(toSend != null)
+        //    System.out.println(who +": "+ toSend.data + ".");
+       // System.out.println("------------------s------------------");
     }
     
     /**
