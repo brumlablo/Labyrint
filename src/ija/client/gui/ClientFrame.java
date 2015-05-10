@@ -470,9 +470,11 @@ public class ClientFrame extends JFrame{
                 }
                 catch(IOException iox) {
                     System.err.println("Error reading file: " + iox);
+                    connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
                 }
                 catch(ClassNotFoundException cnfe) {
                     System.err.println("Programming error: " + cnfe);
+                    connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
                 }
                 savedGamesDialog.dispose();
             }
@@ -553,6 +555,7 @@ public class ClientFrame extends JFrame{
                 //createGDialog();
             }
         });
+        //connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
 
         this.newGameDialog = new JDialog(this);
         newGameDialog.getContentPane().setBackground(Color.GRAY);

@@ -242,6 +242,14 @@ public class Server implements Runnable
                     tmpgs.loader(-1,-1,foundGame);
                     break;
                 }
+                else {
+                    tmpgs = findRoom(autor.getRoomID());
+                    if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                        return;
+                    }
+                    tmpgs.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
+                    tmpgs.destroyer();
+                }
                 break;
             }
             /*----------------------------------------------------------------*/
