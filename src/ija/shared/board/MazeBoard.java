@@ -187,9 +187,9 @@ public class MazeBoard implements Serializable { /*hraci deska*/
          }
     }
    
-    /**Vytvoreni balicku karet s poklady o velikosti
+    /**
+     * Vytvoreni balicku karet s poklady o velikosti
      * tridni promenne deckSize
-     *  
      */
     private void createDeck() {
        this.deck = new CardPack(this.deckSize);
@@ -254,8 +254,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
        }
     }
 
-    /**Vraci policko (objekt typu MazeField) na zadane pozici.
-     *  
+    /**
+     * Vraci policko (objekt typu MazeField) na zadane pozici. 
      * 
      * @param r radek desky
      * @param c sloupec desky
@@ -276,8 +276,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     }
     
 
-    /** Metoda vracejici volny kamen 
-     *  
+    /** 
+     * Metoda vracejici volny kamen 
      * 
      * @return 
      */
@@ -286,8 +286,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     }
     
 
-    /** Vlozi volny kamen na zadanou pozici a posune sloupec/radek.
-     *  
+    /**
+     * Vlozi volny kamen na zadanou pozici a posune sloupec/radek. 
      * 
      * @param mf Kamen, na jehoz pozici se vlozi volny kamen.
      */
@@ -298,6 +298,12 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         
         //SHIFT DOLU
         if( (r == 1) && ((c & 1) == 0) ) {
+            
+            if(get(size, c).getPlayers() != null) {
+               Iterator<Player> i = get(size, c).getPlayers().iterator();
+               while(i.hasNext())
+                  i.next().seizePosition(get(1, c));
+            }
             tmp = get(size, c).getCard();
             
             for(int row = this.size; row > 1; row--) {
@@ -341,8 +347,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         this.freeStone= tmp;
     }
     
-    /**Metoda pro ziskani velikosti desky 
-     *  
+    /** 
+     * Metoda pro ziskani velikosti desky
      * 
      * @return velikost hrany desky
      */
