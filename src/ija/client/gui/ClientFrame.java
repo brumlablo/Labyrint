@@ -486,7 +486,7 @@ public class ClientFrame extends JFrame{
         JLabel nameLabel = new JLabel("JMÉNO");
         nameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         nameLabel.setForeground(Color.WHITE);
-        JTextField nameField = new JTextField("",15);
+        final JTextField nameField = new JTextField("",15);
         nameField.setBackground(new Color(0x96ADC2));
         nameField.setFont(new Font("Verdana", Font.BOLD, 13));
         label.setForeground(Color.WHITE); 
