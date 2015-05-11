@@ -524,7 +524,7 @@ public class ClientFrame extends JFrame{
         JLabel sizeLabel = new JLabel("VELIKOST HRANY DESKY");
         sizeLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         sizeLabel.setForeground(Color.WHITE); 
-        String [] edgeNumber = {"5*5","6*6","7*7","8*8","9*9","10*10","11*11"};
+        String [] edgeNumber = {"5*5","7*7","9*9","11*11"};
         final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
         edgeCB.addActionListener (new ActionListener () {
             public void actionPerformed(ActionEvent e) {
@@ -544,12 +544,13 @@ public class ClientFrame extends JFrame{
         edgeCB.setFont(new Font("Verdana", Font.BOLD, 14));
         edgeCB.setBackground(new Color(0x25567B)); //blue
         edgeCB.setForeground(new Color(0xFFC373)); //yellow
+        edgeCB.setSelectedIndex(1);
         confirmButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int n = 0,k = 0;
                 k = (treasureCB.getSelectedIndex() * 12) + 12;
-                n = edgeCB.getSelectedIndex() + 5;
+                n = (edgeCB.getSelectedIndex() * 2) + 5;
                 connect.send(new DataUnit(new int [] {n,k},DataUnit.MsgID.C_CHOSENG));
                 newGameDialog.dispose();
                 //createGDialog();
