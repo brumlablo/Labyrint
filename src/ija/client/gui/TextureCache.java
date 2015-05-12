@@ -51,10 +51,10 @@ public class TextureCache {
 
         //Textury sipek na policka
         /*****************/
-        shiftableTextures[0] = new javax.swing.ImageIcon("lib/textures/maze/shift1.jpg").getImage();
-        shiftableTextures[1] = new javax.swing.ImageIcon("lib/textures/maze/shift2.jpg").getImage();
-        shiftableTextures[2] = new javax.swing.ImageIcon("lib/textures/maze/shift3.jpg").getImage();
-        shiftableTextures[3] = new javax.swing.ImageIcon("lib/textures/maze/shift4.jpg").getImage();
+        shiftableTextures[0] = new javax.swing.ImageIcon("lib/textures/maze/shift1.png").getImage();
+        shiftableTextures[1] = new javax.swing.ImageIcon("lib/textures/maze/shift2.png").getImage();
+        shiftableTextures[2] = new javax.swing.ImageIcon("lib/textures/maze/shift3.png").getImage();
+        shiftableTextures[3] = new javax.swing.ImageIcon("lib/textures/maze/shift4.png").getImage();
         /*****************/
     }
 
