@@ -393,7 +393,6 @@ public class ClientFrame extends JFrame{
         sgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
                 findSavedGamesDialog();
                 newGameDialog.dispose();
                 //createGDialog();
@@ -416,7 +415,6 @@ public class ClientFrame extends JFrame{
      * Dialog pro vybrani ulozene hry
      */
     public void findSavedGamesDialog() {
-        //connect.send(new DataUnit(new int [] {-1,-1},DataUnit.MsgID.C_CHOSENG));
         this.savedGamesDialog = new JDialog();
         savedGamesDialog.getContentPane().setBackground(Color.GRAY);
         

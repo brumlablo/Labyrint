@@ -93,7 +93,7 @@ public class Server implements Runnable
     }
 
     public synchronized void dataHandler(int ID, DataUnit toParse) {
-        //System.out.println("------------------s------------------");
+        System.out.println("------------------s------------------");
         int autorID = findClient(ID);
         Session autor = null;
         if(autorID >= 0) { //pokud client ID neexistuje, nacitame dal
@@ -102,8 +102,8 @@ public class Server implements Runnable
         else {
             return;
         }
-        //String who = autor.getID() + ""; // pro vypisy
-        //System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
+        String who = autor.getID() + ""; // pro vypisy
+        System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
         //if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
         //    return;
         DataUnit toSend = null;
@@ -215,16 +215,16 @@ public class Server implements Runnable
                 }
             }
             /*----------------------------------------------------------------*/
-            case C_CHOSENG: { //nova nebo ulozena hra, inicializace
+            case C_CHOSENG: {  //inicializace: nova hra - v poli parametry N a K; ulozene hry- nacteny MazeBoard
                 //nova hra
                 if(toParse.data instanceof int []) {
-                    int newgame [] = (int []) toParse.data; //nova hra - v poli parametry N a K; ulozene hry: nacteny MazeBoard
+                    int newgame [] = (int []) toParse.data;
                     tmpgs = findRoom(autor.getRoomID());
                     if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
-                        break;
+                        return;
                     }
                     else {
-                        //nova hra
+                        //nova hra - nacteni
                         tmpgs.loader(newgame[0],newgame[1],null); //N,K,savedgame=null;
                         break;
                     }
@@ -240,7 +240,7 @@ public class Server implements Runnable
                     tmpgs.loader(-1,-1,foundGame);
                     break;
                 }
-                else {
+                else { //prisel mi napriklad null, leader uzavrel dialog s vyberem hry
                     tmpgs = findRoom(autor.getRoomID());
                     if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
                         return;
@@ -253,7 +253,7 @@ public class Server implements Runnable
             /*----------------------------------------------------------------*/
             case C_SHIFT: { //klient mi poslal kam vlozil orotovanou FC, server mu nabidne dirs, ostatni zobrazeni casti tahu
 
-                //Kontrola, jestli ten kdo poslal zpravu je na tahu
+                //Kontrola, jestli ten, kdo poslal zpravu, je na tahu
                 /*************************************************/
                 tmpgs = findRoom(autor.getRoomID());
                 for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
@@ -293,7 +293,7 @@ public class Server implements Runnable
                 break;
             }
             /*----------------------------------------------------------------*/
-            case C_MOVE: { //vzal poklad?
+            case C_MOVE: { //hrac se pohnul, vzal poklad?
                 tmpgs = findRoom(autor.getRoomID());
                 for(int i = 0; i < tmpgs.getRoommates().size() ; i++) {
                     if ((tmpgs.getRoommates().get(i).getID() == autor.getID()) && (i != tmpgs.getOnTurn()))
@@ -307,7 +307,7 @@ public class Server implements Runnable
                 //Odstraneni hrace z desky a posunuti na novou pozici
                 clientFigure.seizePosition(board.get(goal.row(), goal.col()));
                 
-                if(clientFigure.checkTreasure()){//je tam poklad, co hledam?) {
+                if(clientFigure.checkTreasure()){ //je tam poklad,co hledam?
                     //odebrat z balicku, zkontrolovat pocet sebranych pokladu, jestli neni konec hry, predat opet novy tah
                     if(clientFigure.getTreasureCount() == tmpgs.getGoalScore()) {
                         tmpgs.setGame(board);
@@ -331,8 +331,7 @@ public class Server implements Runnable
                 break;
             }
             /*----------------------------------------------------------------*/
-            case C_LEFT_GAME: {
-                //klient odesel z rozehrane hry
+            case C_LEFT_GAME: {  //klient odesel z rozehrane hry
                 //System.out.println( "-" + who + ": " + "opustil hru.");
                 tmpgs = findRoom(autor.getRoomID());
                 tmpgs.removePlayer(autor);
@@ -353,7 +352,7 @@ public class Server implements Runnable
         }
         //if(toSend != null)
         //    System.out.println(who +": "+ toSend.data + ".");
-       // System.out.println("------------------s------------------");
+        System.out.println("------------------s------------------");
     }
     
     /**

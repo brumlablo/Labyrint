@@ -108,11 +108,11 @@ public class Session extends Thread
                server.dataHandler(this.clientID, (DataUnit) streamIn.readObject());
             }
             catch(IOException ioe){
-                System.err.println(this.clientID + " ERROR reading: " + ioe.getMessage());
+                System.err.println(this.clientID + "ERROR reading: " + ioe.getMessage());
                 server.remove(this.clientID);
                 stop();
             } catch (ClassNotFoundException cnfe) {
-               System.err.println(this.clientID + " Programming ERROR: " + cnfe.getMessage());
+               System.err.println(this.clientID + "Programming ERROR: " + cnfe.getMessage());
            }
         }
    }

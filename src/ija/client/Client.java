@@ -53,8 +53,8 @@ public class Client
     public void dataHandler(DataUnit toParse) {
         DataUnit toSend = null; 
         ArrayList<Integer> toChall = new ArrayList<Integer>();
-        //System.out.println("------------------c------------------");
-        //System.out.println( toParse.objCode + ", " + toParse.data);
+        System.out.println("------------------c------------------");
+        System.out.println( toParse.objCode + ", " + toParse.data);
         switch(toParse.objCode) {
             /*----------------------------------------------------------------*/
             case S_LOBBY: { //hrac ma jit do lobby
@@ -177,7 +177,7 @@ public class Client
         }
         //if(toSend != null)
         //    System.out.println(toSend.data);
-        //System.out.println("------------------c------------------"); 
+        System.out.println("------------------c------------------"); 
     }
 
     /**
