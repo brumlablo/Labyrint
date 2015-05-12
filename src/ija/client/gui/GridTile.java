@@ -131,31 +131,34 @@ public class GridTile extends JComponent {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
         AffineTransform old = g2.getTransform();
-
+        AffineTransform sc = new AffineTransform();
+        sc.setToIdentity();
+        sc.scale(scaleFactor, scaleFactor);
+        sc.rotate(Math.PI/2 * rotationVec, 40, 40);
 
         //Kresleni textury labyrintu
         /**************************/
         Image img = textures.getMazeTexture(type);
-        switch(rotationVec) {
-            case 0:
-                g2.rotate(Math.toRadians(0.0));
-                break;
+        //switch(rotationVec) {
+            //case 0:
+                //g2.rotate(Math.toRadians(0.0));
+                //break;
 
-            case 1:
-                g2.rotate(Math.toRadians(90.0), 40, 40);
-                break;
+            //case 1:
+                //g2.rotate(Math.toRadians(90.0), 40, 40);
+                //break;
 
-            case 2:
-                g2.rotate(Math.toRadians(180.0), 40, 40);
-                break;
+            //case 2:
+                //g2.rotate(Math.toRadians(180.0), 40, 40);
+                //break;
 
-            case 3:
-                g2.rotate(Math.toRadians(270.0), 40, 40);
-                break;
-            default:
-                break;
-        }
-        g2.drawImage(img, 0, 0, this);
+            //case 3:
+                //g2.rotate(Math.toRadians(270.0), 40, 40);
+                //break;
+            //default:
+                //break;
+        //}
+        g2.drawImage(img, sc, null);
         /**************************/
 
         //Kresleni pokladu
