@@ -29,26 +29,25 @@ public class GridTile extends JComponent {
     private ArrayList<Player> players;
     private TextureCache textures;
     private float scaleFactor;
+    private int shiftableDir;
 
     /** 
      * Vytvori jedno policko desky 
      * 
-     * @param card karta, ze ktere se vyberou vsechny dulezite hodnoty
-     * @param players seznam hracu
+     * @param mf Policko na herni desce reprezentovane souradnicemi [R, C]
      * @param textures kolekce textur, ze kterych se vykresluje
      */
-    public GridTile(MazeCard card, ArrayList<Player> players, TextureCache textures) {
-
-        this.type = card.getType();
-        this.rotationVec = card.getRotation();
-        this.treasure = card.getTreasure();
-        this.players = players;
+    public GridTile(MazeField mf, TextureCache textures) {
+        this.type = mf.getCard().getType();
+        this.rotationVec = mf.getCard().getRotation();
+        this.treasure = mf.getCard().getTreasure();
+        this.players = mf.getPlayers();
         this.textures = textures;
         this.scaleFactor = 1.0f;
     }
 
     /** 
-     * Vytvori jedno policko desky 
+     * Vytvori jedno policko desky
      * 
      * @param card karta, ze ktere se vyberou vsechny dulezite hodnoty
      * @param players seznam hracu
@@ -60,7 +59,6 @@ public class GridTile extends JComponent {
         this.treasure = card.getTreasure();
         this.textures = textures;
         this.scaleFactor = 1.0f;
-        //setPreferredSize(new Dimension(80, 80));
     }
 
     /** 
@@ -72,6 +70,10 @@ public class GridTile extends JComponent {
         this.type = card.getType();
         this.rotationVec = card.getRotation();
         this.treasure = card.getTreasure();
+    }
+
+    public void setShiftableDir(int dir) {
+        this.shiftableDir = dir;
     }
 
     /** 
@@ -138,13 +140,23 @@ public class GridTile extends JComponent {
         g2.drawImage(img, sc, null);
         /**************************/
 
-        //Kresleni pokladu
-        /**************************/
         g2.setTransform(old); //nastaveni stare rotace
         g2.rotate(Math.toRadians(0.0));
         sc = old;
         sc.setToIdentity();
         sc.scale(scaleFactor, scaleFactor);
+
+
+        //Vykresleni sipky pro indikaci moznosti vlozeni kamene
+        /**************************/
+        Image s = null;
+        if(shiftableDir != 0)
+           s = textures.getShiftableTexture(shiftableDir);
+        g2.drawImage(s, sc, this);
+        /**************************/
+
+        //Kresleni pokladu
+        /**************************/
         if(treasure != null) {
           Image tr = textures.getTreasureTexture(treasure.getCode());
           g2.drawImage(tr, sc, this);
