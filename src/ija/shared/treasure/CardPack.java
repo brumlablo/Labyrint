@@ -15,7 +15,6 @@ import java.util.Random;
  *  
  * 
  * @author xhajek33
- * @version 
  */
 public class CardPack implements Serializable{
 

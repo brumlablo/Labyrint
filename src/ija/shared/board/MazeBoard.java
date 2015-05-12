@@ -35,6 +35,8 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     * 
     * @param n velikost jedne strany herni desky
     * @param p velikost baliku karet
+    * @param h pocet hracu
+    * @param colors seznam barev hracu
     */
    private MazeBoard(int n, int p, int h,List<Integer> colors) {
       this.gameBoard = new MazeField[n][n];
@@ -73,9 +75,10 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * @param n velikost jedne strany herni desky
      * @param p velikost baliku karet
      * @param h pocet hracu
-     * @return 
+     * @param colors seznam barev hracu
+     * @return herni desku vytvorenou dle zadanych parametru
      */
-   public static MazeBoard createMazeBoard(int n, int p, int h,List<Integer> colors) {
+   public static MazeBoard createMazeBoard(int n, int p, int h, List<Integer> colors) {
         
         MazeBoard tmp = new MazeBoard(n, p, h,colors);
         for (int r=1; r <= n; r++){
@@ -226,16 +229,24 @@ public class MazeBoard implements Serializable { /*hraci deska*/
      * Ziskani hrace dle klientova ID 
      * 
      * @param ID klientovo ID
-     * @return 
+     * @return hrace/figurku patrici ke klientovu ID
      */
     public Player getPlayerByID(int ID) {
        return this.players.get(id2col.get(ID));
     }
 
+    /** 
+     * Znehodnoceni moznych cest pro hrace 
+     */
     public void noRoutes() {
         this.finderPaths = null;
     }
 
+    /** 
+     * Vyhledani vsech moznych cest pro hracovu figurku 
+     * 
+     * @param ID ID klienta
+     */
     public void findRoutes(int ID) {
         //vycisteni predchozich cest
         this.finderPaths = null;
@@ -243,6 +254,11 @@ public class MazeBoard implements Serializable { /*hraci deska*/
         this.finderPaths = finder.findRoutes(getPlayerByID(ID), this);
     }
 
+    /** 
+     * Navraceni seznamu cest pro hrace 
+     * 
+     * @return seznam vsech cest pro hrace
+     */
     public ArrayList<MazeField> getFinderPaths() {
         return this.finderPaths;
     }
@@ -295,7 +311,7 @@ public class MazeBoard implements Serializable { /*hraci deska*/
     /** 
      * Metoda vracejici volny kamen 
      * 
-     * @return 
+     * @return volny kamen na desce
      */
     public MazeCard getFreeStone() {
        return this.freeStone;

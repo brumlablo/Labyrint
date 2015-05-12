@@ -207,7 +207,7 @@ public class Client
 
     /**
      * Navraceni ID hrace.
-     * @return 
+     * @return ID hrace
      */
     public int getMyID() {
         return this.myID;
@@ -215,7 +215,7 @@ public class Client
 
     /**
      * Vraci mozne policka pro vstup hrace.
-     * @return 
+     * @return pole policek, kam muze hrac vstoupit
      */
     public ArrayList<MazeField> getPaths() {
         return this.paths;

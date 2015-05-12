@@ -16,6 +16,7 @@ public class TextureCache {
     private Image[] mazeTextures = new Image[3];
     private Image[] treasureTextures = new Image[24];
     private Image[] playerTextures = new Image[4];
+    private Image[] shiftableTextures = new Image[4];
 
     /** 
      * Konstruktor tridy, ulozi si vsechny potrebne textury 
@@ -48,16 +49,13 @@ public class TextureCache {
         playerTextures[3] = new javax.swing.ImageIcon("lib/textures/players/player4.png").getImage();
         /*****************/
 
-        //ScaleDown(30);
-    }
-
-    private void ScaleDown(int size) {
-        mazeTextures[0] = mazeTextures[0].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
-        mazeTextures[1] = mazeTextures[1].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
-        mazeTextures[2] = mazeTextures[2].getScaledInstance(size, size,java.awt.Image.SCALE_SMOOTH);
-
-        for(int i = 0; i < 24; i++)
-            treasureTextures[i] = treasureTextures[i].getScaledInstance(2*size, 2*size, java.awt.Image.SCALE_SMOOTH);
+        //Textury sipek na policka
+        /*****************/
+        shiftableTextures[0] = new javax.swing.ImageIcon("lib/textures/maze/shift1.jpg").getImage();
+        shiftableTextures[1] = new javax.swing.ImageIcon("lib/textures/maze/shift2.jpg").getImage();
+        shiftableTextures[2] = new javax.swing.ImageIcon("lib/textures/maze/shift3.jpg").getImage();
+        shiftableTextures[3] = new javax.swing.ImageIcon("lib/textures/maze/shift4.jpg").getImage();
+        /*****************/
     }
 
     /** 
@@ -97,5 +95,15 @@ public class TextureCache {
      */
     public Image getPlayerTexture(int color) {
         return playerTextures[color];   
+    }
+
+    /** 
+     * Ziskani textury sipky indikujici moznost vlozeni kamene 
+     * 
+     * @param dir smer, kterym sipka smeruje [1-4]
+     * @return textura sipky 
+     */
+    public Image getShiftableTexture(int dir) {
+        return shiftableTextures[dir-1];
     }
 }

@@ -60,13 +60,35 @@ public class GridPanel extends JPanel {
         setLayout(new GridLayout(this.size, this.size, 3, 3));
         for(int row = 1; row <= size; row++) {
             for(int col = 1; col <= size; col++) {
-                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col).getCard(), gameBoard.get(row, col).getPlayers(), textures);
+                //Vytvoreni noveho policka
+                tiles[ (row-1)+(col-1) ] = new GridTile(gameBoard.get(row, col), textures);
+                //Nastaveni velikosti policka dle velikosti desky
                 tiles[ (row-1)+(col-1) ].setScale(gameBoard.getSize());
+                //Jestli je kamen na okraji a sudem radku/sloupci, nastav sipku
+                tiles[ (row-1)+(col-1) ].setShiftableDir(checkShiftable(row, col));
+
                 addListener(tiles[ (row-1)+(col-1) ], row, col);
                 add(tiles[ (row-1)+(col-1) ]);
             }
         }
         revalidate();
+    }
+
+    private int checkShiftable(int row, int col) {
+        if((row == 1) && ((col & 1) == 0))
+            return 1;
+
+        else if((row == size) && ((col & 1) == 0))
+            return 3;
+
+        else if( ((row & 1) == 0) && (col == 1) )
+            return 4;
+
+        else if( ((row & 1) == 0) && (col == size) )
+            return 2;
+
+        else
+            return 0;
     }
     
     /** 
