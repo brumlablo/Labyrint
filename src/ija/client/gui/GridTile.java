@@ -98,7 +98,7 @@ public class GridTile extends JComponent {
      * @return preferovana velikost komponenty
      */
     public Dimension getPreferredSize() {
-        return new Dimension(80, 80);
+        return new Dimension( (int) (80 * scaleFactor), (int) (80 * scaleFactor));
     }
 
     /** 
@@ -108,20 +108,13 @@ public class GridTile extends JComponent {
      */
     public void setScale(int size) {
         switch(size) {
-            case 8:
+
+            case 9:
                this.scaleFactor = 0.8f;
                break;
 
-            case 9:
-               this.scaleFactor = 0.7f;
-               break;
-
-            case 10:
-               this.scaleFactor = 0.6f;
-               break;
-
             case 11:
-               this.scaleFactor = 0.5f;
+               this.scaleFactor = 0.6f;
                break;
         }
     }
@@ -130,34 +123,18 @@ public class GridTile extends JComponent {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+        //Uchovani stare transformacni matice bez rotaci
         AffineTransform old = g2.getTransform();
+        //Nova matice pro zmenseni a rotovani
         AffineTransform sc = new AffineTransform();
         sc.setToIdentity();
         sc.scale(scaleFactor, scaleFactor);
+        // rotace 90° * rotationVec => 90 * 2 => 180°rotace
         sc.rotate(Math.PI/2 * rotationVec, 40, 40);
 
         //Kresleni textury labyrintu
         /**************************/
         Image img = textures.getMazeTexture(type);
-        //switch(rotationVec) {
-            //case 0:
-                //g2.rotate(Math.toRadians(0.0));
-                //break;
-
-            //case 1:
-                //g2.rotate(Math.toRadians(90.0), 40, 40);
-                //break;
-
-            //case 2:
-                //g2.rotate(Math.toRadians(180.0), 40, 40);
-                //break;
-
-            //case 3:
-                //g2.rotate(Math.toRadians(270.0), 40, 40);
-                //break;
-            //default:
-                //break;
-        //}
         g2.drawImage(img, sc, null);
         /**************************/
 
@@ -165,9 +142,12 @@ public class GridTile extends JComponent {
         /**************************/
         g2.setTransform(old); //nastaveni stare rotace
         g2.rotate(Math.toRadians(0.0));
+        sc = old;
+        sc.setToIdentity();
+        sc.scale(scaleFactor, scaleFactor);
         if(treasure != null) {
           Image tr = textures.getTreasureTexture(treasure.getCode());
-          g2.drawImage(tr, 0, 0, this);
+          g2.drawImage(tr, sc, this);
         }
         /**************************/
 
@@ -177,8 +157,9 @@ public class GridTile extends JComponent {
           int x = 0;
           int y = 0;
           for(Player p : players) {
+            sc.translate((double) x, (double) y);
             Image pl = textures.getPlayerTexture(p.getColor());
-            g2.drawImage(pl, x, y, this);
+            g2.drawImage(pl, sc, null);
             x += 5;
             y += 5;
           }
