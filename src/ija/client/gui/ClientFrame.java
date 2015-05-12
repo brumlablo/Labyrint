@@ -568,6 +568,7 @@ public class ClientFrame extends JFrame{
 
         newGameDialog.setModal(true);
         newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
+        
         JPanel pane = (JPanel) newGameDialog.getContentPane();
         pane.setBorder(new EmptyBorder(10, 10, 10, 10));
         newGameDialog.setBounds(800, 300, 100, 100);
