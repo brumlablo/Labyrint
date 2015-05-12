@@ -24,19 +24,19 @@ public class Player implements Serializable{
     private MazeField position;
     private int treasureCount;
 
-    /**Konstruktor tridy, vytvori jednoho hrace
-     *  
+    /**
+     * Konstruktor tridy, vytvori jednoho hrace 
      * 
-     * @param name jmeno hrace/barva
-     * @param startPos startovni pozice, ktera se prideli do aktualni pozice
+     * @param col barva hrace
+     * @param card karta s pokladem, ktery hrac hleda
      */
     public Player(int col, TreasureCard card){
         this.color = col;
         this.activeCard = card;
     }
 
-    /**Ziskani jmena hrace
-     *  
+    /**
+     * Ziskani jmena hrace 
      * 
      * @return jmeno/barva hrace
      */
@@ -44,8 +44,8 @@ public class Player implements Serializable{
         return this.color;
     }
 
-    /**Ziskani aktualni pozici hrace
-     *  
+    /**
+     * Ziskani aktualni pozici hrace 
      * 
      * @return aktualni pozice hrace
      */
@@ -62,10 +62,10 @@ public class Player implements Serializable{
         this.position = mf;
     }
  
-    /**Obsazeni policka hracem, zaroven overi, jestli se na danem policku
+    /** 
+     * Obsazeni policka hracem, zaroven overi, jestli se na danem policku
      * nenachazi poklad, ktery hrac hleda; pokud ano, je navyseno jeho skore.
-     *  
-     * 
+     *
      * @param mf policko desky k obsazeni
      */
     public void seizePosition(MazeField mf) {
@@ -74,13 +74,10 @@ public class Player implements Serializable{
         
         this.position = mf;
         mf.putPlayer(this);
-        
-        //if(mf.getCard().getTreasure() == this.activeCard.getTreasure())
-            //this.treasureCount++;
     }
 
-    /**Ziskani aktivni pokladove karty
-     * (pokladu, ktery hrac hleda)
+    /**
+     * Ziskani aktivni pokladove karty (pokladu, ktery hrac hleda)
      *  
      * 
      * @return aktivni pokladova karta

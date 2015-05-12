@@ -13,8 +13,7 @@ import java.util.Iterator;
 /** 
  * Trida reprezentujici jedno policko na herni desce 
  * 
- * @author 
- * @version 
+ * @author xblozo00, xhajek33
  */
 public class MazeField implements Serializable{
     

@@ -50,7 +50,6 @@ public class GridTile extends JComponent {
      * Vytvori jedno policko desky
      * 
      * @param card karta, ze ktere se vyberou vsechny dulezite hodnoty
-     * @param players seznam hracu
      * @param textures kolekce textur, ze kterych se vykresluje
      */
     public GridTile(MazeCard card, TextureCache textures) {
@@ -72,6 +71,12 @@ public class GridTile extends JComponent {
         this.treasure = card.getTreasure();
     }
 
+    /** 
+     * Nastaveni vlastnosti, jestli se na policko ma vykreslit
+     * sipka indikujici moznost vlozit herni kamen
+     * 
+     * @param dir smer, kam sipka smeruje [1-4]
+     */
     public void setShiftableDir(int dir) {
         this.shiftableDir = dir;
     }

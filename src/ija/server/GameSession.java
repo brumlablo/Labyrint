@@ -70,7 +70,7 @@ public class GameSession {
 
     /**
      * Ziskani ID hrace na tahu
-     * @return 
+     * @return ID hrace na tahu
      */
     public int getOnTurn() {
         return onTurn;

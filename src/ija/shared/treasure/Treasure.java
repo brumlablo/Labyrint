@@ -60,12 +60,6 @@ public class Treasure implements Serializable{
         return treasureSet[code]; 
     }
 
-    /**
-     *  
-     * 
-     * @param o 
-     * @return 
-     */
     public boolean equals(Object o) {
         if(!(o instanceof Treasure))
             return false;
