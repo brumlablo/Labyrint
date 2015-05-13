@@ -37,13 +37,13 @@ public class Server implements Runnable
         this.gameRooms = new ArrayList <GameSession>();
         try {  
             this.port = 12345;
-            //System.out.println("Binding to port " + port + ", please wait  ...");
+            System.out.println("Binding to port " + port + ", please wait  ...");
 
             server = new ServerSocket(); //novy socket
             InetSocketAddress sAddr = new InetSocketAddress("127.0.0.1", port);
             server.bind(sAddr);
 
-            //System.out.println("Server started: " + server);
+            System.out.println("Server started: " + server);
             start();
         }
         catch(IOException ioe) {  
@@ -54,10 +54,10 @@ public class Server implements Runnable
     public void run() {
         while (thread != null) {
             try {  
-                //System.out.println("Waiting for a client ..."); 
+                System.out.println("Waiting for a client ..."); 
                 newSession(server.accept()); }
             catch(IOException ioe) {  
-                //System.out.println("Server accept error: " + ioe);
+                System.out.println("Server accept error: " + ioe);
                 stop();
             }
         }
@@ -364,7 +364,7 @@ public class Server implements Runnable
         int pos = findClient(ID);
         Session threadExitus = players.get(pos);
         players.remove(pos);
-        //System.out.println("Removing client thread " + ID + " at " + pos);
+        System.out.println("Removing client thread " + ID + " at " + pos);
         //playerCount--;
         try {  
             threadExitus.close();
@@ -380,7 +380,7 @@ public class Server implements Runnable
      * @param socket 
      */
     private void newSession(Socket socket) {  
-        //System.out.println("Client accepted: " + socket);
+        System.out.println("Client accepted: " + socket);
         playerID++;
         Session newPlayer = new Session(this, socket,playerID);
         players.add(newPlayer);
