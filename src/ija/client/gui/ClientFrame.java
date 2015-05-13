@@ -49,7 +49,7 @@ public class ClientFrame extends JFrame{
     private GridPanel maze;
     private JTextArea console;
     
-    private JDialog newGameDialog;
+    private JDialog chooseGDialog;
     private JDialog challDialog;
     private JDialog challFailDialog;
     private JDialog leaveGameDialog;
@@ -60,7 +60,12 @@ public class ClientFrame extends JFrame{
     private Client connect;
     private static ClientFrame instance; //singleton!
     private boolean isEnd;
-    private JDialog savedGamesDialog;
+    private JDialog findSGDialog;
+    
+    private final Color petrolBlue = new Color(0x25567B);
+    private final Color yellowish = new Color(0xFFC373);
+    private final Color lightBlue = new Color(0x96ADC2);
+    private JDialog newGDialog;
 
 
     /**
@@ -97,9 +102,9 @@ public class ClientFrame extends JFrame{
      public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
          Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
          if (isSelected) {
-             c.setBackground(new Color(0xFFC373));
+             c.setBackground(yellowish);
              c.setFont(new Font("Verdana", Font.PLAIN, 15));
-             //c.setForeground(new Color(0x25567B));
+             //c.setForeground(petrolBlue);
          }
          return c;
      }
@@ -129,7 +134,7 @@ public class ClientFrame extends JFrame{
         //Jmeno hry
         JLabel name = new JLabel("LABYRINT", SwingConstants.CENTER);
         name.setFont(new Font("Verdana", Font.PLAIN, 24));
-        name.setForeground(new Color(0xFFC373)); //yellow
+        name.setForeground(yellowish); //yellow
         name.setPreferredSize(new Dimension(this.getWidth(), 100));
         lobbyPane.add(name, BorderLayout.NORTH);
 
@@ -137,8 +142,9 @@ public class ClientFrame extends JFrame{
         lobbyPlayersList.setCellRenderer(new SelectedListCellRenderer());
         lobbyPlayersList.setBackground(Color.WHITE);
         lobbyPlayersList.setFont(new Font("Verdana", Font.PLAIN, 15));
-        lobbyPlayersList.setForeground(new Color(0x25567B));
+        lobbyPlayersList.setForeground(petrolBlue);
         lobbyPlayersList.setSelectionModel(new DefaultListSelectionModel(){
+            //OSETRENI VYBERU MAXIMALNE TRI HRACU
             @Override
             public void setSelectionInterval(int index0, int index1) {
                 if(index1-index0>= 3)
@@ -164,11 +170,11 @@ public class ClientFrame extends JFrame{
         this.refreshButton = new JButton("OBNOVIT");
         refreshButton.setFont(new Font("Verdana", Font.BOLD, 16));
         if (refreshButton.isEnabled()){
-            refreshButton.setBackground(new Color(0x25567B)); //blue
-            refreshButton.setForeground(new Color(0xFFC373)); //yellow
+            refreshButton.setBackground(petrolBlue);
+            refreshButton.setForeground(yellowish);
         }
         else {
-            refreshButton.setBackground(new Color(0x96ADC2));
+            refreshButton.setBackground(lightBlue);
             refreshButton.setForeground(Color.DARK_GRAY);
         }
         refreshButton.addActionListener(new ActionListener() {
@@ -184,11 +190,11 @@ public class ClientFrame extends JFrame{
         newGameButton.setPreferredSize( new Dimension(this.getWidth(), 50));
         newGameButton.setFont(new Font("Verdana", Font.BOLD, 16));
         if (newGameButton.isEnabled()){
-            newGameButton.setBackground(new Color(0x25567B)); //blue
-            newGameButton.setForeground(new Color(0xFFC373)); //yellow
+            newGameButton.setBackground(petrolBlue);
+            newGameButton.setForeground(yellowish);
         }
         else {
-            newGameButton.setBackground(new Color(0x96ADC2));
+            newGameButton.setBackground(lightBlue);
             newGameButton.setForeground(Color.DARK_GRAY);
         }
         newGameButton.addActionListener(new ActionListener() {
@@ -201,7 +207,6 @@ public class ClientFrame extends JFrame{
                     selected.add(((LobbyPlayer) o).getID());
                 }
                 setNGButton(false);
-                //createDialog();
                 connect.send(new DataUnit(selected,DataUnit.MsgID.C_CHALLPL));
             }
         });
@@ -240,11 +245,11 @@ public class ClientFrame extends JFrame{
     public void setNGButton(boolean b) {
         newGameButton.setEnabled(b);
         if (newGameButton.isEnabled()){
-            newGameButton.setBackground(new Color(0x25567B)); //blue
-            newGameButton.setForeground(new Color(0xFFC373)); //yellow
+            newGameButton.setBackground(petrolBlue);
+            newGameButton.setForeground(yellowish);
         }
         else {
-            newGameButton.setBackground(new Color(0x96ADC2)); //light blue
+            newGameButton.setBackground(lightBlue);
             newGameButton.setForeground(Color.DARK_GRAY);
         }
     }
@@ -256,11 +261,11 @@ public class ClientFrame extends JFrame{
     public void setLobbyButtons(boolean b) {
         refreshButton.setEnabled(b);
         if (refreshButton.isEnabled()){
-            refreshButton.setBackground(new Color(0x25567B)); //blue
-            refreshButton.setForeground(new Color(0xFFC373)); //yellow
+            refreshButton.setBackground(petrolBlue);
+            refreshButton.setForeground(yellowish);
         }
         else {
-            refreshButton.setBackground(new Color(0x96ADC2));
+            refreshButton.setBackground(lightBlue);
             refreshButton.setForeground(Color.DARK_GRAY);
         }
         lobbyPlayersList.setEnabled(b);
@@ -268,7 +273,7 @@ public class ClientFrame extends JFrame{
     
     /**
      * Obnoveni poctu hracu v Lobby
-     * @param inLobby 
+     * @param inLobby pole hracu v lobby
      */
     public void updateLobby(ArrayList<Integer> inLobby) {
         this.lobbyPlayersList.setVisible(false);
@@ -288,12 +293,12 @@ public class ClientFrame extends JFrame{
         setLobbyButtons(false);
         JButton yesButton = new JButton("ANO");
         JButton noButton = new JButton("NE");
-        yesButton.setFont(new Font("Verdana", Font.PLAIN, 15));
-        yesButton.setBackground(new Color(0x25567B)); //blue
-        yesButton.setForeground(new Color(0xFFC373)); //yellow
-        noButton.setFont(new Font("Verdana", Font.PLAIN, 15));
-        noButton.setBackground(new Color(0x25567B)); //blue
-        noButton.setForeground(new Color(0xFFC373)); //yellow
+        yesButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        yesButton.setBackground(petrolBlue); //blue
+        yesButton.setForeground(yellowish); //yellow
+        noButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        noButton.setBackground(petrolBlue); //blue
+        noButton.setForeground(yellowish); //yellow
         this.challDialog = new JDialog(this);
         challDialog.getContentPane().setBackground(Color.GRAY);
         
@@ -321,7 +326,7 @@ public class ClientFrame extends JFrame{
         challDialog.setModal(true);
         challDialog.setLayout(new GridLayout(3, 0, 10, 10));
         JPanel pane = (JPanel) challDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(10, 10, 10, 10));
+        pane.setBorder(new EmptyBorder(30, 30, 30, 30));
         challDialog.pack();
         challDialog.setLocationRelativeTo(this);
         challDialog.setVisible(true);
@@ -340,8 +345,8 @@ public class ClientFrame extends JFrame{
         label.setForeground(Color.WHITE); 
         JButton okButton = new JButton("OK");
         okButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        okButton.setBackground(new Color(0x25567B)); //blue
-        okButton.setForeground(new Color(0xFFC373)); //yellow
+        okButton.setBackground(petrolBlue); //blue
+        okButton.setForeground(yellowish); //yellow
         challFailDialog.setBounds(300, 400, 100, 100);
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -359,7 +364,7 @@ public class ClientFrame extends JFrame{
         challFailDialog.setModal(true);
         challFailDialog.setLayout(new GridLayout(2, 0, 10, 10));
         JPanel pane = (JPanel) challFailDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(0, 60,20 ,60));
+        pane.setBorder(new EmptyBorder(30, 70,30 ,70));
         challFailDialog.pack(); 
         challFailDialog.setLocationRelativeTo(this);
         challFailDialog.setVisible(true);
@@ -371,52 +376,150 @@ public class ClientFrame extends JFrame{
     public void chooseGDialog() {
         JButton ngButton = new JButton("NOVÁ HRA");
         JButton sgButton = new JButton("ULOŽENÁ HRA");
-        ngButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        ngButton.setBackground(new Color(0x25567B)); //blue
-        ngButton.setForeground(new Color(0xFFC373)); //yellow
-        sgButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        sgButton.setBackground(new Color(0x25567B)); //blue
-        sgButton.setForeground(new Color(0xFFC373)); //yellow        
+        JButton cancelButton = new JButton("ZRUŠIT");        
         
-        this.newGameDialog = new JDialog(this);
-        newGameDialog.getContentPane().setBackground(Color.GRAY);
+        
+        ngButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        ngButton.setBackground(petrolBlue); //blue
+        ngButton.setForeground(yellowish); //yellow
+        this.chooseGDialog = new JDialog(this);
+        chooseGDialog.getContentPane().setBackground(Color.GRAY);
+        //chooseGDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         //this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
-        newGameDialog.setBounds(300, 400, 100, 100);
+        chooseGDialog.setBounds(300, 400, 100, 100);
         ngButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                newGameDialog.dispose();
+                chooseGDialog.dispose();
                 createNGDialog();
             }
         });
+        sgButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        sgButton.setBackground(petrolBlue); //blue
+        sgButton.setForeground(yellowish); //yellow  
         sgButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 findSavedGamesDialog();
-                newGameDialog.dispose();
-                //createGDialog();
+                chooseGDialog.dispose();
+            }
+        });
+        
+        cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        cancelButton.setBackground(petrolBlue);
+        cancelButton.setForeground(Color.WHITE); 
+        cancelButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { 
+                connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
+                dispose();
+                //chooseGDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
             }
         });
 
-        newGameDialog.add(ngButton);
-        newGameDialog.add(sgButton);
+        chooseGDialog.add(ngButton);
+        chooseGDialog.add(sgButton);
+        chooseGDialog.add(cancelButton);
 
-        newGameDialog.setModal(true);
-        newGameDialog.setLayout(new GridLayout(2, 0, 10, 10));
-        JPanel pane = (JPanel) newGameDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(5, 50,20 ,50));
-        newGameDialog.pack();
-        newGameDialog.setLocationRelativeTo(this);
-        newGameDialog.setVisible(true);
+        chooseGDialog.setModal(true);
+        chooseGDialog.setLayout(new GridLayout(3, 0, 10, 10));
+        JPanel pane = (JPanel) chooseGDialog.getContentPane();
+        pane.setBorder(new EmptyBorder(30, 50,30 ,50));
+        chooseGDialog.pack();
+        chooseGDialog.setLocationRelativeTo(this);
+        chooseGDialog.setVisible(true);
+    }
+       
+    /**
+     * Ukaze dialog s nastavenim parametru hry
+     */
+    public void createNGDialog() {
+        this.newGDialog = new JDialog(this);
+        newGDialog.getContentPane().setBackground(Color.GRAY);
+        
+        JButton confirmButton = new JButton("POTVRDIT");      
+        confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        confirmButton.setBackground(petrolBlue); //blue
+        confirmButton.setForeground(yellowish); //yellow
+        
+        String[] treasureNumber = {"12"};
+        JLabel treasureLabel = new JLabel("POČET POKLADŮ");
+        treasureLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        treasureLabel.setForeground(Color.WHITE); 
+        final JComboBox<String> treasureCB = new JComboBox<>(treasureNumber);
+        
+        JLabel sizeLabel = new JLabel("VELIKOST HRANY DESKY");
+        sizeLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
+        sizeLabel.setForeground(Color.WHITE); 
+        String [] edgeNumber = {"5*5","7*7","9*9","11*11"};
+        final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
+        edgeCB.addActionListener (new ActionListener () {
+            public void actionPerformed(ActionEvent e) {
+                treasureCB.removeAllItems();
+                treasureCB.addItem("12");
+                if(edgeCB.getSelectedIndex() > 0) {
+                        treasureCB.addItem("24");
+                }
+            }
+        });
+
+        
+        treasureCB.setFont(new Font("Verdana", Font.BOLD, 14));
+        treasureCB.setBackground(petrolBlue); //blue
+        treasureCB.setForeground(yellowish);
+        
+        edgeCB.setFont(new Font("Verdana", Font.BOLD, 14));
+        edgeCB.setBackground(petrolBlue); //blue
+        edgeCB.setForeground(yellowish); //yellow
+        edgeCB.setSelectedIndex(1);
+        confirmButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int n = 0,k = 0;
+                k = (treasureCB.getSelectedIndex() * 12) + 12;
+                n = (edgeCB.getSelectedIndex() * 2) + 5;
+                connect.send(new DataUnit(new int [] {n,k},DataUnit.MsgID.C_CHOSENG));
+                newGDialog.dispose();
+                //createGDialog();
+            }
+        });
+        JButton backButton = new JButton("ZPĚT");
+        backButton.setFont(new Font("Verdana", Font.BOLD, 15));
+        backButton.setBackground(petrolBlue); //blue
+        backButton.setForeground(Color.WHITE); //yellow
+        backButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) { 
+                newGDialog.dispose();
+                chooseGDialog();
+            }
+        });
+
+        newGDialog.add(treasureLabel);
+        newGDialog.add(treasureCB);
+        newGDialog.add(sizeLabel);
+        newGDialog.add(edgeCB);
+        newGDialog.add(confirmButton);
+        newGDialog.add(backButton);
+
+        newGDialog.setModal(true);
+        newGDialog.setLayout(new GridLayout(3, 0, 10, 10));
+        
+        JPanel pane = (JPanel) newGDialog.getContentPane();
+        pane.setBorder(new EmptyBorder(30, 10, 30, 10));
+        newGDialog.setBounds(800, 300, 100, 100);
+        newGDialog.pack();
+        newGDialog.setLocationRelativeTo(this);
+        newGDialog.setVisible(true);
     }
     
     /**
-     * Dialog pro vybrani ulozene hry
+     * Ukaze dialog pro vybrani ulozene hry
      */
     public void findSavedGamesDialog() {
-        this.savedGamesDialog = new JDialog();
-        savedGamesDialog.getContentPane().setBackground(Color.GRAY);
+        this.findSGDialog = new JDialog();
+        findSGDialog.getContentPane().setBackground(Color.GRAY);
         
         JLabel listLabel = new JLabel("SEZNAM ULOŽENÝCH HER");
         listLabel.setForeground(Color.WHITE);
@@ -426,8 +529,9 @@ public class ClientFrame extends JFrame{
         final JList savedGamesList = new JList();
         savedGamesList.setBackground(Color.WHITE);
         savedGamesList.setFont(new Font("Verdana", Font.BOLD, 13));
-        savedGamesList.setForeground(new Color(0x25567B));
+        savedGamesList.setForeground(petrolBlue);
         savedGamesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        //nalezeni ulozenych her
         String path = "./examples/savedGames/"; 
         String files;
         File folder = new File(path);
@@ -447,9 +551,9 @@ public class ClientFrame extends JFrame{
         
         JButton okButton = new JButton("POTVRDIT");
         okButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        okButton.setBackground(new Color(0x25567B)); //blue
+        okButton.setBackground(petrolBlue); //blue
         okButton.setForeground(new Color(0xFFC373)); //yellow
-        savedGamesDialog.setBounds(300, 400, 100, 100);
+        findSGDialog.setBounds(300, 400, 100, 100);
         okButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -475,108 +579,35 @@ public class ClientFrame extends JFrame{
                     System.err.println("Programming error: " + cnfe);
                     connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
                 }
-                savedGamesDialog.dispose();
+                findSGDialog.dispose();
             }
         });
         JButton cancelButton = new JButton("ZPĚT");
         cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        cancelButton.setBackground(new Color(0x25567B)); //blue
-        cancelButton.setForeground(new Color(0xFFC373)); //yellow
+        cancelButton.setBackground(petrolBlue); //blue
+        cancelButton.setForeground(Color.WHITE); //yellow
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) { 
-                savedGamesDialog.dispose();
+                findSGDialog.dispose();
                 chooseGDialog();
             }
         });
-        savedGamesDialog.add(listLabel,BorderLayout.NORTH);
-        savedGamesDialog.add(savedGamesList,BorderLayout.CENTER);
-        savedGamesDialog.add(okButton,BorderLayout.SOUTH);
-        savedGamesDialog.add(cancelButton,BorderLayout.EAST);
+        findSGDialog.add(listLabel,BorderLayout.NORTH);
+        findSGDialog.add(savedGamesList,BorderLayout.CENTER);
+        findSGDialog.add(okButton,BorderLayout.SOUTH);
+        findSGDialog.add(cancelButton,BorderLayout.EAST);
         
-        savedGamesDialog.setModal(true);
-        newGameDialog.setLayout(new BorderLayout());
-        JPanel pane = (JPanel) savedGamesDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(5, 50,20 ,50));
-        savedGamesDialog.pack();
-        savedGamesDialog.setLocationRelativeTo(this);
-        savedGamesDialog.setVisible(true);
+        findSGDialog.setModal(true);
+        chooseGDialog.setLayout(new BorderLayout());
+        JPanel pane = (JPanel) findSGDialog.getContentPane();
+        pane.setBorder(new EmptyBorder(30, 30,30,30));
+        findSGDialog.pack();
+        findSGDialog.setLocationRelativeTo(this);
+        findSGDialog.setVisible(true);
         
     }
-    
-    /**
-     * Ukaze dialog s nastavenim parametru hry
-     */
-    public void createNGDialog() {
-        JButton confirmButton = new JButton("POTVRDIT");      
-        confirmButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        confirmButton.setBackground(new Color(0x25567B)); //blue
-        confirmButton.setForeground(new Color(0xFFC373)); //yellow
-        
-        String[] treasureNumber = {"12"};
-        JLabel treasureLabel = new JLabel("POČET POKLADŮ");
-        treasureLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-        treasureLabel.setForeground(Color.WHITE); 
-        final JComboBox<String> treasureCB = new JComboBox<>(treasureNumber);
-        
-        JLabel sizeLabel = new JLabel("VELIKOST HRANY DESKY");
-        sizeLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
-        sizeLabel.setForeground(Color.WHITE); 
-        String [] edgeNumber = {"5*5","7*7","9*9","11*11"};
-        final JComboBox<String> edgeCB = new JComboBox<>(edgeNumber);
-        edgeCB.addActionListener (new ActionListener () {
-            public void actionPerformed(ActionEvent e) {
-                treasureCB.removeAllItems();
-                treasureCB.addItem("12");
-                if(edgeCB.getSelectedIndex() > 0) {
-                        treasureCB.addItem("24");
-                }
-            }
-        });
-
-        
-        treasureCB.setFont(new Font("Verdana", Font.BOLD, 14));
-        treasureCB.setBackground(new Color(0x25567B)); //blue
-        treasureCB.setForeground(new Color(0xFFC373));
-        
-        edgeCB.setFont(new Font("Verdana", Font.BOLD, 14));
-        edgeCB.setBackground(new Color(0x25567B)); //blue
-        edgeCB.setForeground(new Color(0xFFC373)); //yellow
-        edgeCB.setSelectedIndex(1);
-        confirmButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                int n = 0,k = 0;
-                k = (treasureCB.getSelectedIndex() * 12) + 12;
-                n = (edgeCB.getSelectedIndex() * 2) + 5;
-                connect.send(new DataUnit(new int [] {n,k},DataUnit.MsgID.C_CHOSENG));
-                newGameDialog.dispose();
-                //createGDialog();
-            }
-        });
-        //zde lze pridat uzavreni okna
-        //connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
-
-        this.newGameDialog = new JDialog(this);
-        newGameDialog.getContentPane().setBackground(Color.GRAY);
-
-        newGameDialog.add(treasureLabel);
-        newGameDialog.add(treasureCB);
-        newGameDialog.add(sizeLabel);
-        newGameDialog.add(edgeCB);
-        newGameDialog.add(confirmButton);
-
-        newGameDialog.setModal(true);
-        newGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
-        
-        JPanel pane = (JPanel) newGameDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(10, 10, 10, 10));
-        newGameDialog.setBounds(800, 300, 100, 100);
-        newGameDialog.pack();
-        newGameDialog.setLocationRelativeTo(this);
-        newGameDialog.setVisible(true);
-    }
-    
+     
     /**
      * Ukaze dialog ve hre pro ulozeni rozehrane hry
      */
@@ -590,13 +621,13 @@ public class ClientFrame extends JFrame{
         nameLabel.setFont(new Font("Verdana", Font.PLAIN, 15));
         nameLabel.setForeground(Color.WHITE);
         final JTextField nameField = new JTextField("",15);
-        nameField.setBackground(new Color(0x96ADC2));
+        nameField.setBackground(lightBlue);
         nameField.setFont(new Font("Verdana", Font.BOLD, 13));
         label.setForeground(Color.WHITE); 
         JButton okButton = new JButton("POTVRDIT");
         okButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        okButton.setBackground(new Color(0x25567B)); //blue
-        okButton.setForeground(new Color(0xFFC373)); //yellow
+        okButton.setBackground(petrolBlue); //blue
+        okButton.setForeground(yellowish); //yellow
         saveGameDialog.setBounds(300, 400, 100, 100);
         okButton.addActionListener(new ActionListener() {
             @Override
@@ -641,8 +672,8 @@ public class ClientFrame extends JFrame{
         });
         JButton cancelButton = new JButton("ZRUŠIT");
         cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
-        cancelButton.setBackground(new Color(0x25567B)); //blue
-        cancelButton.setForeground(new Color(0xFFC373)); //yellow
+        cancelButton.setBackground(petrolBlue); //blue
+        cancelButton.setForeground(yellowish); //yellow
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -657,7 +688,7 @@ public class ClientFrame extends JFrame{
         c.gridy = 0;
         c.gridwidth = 2;
         c.anchor = GridBagConstraints.PAGE_START;
-        c.insets = new Insets(40,0,10,0);  //top,left, bottom, right
+        c.insets = new Insets(30,0,10,0);  //top,left, bottom, right
         saveGameDialog.add(label,c);
         c.weightx = 0.0;
         c.weighty = 0.0;
@@ -694,7 +725,7 @@ public class ClientFrame extends JFrame{
 
         saveGameDialog.setModal(true);
         JPanel pane = (JPanel) saveGameDialog.getContentPane();
-        pane.setBorder(new EmptyBorder(20, 30,20 ,30));
+        pane.setBorder(new EmptyBorder(30, 30,30,30));
         saveGameDialog.pack(); 
         saveGameDialog.setLocationRelativeTo(this);
         saveGameDialog.setVisible(true);
@@ -711,8 +742,8 @@ public class ClientFrame extends JFrame{
     label.setForeground(Color.WHITE); 
     JButton joButton = new JButton("Opravdu JO.");
     joButton.setFont(new Font("Verdana", Font.BOLD, 15));
-    joButton.setBackground(new Color(0x25567B)); //blue
-    joButton.setForeground(new Color(0xFFC373)); //yellow
+    joButton.setBackground(petrolBlue); //blue
+    joButton.setForeground(Color.WHITE); //yellow
     leaveGameDialog.setBounds(300, 400, 100, 100);
     joButton.addActionListener(new ActionListener() {
         @Override
@@ -725,8 +756,8 @@ public class ClientFrame extends JFrame{
     });
     JButton noButton = new JButton("Nakonec NE.");
     noButton.setFont(new Font("Verdana", Font.BOLD, 15));
-    noButton.setBackground(new Color(0x25567B)); //blue
-    noButton.setForeground(new Color(0xFFC373)); //yellow
+    noButton.setBackground(petrolBlue); //blue
+    noButton.setForeground(yellowish); //yellow
     leaveGameDialog.setBounds(300, 400, 100, 100);
     noButton.addActionListener(new ActionListener() {
         @Override
@@ -742,7 +773,7 @@ public class ClientFrame extends JFrame{
     leaveGameDialog.setModal(true);
     leaveGameDialog.setLayout(new GridLayout(3, 0, 10, 10));
     JPanel pane = (JPanel) leaveGameDialog.getContentPane();
-    pane.setBorder(new EmptyBorder(0,60,20,60));
+    pane.setBorder(new EmptyBorder(30,60,30,60));
     leaveGameDialog.pack(); 
     leaveGameDialog.setLocationRelativeTo(this);
     leaveGameDialog.setVisible(true);
@@ -778,7 +809,7 @@ public class ClientFrame extends JFrame{
         gamePane.setLayout(new BorderLayout());
         gamePane.removeAll();
         JPanel westPane = new JPanel();
-        westPane.setBackground(new Color(0xFFC373));
+        westPane.setBackground(yellowish);
         westPane.setLayout(new FlowLayout());
 
         westPane.add(maze);
@@ -787,7 +818,7 @@ public class ClientFrame extends JFrame{
         JPanel eastPane = new JPanel();
         eastPane.setLayout(new GridBagLayout());
         eastPane.setPreferredSize(new Dimension(200, 100));
-        eastPane.setBackground(new Color(0x25567B));//(0x17577e)); //blue
+        eastPane.setBackground(petrolBlue);//(0x17577e)); //blue
         GridBagConstraints c = new GridBagConstraints();
         
               
@@ -840,7 +871,7 @@ public class ClientFrame extends JFrame{
         c.gridy = 0;
         c.anchor = GridBagConstraints.CENTER;
         freeStonePane.add(maze.getFreeStone(),c);
-        freeStonePane.setBackground(new Color(0x96ADC2));
+        freeStonePane.setBackground(lightBlue);
         c.weightx = 0.0;
         c.weighty = 0.0;
         c.gridx = 0;
@@ -904,7 +935,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,0,50,0);
+                c.insets = new Insets(20,0,70,0);
                 eastPane.add(plBoxes.get(0),c);
                 break;
             case 2:
@@ -916,7 +947,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,50,2);
+                c.insets = new Insets(20,0,70,2);
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -926,7 +957,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,50,0);  //bottom,left, right,top
+                c.insets = new Insets(20,2,70,0);  //bottom,left, right,top
                 eastPane.add(plBoxes.get(1),c);
                 break;
             case 3:
@@ -938,7 +969,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 0;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.EAST;
-                c.insets = new Insets(20,0,50,2);  //bottom,left, right,top
+                c.insets = new Insets(20,0,70,2);
                 eastPane.add(plBoxes.get(0),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -948,7 +979,7 @@ public class ClientFrame extends JFrame{
                 c.gridx = 1;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.CENTER;
-                c.insets = new Insets(20,2,50,2);  //bottom,left, right,top
+                c.insets = new Insets(20,2,70,2);
                 eastPane.add(plBoxes.get(1),c);
                 c.ipady = 0;
                 c.ipadx = 0;
@@ -958,15 +989,15 @@ public class ClientFrame extends JFrame{
                 c.gridx = 2;
                 c.gridy = 2;
                 c.anchor = GridBagConstraints.WEST;
-                c.insets = new Insets(20,2,50,0);
+                c.insets = new Insets(20,2,70,0);
                 eastPane.add(plBoxes.get(2),c);
                 break;    
         }
         this.saveGameButton.setText("ULOŽIT HRU");
-        saveGameButton.setBackground(new Color(0x96ADC2));
-        saveGameButton.setFont(new Font("Verdana", Font.PLAIN, 13));
+        saveGameButton.setBackground(lightBlue);
+        saveGameButton.setFont(new Font("Verdana", Font.BOLD, 13));
         saveGameButton.setForeground(Color.BLACK);
-        saveGameButton.setPreferredSize(new Dimension(170,30));
+        saveGameButton.setPreferredSize(new Dimension(175,30));
         saveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -982,10 +1013,10 @@ public class ClientFrame extends JFrame{
         c.insets = new Insets(0,0,10,0);
         eastPane.add(saveGameButton,c);
         JButton toLobbyButton = new JButton("NÁVRAT DO LOBBY");
-        toLobbyButton.setBackground(new Color(0x96ADC2));
-        toLobbyButton.setFont(new Font("Verdana", Font.PLAIN, 13));
+        toLobbyButton.setBackground(lightBlue);
+        toLobbyButton.setFont(new Font("Verdana", Font.BOLD, 13));
         toLobbyButton.setForeground(Color.BLACK);
-        toLobbyButton.setPreferredSize(new Dimension(170,30));
+        toLobbyButton.setPreferredSize(new Dimension(175,30));
         toLobbyButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

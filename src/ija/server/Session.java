@@ -1,5 +1,5 @@
 /* file name  : Session.java
- * authors    : xhajek33, xblozo00
+ * authors    : xblozo00, xhajek33
  */
 
 package ija.server;

@@ -1,5 +1,5 @@
 /* file name  : Server.java
- * authors    : xhajek33, xblozo00
+ * authors    : xblozo00, xhajek33
  */
 package ija.server;
 
@@ -242,7 +242,8 @@ public class Server implements Runnable
                 }
                 else { //prisel mi napriklad null, leader uzavrel dialog s vyberem hry
                     tmpgs = findRoom(autor.getRoomID());
-                    if(tmpgs == null) { //pokud client ID neexistuje, nacitame dal
+                    if(tmpgs == null) { //pokud client ID neexistuje, autorovi posleme FailDialog
+                        autor.send(new DataUnit(false,DataUnit.MsgID.S_READYFG));
                         return;
                     }
                     tmpgs.multicast(new DataUnit(false,DataUnit.MsgID.S_READYFG),false);
