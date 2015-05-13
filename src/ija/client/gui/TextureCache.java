@@ -1,5 +1,5 @@
 /* file name  : TextureCache.java
- * authors    : 
+ * authors    : xhajek33, xblozo00
  */
 
 package ija.client.gui;
