@@ -93,7 +93,7 @@ public class Server implements Runnable
     }
 
     public synchronized void dataHandler(int ID, DataUnit toParse) {
-        System.out.println("------------------s------------------");
+        //System.out.println("------------------s------------------");
         int autorID = findClient(ID);
         Session autor = null;
         if(autorID >= 0) { //pokud client ID neexistuje, nacitame dal
@@ -102,8 +102,8 @@ public class Server implements Runnable
         else {
             return;
         }
-        String who = autor.getID() + ""; // pro vypisy
-        System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
+        //String who = autor.getID() + ""; // pro vypisy
+        //System.out.println( who + ": " + toParse.objCode + ", " + toParse.data);
         //if(toParse.objCode.getCode() < 21 ) //nejedna se o zpravu pro server
         //    return;
         DataUnit toSend = null;
@@ -346,14 +346,14 @@ public class Server implements Runnable
             }
             /*----------------------------------------------------------------*/
             default:
-                System.out.println("Tady jsme v defaultni vetvi");
+                //System.out.println("Tady jsme v defaultni vetvi");
                 autor.send(new DataUnit("OK",DataUnit.MsgID.UNKNOWN));
                 break;
 
         }
         //if(toSend != null)
         //    System.out.println(who +": "+ toSend.data + ".");
-        System.out.println("------------------s------------------");
+        //System.out.println("------------------s------------------");
     }
     
     /**
@@ -391,7 +391,8 @@ public class Server implements Runnable
         catch(IOException ioe) {  
             System.err.println("Error opening thread: " + ioe);
         }
-    }     
+    } 
+    
   /**
    * Vytvoreni serveru
    * @param args the command line arguments

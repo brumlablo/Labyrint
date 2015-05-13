@@ -374,6 +374,10 @@ public class ClientFrame extends JFrame{
      * Ukaze dialog vybrani stylu hry pro Leadera
      */
     public void chooseGDialog() {
+        if(this.chooseGDialog != null)
+            this.chooseGDialog.dispose();
+        
+        this.chooseGDialog = new JDialog(this);
         JButton ngButton = new JButton("NOVÁ HRA");
         JButton sgButton = new JButton("ULOŽENÁ HRA");
         JButton cancelButton = new JButton("ZRUŠIT");        
@@ -382,9 +386,8 @@ public class ClientFrame extends JFrame{
         ngButton.setFont(new Font("Verdana", Font.BOLD, 15));
         ngButton.setBackground(petrolBlue); //blue
         ngButton.setForeground(yellowish); //yellow
-        this.chooseGDialog = new JDialog(this);
         chooseGDialog.getContentPane().setBackground(Color.GRAY);
-        //chooseGDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        chooseGDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         //this.newGameDialog.setModalityType(Dialog.ModalityType.TOOLKIT_MODAL);
         chooseGDialog.setBounds(300, 400, 100, 100);
@@ -413,8 +416,8 @@ public class ClientFrame extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) { 
                 connect.send(new DataUnit(null,DataUnit.MsgID.C_CHOSENG));
-                dispose();
-                //chooseGDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
+                //dispose();
+                chooseGDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
             }
         });
 
@@ -612,8 +615,11 @@ public class ClientFrame extends JFrame{
      * Ukaze dialog ve hre pro ulozeni rozehrane hry
      */
     public void saveGameDialog(){
+        if(this.saveGameDialog != null)
+            this.saveGameDialog.dispose();
         this.saveGameDialog = new JDialog(this);
         saveGameDialog.getContentPane().setBackground(Color.GRAY);
+        //saveGameDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         JLabel label = new JLabel("Uložit hru?");
         label.setFont(new Font("Verdana", Font.BOLD, 15));
         label.setForeground(Color.WHITE); 
@@ -673,10 +679,11 @@ public class ClientFrame extends JFrame{
         JButton cancelButton = new JButton("ZRUŠIT");
         cancelButton.setFont(new Font("Verdana", Font.BOLD, 15));
         cancelButton.setBackground(petrolBlue); //blue
-        cancelButton.setForeground(yellowish); //yellow
+        cancelButton.setForeground(Color.WHITE); //yellow
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //saveGameDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
                 saveGameDialog.dispose();
             }
         });
