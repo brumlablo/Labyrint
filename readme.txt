@@ -9,7 +9,7 @@ Clenove tymu:
 Popis:
 
 	Projekt do předmětu IJA. Úkolem bylo navrhnout a implementovat počítačovou
-verzi deskové hry Labyrinth. Pravidla pro hru jsou z většiny stejná (přesné
+verzi deskové hry Úžasný labyrint. Pravidla pro hru jsou z většiny stejná (přesné
 znění je k dostání na WIKI stránkach předmětu IJA).
 	Hra je určena pro 2-4 hráče. Hra je realizovaná stylem klient-server, proto
 je potřeba, aby se jako první vždy zapl server hry, na který se hráči automaticky
