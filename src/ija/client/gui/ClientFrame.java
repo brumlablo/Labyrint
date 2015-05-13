@@ -619,7 +619,7 @@ public class ClientFrame extends JFrame{
             this.saveGameDialog.dispose();
         this.saveGameDialog = new JDialog(this);
         saveGameDialog.getContentPane().setBackground(Color.GRAY);
-        //saveGameDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        saveGameDialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         JLabel label = new JLabel("Uložit hru?");
         label.setFont(new Font("Verdana", Font.BOLD, 15));
         label.setForeground(Color.WHITE); 
@@ -673,7 +673,8 @@ public class ClientFrame extends JFrame{
                             
 			}
 		}
-                saveGameDialog.dispose();
+                saveGameDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
+                //saveGameDialog.dispose();
             }
         });
         JButton cancelButton = new JButton("ZRUŠIT");
@@ -683,8 +684,8 @@ public class ClientFrame extends JFrame{
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //saveGameDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
-                saveGameDialog.dispose();
+                saveGameDialog.dispatchEvent(new WindowEvent(chooseGDialog,WindowEvent.WINDOW_CLOSING));
+                //saveGameDialog.dispose();
             }
         });
         saveGameDialog.setLayout(new GridBagLayout());
