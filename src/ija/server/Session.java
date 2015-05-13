@@ -117,7 +117,7 @@ public class Session extends Thread
    
    /**
     * Otevreni vstupnich a vystupnich streamu
-    * @throws IOException 
+    * @throws IOException vyjimka při nezískání inputu/outputu ze streamu objektu
     */
    public void open() throws IOException {  
        streamOut = new ObjectOutputStream(socket.getOutputStream());
@@ -127,7 +127,7 @@ public class Session extends Thread
    
    /**
     * Ukonceni vstupnich a vystupnich streamu
-    * @throws IOException 
+    * @throws IOException vyjimka při nemožnosti uzavřít klientuv socket, nebo input stream, nebo output stream
     */
    public void close() throws IOException {  
        if (socket != null)

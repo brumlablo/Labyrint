@@ -187,7 +187,7 @@ public class Client
 
     /**
      * start vlakna
-     * @throws IOException 
+     * @throws IOException vyjimka pri nemoznosti nacitat a odesilat
      */
     public void start() throws IOException {  
         streamOut = new ObjectOutputStream(socket.getOutputStream());

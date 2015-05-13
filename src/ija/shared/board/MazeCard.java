@@ -69,7 +69,7 @@ public class MazeCard implements Serializable{
      * 
      * @param type jeden ze tri typu karty: C, L, F
      * @return herni kamen
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException  vyjimka pri nespravne zadanem typu kamene
      */
     public static MazeCard create(String type) throws IllegalArgumentException {
         if(type.equals("C") || type.equals("L") || type.equals("F")) {

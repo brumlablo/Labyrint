@@ -88,7 +88,7 @@ public class ClientFrame extends JFrame{
 
     /**
      * Ziskani vlakna hrace
-     * @return Client
+     * @return Client, vlakno klienta
      */
     public Client getConnect() {
         return connect;
@@ -240,7 +240,7 @@ public class ClientFrame extends JFrame{
    
     /**
      * Nastaveni aktivity newGameButton
-     * @param b 
+     * @param b pravdivost aktivity
      */
     public void setNGButton(boolean b) {
         newGameButton.setEnabled(b);
@@ -256,7 +256,7 @@ public class ClientFrame extends JFrame{
     
     /**
      * Nastaveni aktivity refreshButton a lobbyPlayerList
-     * @param b 
+     * @param b  pravdivost aktivity
      */
     public void setLobbyButtons(boolean b) {
         refreshButton.setEnabled(b);
@@ -789,7 +789,7 @@ public class ClientFrame extends JFrame{
     
     /**
      * Zmena karet tzn. celych oken
-     * @param type 
+     * @param type typ karty v hlavnim CardLayoutu
      */
     public void showView(String type){
         shownPanel = type;
@@ -798,7 +798,7 @@ public class ClientFrame extends JFrame{
     
     /**
      * Zjisteni stavu hry - jestli se jeste hraje, nebo uz je konec hry.
-     * @param b 
+     * @param b  pravdivost, zda je konec
      */
     public void setIsEnd(boolean b) {
         this.isEnd = b;
@@ -807,7 +807,7 @@ public class ClientFrame extends JFrame{
 
     /**
      * Vykresli herni okno
-     * @param g 
+     * @param g herni deska
      */
     public void showGame(MazeBoard g) {
         setVisible(false);
@@ -1109,7 +1109,7 @@ public class ClientFrame extends JFrame{
 
     /**
      * Spousteni GUI pro klienta
-     * @param args 
+     * @param args CLI argumenty
      */
     public static void main(String[] args) {
         ClientFrame window = ClientFrame.getInstance();
