@@ -22,7 +22,7 @@ public class LobbyPlayer {
 
     /**
      * ziskani promenne na vypis hrace s jeho ID
-     * @return 
+     * @return jmeno na vypis
      */
     public String getName() {
         return name;
@@ -30,7 +30,7 @@ public class LobbyPlayer {
 
     /**
      * ziskani ID hrace
-     * @return 
+     * @return ID hrace
      */
     public int getID() {
         return ID;
@@ -38,7 +38,7 @@ public class LobbyPlayer {
     
     /**
      * uprava pro vypis
-     * @return 
+     * @return hracuv string na vypis
      */
     @Override
     public String toString() {

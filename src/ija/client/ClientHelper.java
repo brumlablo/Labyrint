@@ -12,7 +12,7 @@ import ija.shared.*;
 
 
 /**
- * Vlakno nacitani vstupu(pro jednoho klienta) ze serveru
+ * Trida pro spravu nacitani vstupu(pro jednoho klienta) ze serveru
  * @author babu
  */
 public class ClientHelper extends Thread {  
@@ -20,6 +20,11 @@ public class ClientHelper extends Thread {
     private Client client = null;
     private ObjectInputStream streamIn = null;
 
+    /**
+     * Inicializace nacitani
+     * @param client klient
+     * @param socket schranka pro klienta
+     */
     public ClientHelper(Client client, Socket socket) {
         this.client   = client;
         this.socket   = socket;
@@ -27,6 +32,9 @@ public class ClientHelper extends Thread {
         start(); //start vlakna Thread
     }
     
+    /**
+     * Otevreni vstupu pro klienta
+     */
     public void open() {  
         try {
             streamIn  = new ObjectInputStream(socket.getInputStream());
@@ -37,6 +45,9 @@ public class ClientHelper extends Thread {
         }
     }
     
+    /**
+     * Uzavreni vstupu pro klienta
+     */
     public void close() {  
        try {  
            if (streamIn != null)
@@ -51,7 +62,7 @@ public class ClientHelper extends Thread {
     public void run() {  
        while (true) { 
            try {
-               client.dataHandler((DataUnit) streamIn.readObject()); //nacetl jsem data, jdu na event
+               client.dataHandler((DataUnit) streamIn.readObject());
             }
            catch(IOException ioe) {  
                 System.err.println("Listening error: " + ioe.getMessage());

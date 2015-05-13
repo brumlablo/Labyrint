@@ -31,7 +31,7 @@ public class GameSession {
     }
     /**
      * Pridani hrace
-     * @param p 
+     * @param p serverove vlakno pro hrace
      */
     public void addPlayer(Session p) {
         //System.out.println("pridan hrac: " + p.getID() + " v mistnosti " + this.roomID);
@@ -40,7 +40,7 @@ public class GameSession {
     }
     /**
      * Odebrani hrace
-     * @param p 
+     * @param p serverove vlakno pro hrace
      */
     public void removePlayer(Session p) {
         //System.out.println("odebran hrac: " + p.getID() + " v mistnosti " + this.roomID);

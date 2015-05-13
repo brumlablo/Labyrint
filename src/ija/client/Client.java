@@ -10,6 +10,7 @@ import java.io.*;
 import java.util.*;
 import ija.shared.*;
 import ija.shared.board.MazeField;
+
 /**
  * Trida pro klienta-hrace
  * @author xblozo00
@@ -41,14 +42,18 @@ public class Client
              System.err.println("Unexpected exception: " + ioe.getMessage());
          }
     }
-
+    
+    /**
+     * Vraci aktualni herni desku klienta
+     * @return herni deska klienta
+     */
     public MazeBoard getBoard() {
         return board;
     }
     
     /**
-     * Nacteni prichozi zpravy ze serveru, provedeni zmen,generace prislusne odpovedi
-     * @param toParse
+     * Metoda pro nacteni prichozi zpravy ze serveru, provedeni a vykresleni zmen,generace prislusne odpovedi
+     * @param toParse zprava na rozparsovani
      */
     public void dataHandler(DataUnit toParse) {
         DataUnit toSend = null; 

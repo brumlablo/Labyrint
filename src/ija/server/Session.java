@@ -9,8 +9,6 @@ import java.io.*;
 import ija.shared.*;
 
 /**
- *
- * 
  * Generator sezeni pro klienty
  * @author xblozo00
  **/
@@ -30,9 +28,9 @@ public class Session extends Thread
 
    /**
     * Dostava server,socket a ID clienta ze serveru
-    * @param server
-    * @param socket
-    * @param clientId 
+    * @param server nas server
+    * @param socket schranka pro klienta
+    * @param clientId ID clienta na serveru
     */
    public Session(Server server,Socket socket,int clientId) {
       this.server = server;
@@ -66,8 +64,8 @@ public class Session extends Thread
    }
    
    /**
-    * Vraci cislo "pokoje"
-    * @return roomID
+    * Vraci cislo jednoho herniho sezeni, "pokoje"
+    * @return roomID ID pokoje na serveru
     */
    public int getRoomID() {
       return this.roomID; 
@@ -75,7 +73,7 @@ public class Session extends Thread
 
    /**
     * Vraci stav hrace
-    * @return stav hrace
+    * @return clientState, tedy stav hrace
     */
     public PlState getClientState() {
         return clientState;
@@ -83,7 +81,7 @@ public class Session extends Thread
 
     /**
      * Nastaveni ID pokoje
-     * @param roomID 
+     * @param roomID ID pokoje na serveru
      */
     public void setRoomID(int roomID) {
         this.roomID = roomID;
@@ -91,14 +89,14 @@ public class Session extends Thread
 
     /**
      * Nastaveni stavu hrace
-     * @param clientState 
+     * @param clientState stav hrace
      */
     public void setClientState(PlState clientState) {
         this.clientState = clientState;
     }
 
     /**
-     * Spustnei vlakna
+     * Spusteni vlakna
      */
    @Override
    public void run() {

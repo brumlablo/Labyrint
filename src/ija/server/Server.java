@@ -51,6 +51,7 @@ public class Server implements Runnable
         }
     }
     
+    @Override
     public void run() {
         while (thread != null) {
             try {  
@@ -76,7 +77,11 @@ public class Server implements Runnable
            thread = null;
        }
     }
-    
+    /**
+     * Metoda pro nalezeni klienta/hrace v poli klientu na serveru
+     * @param ID ID hrace na serveru
+     * @return nazelene ID hrace
+     */
     private int findClient(int ID) {  
         for(int i = 0; i < players.size() ; i++)
             if (players.get(i).getID() == ID)
@@ -84,6 +89,11 @@ public class Server implements Runnable
        return -1;
     }
     
+    /**
+     * Metoda pro nalezeni "pokoje" hracu, tedy jednoho herniho sezeni
+     * @param ID ID hrace na serveru
+     * @return herni sezeni
+     */
     private GameSession findRoom(int ID) {
         for(GameSession room : gameRooms) {
             if (room.getRoomID() == ID)
@@ -91,7 +101,12 @@ public class Server implements Runnable
         }
         return null;
     }
-
+    
+    /**
+     * Metoda zajistujici herni logiku na serveru
+     * @param ID ID autora zpravy
+     * @param toParse zprava na rozparsovani
+     */
     public synchronized void dataHandler(int ID, DataUnit toParse) {
         //System.out.println("------------------s------------------");
         int autorID = findClient(ID);
@@ -358,7 +373,7 @@ public class Server implements Runnable
     
     /**
      * Odstraneni hrace ze serveru
-     * @param ID 
+     * @param ID ID hrace
      */
     public synchronized void remove(int ID) {  
         int pos = findClient(ID);
@@ -377,7 +392,7 @@ public class Server implements Runnable
 
     /**
      * Vytvoreni noveho sezeni pro klienta
-     * @param socket 
+     * @param socket schranka pro klienta
      */
     private void newSession(Socket socket) {  
         System.out.println("Client accepted: " + socket);
@@ -395,7 +410,7 @@ public class Server implements Runnable
     
   /**
    * Vytvoreni serveru
-   * @param args the command line arguments
+   * @param args CLI argumenty
    */
    public static void main(String args[]) {  
       Server mujserver = null;
