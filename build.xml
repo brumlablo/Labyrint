@@ -17,7 +17,9 @@
 
 
 	<target name = "compile" depends = "clean">
-
+		<exec executable="/bin/bash">
+			<arg value="lib/get-libs.sh"/>
+		</exec>
 		<javac  srcdir="src" destdir="build" />
 		<javadoc sourcepath="src" destdir="doc"/>
 		<jar basedir="build" destfile="dest-client/ija2015-client.jar" >
@@ -25,6 +27,7 @@
 				<attribute name="Main-Class" value="ija.client.gui.ClientFrame" /> 
 			</manifest>
 		</jar>
+
 		<jar basedir="build" destfile="dest-server/ija2015-server.jar" >
 			<manifest>
 				<attribute name="Main-Class" value="ija.server.Server" /> 
