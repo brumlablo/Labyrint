@@ -1,11 +1,5 @@
 Nazev: IJA-Labyrinth
 
-
-Clenove tymu:
-			xblozo00
-			xhajek33
-
-
 Popis:
 
 	Projekt do předmětu IJA. Úkolem bylo navrhnout a implementovat počítačovou
